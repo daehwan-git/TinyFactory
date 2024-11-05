@@ -158,5 +158,5 @@ HCURSOR CTinyFactoryDlg::OnQueryDragIcon()
 
 void CTinyFactoryDlg::OnBnClickedButton1()
 {
-	
+	MessageBox(L"sdfsdf");
 }
