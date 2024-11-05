@@ -65,7 +65,6 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CTinyFactoryDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -155,8 +154,3 @@ HCURSOR CTinyFactoryDlg::OnQueryDragIcon()
 }
 
 
-
-void CTinyFactoryDlg::OnBnClickedButton1()
-{
-	MessageBox(L"sdfsdf");
-}
