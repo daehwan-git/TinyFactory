@@ -11,6 +11,7 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+#include "FileManager.h"
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -31,6 +32,7 @@ public:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -51,7 +53,7 @@ END_MESSAGE_MAP()
 
 
 CTinyFactoryDlg::CTinyFactoryDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent)
+	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),convayorBeltSp(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -59,12 +61,18 @@ CTinyFactoryDlg::CTinyFactoryDlg(CWnd* pParent /*=nullptr*/)
 void CTinyFactoryDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, LOG_LIST_BOX, logListBox);
+	DDX_Control(pDX, START_BTN, startBtn);
 }
 
 BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(START_BTN, &CTinyFactoryDlg::OnBnClickedBtn)
+	ON_WM_DESTROY()
+	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
+	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +108,7 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	Init();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -154,3 +163,69 @@ HCURSOR CTinyFactoryDlg::OnQueryDragIcon()
 }
 
 
+
+
+void CTinyFactoryDlg::OnBnClickedOk()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	return;
+}
+
+void CTinyFactoryDlg::Init()
+{
+	LogManager::GetInstance().InitLogControl(&logListBox);
+}
+
+void CTinyFactoryDlg::SaveLogData()
+{
+	int itemCount = logListBox.GetCount(); // 리스트박스 항목 개수 가져오기
+
+	CString* data = new CString[itemCount];
+
+	for (int i = 0; i < itemCount; ++i)
+	{
+		CString text;
+		logListBox.GetText(i,text);
+		data[i] = text;
+	}
+
+	FileManager::GetInstance().SaveFile(data);
+
+	delete[] data;
+}
+
+
+void CTinyFactoryDlg::OnBnClickedBtn()
+{
+	CString text = "";
+	GetDlgItemText(BELT_PORT, text);
+
+	if (convayorBeltSp == nullptr)
+		convayorBeltSp = new ConvayorBeltSP(text, this);
+
+	convayorBeltSp->StartConvayorBelt();
+}
+
+
+void CTinyFactoryDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+	convayorBeltSp->ReleaseConvayorBelt();
+	delete convayorBeltSp;
+	
+}
+
+
+
+void CTinyFactoryDlg::OnStopBtnClicked()
+{
+	convayorBeltSp->StopConvayorBelt();
+	GetDlgItem(START_BTN)->EnableWindow(TRUE);
+	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+}
+
+LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
+{
+	GetDlgItem(START_BTN)->EnableWindow(FALSE);
+	return 0;
+}

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "ConvayorBeltSP.h"
 
 // CTinyFactoryDlg 대화 상자
 class CTinyFactoryDlg : public CDialogEx
@@ -32,5 +33,18 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedOk();
+	CListBox logListBox;
+
+private:
+	void Init();
+	ConvayorBeltSP* convayorBeltSp;
+	void SaveLogData();
+
+public:
+	afx_msg void OnBnClickedBtn();
+	afx_msg void OnDestroy();
+	afx_msg void OnStopBtnClicked();
+	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
+	CButton startBtn;
 };

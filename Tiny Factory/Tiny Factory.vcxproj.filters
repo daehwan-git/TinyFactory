@@ -13,25 +13,49 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Utils">
+      <UniqueIdentifier>{2b15add2-f0c2-4d46-a1c4-f6ba5769e2c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Others">
+      <UniqueIdentifier>{06050a96-74b7-43c4-a05c-184364304d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Custom Controls">
+      <UniqueIdentifier>{133b0c76-08f1-4d44-8406-9325406988f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tiny Factory.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Tiny FactoryDlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Others</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Tiny Factory.h">
+      <Filter>헤더 파일\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Tiny FactoryDlg.h">
+      <Filter>헤더 파일\Others</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
+      <Filter>헤더 파일\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="LogManager.h">
+      <Filter>헤더 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialClass.h">
+      <Filter>헤더 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>헤더 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvayorBeltSP.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +66,18 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LogManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Serial.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvayorBeltSP.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
