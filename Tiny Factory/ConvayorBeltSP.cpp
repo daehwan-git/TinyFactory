@@ -28,6 +28,7 @@ void ConvayorBeltSP::StartConvayorBelt()
 		sp->WriteData(CONVAYORBELT_ON_DATA, DATA_LENGTH);
 	}
 
+	AfxBeginThread(ConvayorBeltRun,this);
 }
 
 void ConvayorBeltSP::ReleaseConvayorBelt()
@@ -55,8 +56,15 @@ UINT ConvayorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 		incomingData[resultData] = '\0';
 
 		CString result(incomingData);
+
 		if (!result.IsEmpty())
 		{
+			if (result.Compare("HELLOWORLD") == 0)
+			{
+				LogManager::GetInstance().WriteLog("들어왔으유");
+				convayorBeltSP->StopConvayorBelt();
+			}
+
 			result += _T("\r\n");
 			LogManager::GetInstance().WriteLog(result);
 		}
