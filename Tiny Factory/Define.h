@@ -14,3 +14,9 @@
 
 //커스텀 메시지
 #define ON_CONNECT_COMPLETE_MESSAGE WM_USER + 150
+
+
+//카메라
+#define CAMERA_WIDTH 320
+#define CAMERA_HEIGHT 260
+#define CAMERA_EVENT 1000

@@ -13,6 +13,11 @@
 #endif
 #include "FileManager.h"
 
+#include "opencv2/opencv.hpp"
+
+using namespace cv;
+
+
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -63,6 +68,7 @@ void CTinyFactoryDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, LOG_LIST_BOX, logListBox);
 	DDX_Control(pDX, START_BTN, startBtn);
+	DDX_Control(pDX, BELT_PORT, videoRect);
 }
 
 BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
@@ -73,6 +79,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -194,6 +201,25 @@ void CTinyFactoryDlg::SaveLogData()
 	delete[] data;
 }
 
+void CTinyFactoryDlg::DisplayCamera()
+{
+	capture = new VideoCapture(0);
+
+	if (!capture->isOpened())
+
+	{
+
+		MessageBox(_T("웹캠을 열수 없습니다. \n"));
+
+	}
+
+	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
+
+	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
+
+	SetTimer(CAMERA_EVENT, 30, NULL);
+}
+
 
 void CTinyFactoryDlg::OnBnClickedBtn()
 {
@@ -228,4 +254,124 @@ LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 {
 	GetDlgItem(START_BTN)->EnableWindow(FALSE);
 	return 0;
+}
+
+
+void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent)
+	{
+	case CAMERA_EVENT:
+
+		capture->read(matFrame);
+
+
+		//이곳에 OpenCV 함수들을 적용합니다.
+		//여기에서는 그레이스케일 이미지로 변환합니다.
+		cvtColor(matFrame, matFrame, COLOR_BGR2GRAY);
+
+
+
+		//화면에 보여주기 위한 처리입니다.
+		int bpp = 8 * matFrame.elemSize();
+		assert((bpp == 8 || bpp == 24 || bpp == 32));
+
+		int padding = 0;
+		//32 bit image is always DWORD aligned because each pixel requires 4 bytes
+		if (bpp < 32)
+			padding = 4 - (matFrame.cols % 4);
+
+		if (padding == 4)
+			padding = 0;
+
+		int border = 0;
+		//32 bit image is always DWORD aligned because each pixel requires 4 bytes
+		if (bpp < 32)
+		{
+			border = 4 - (matFrame.cols % 4);
+		}
+
+
+
+		Mat mat_temp;
+		if (border > 0 || matFrame.isContinuous() == false)
+		{
+			// Adding needed columns on the right (max 3 px)
+			cv::copyMakeBorder(matFrame, mat_temp, 0, 0, 0, border, cv::BORDER_CONSTANT, 0);
+		}
+		else
+		{
+			mat_temp = matFrame;
+		}
+
+
+		RECT r;
+		videoRect.GetClientRect(&r);
+		cv::Size winSize(r.right, r.bottom);
+
+		imageMfc.Create(winSize.width, winSize.height, 24);
+
+
+		BITMAPINFO* bitInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
+		bitInfo->bmiHeader.biBitCount = bpp;
+		bitInfo->bmiHeader.biWidth = mat_temp.cols;
+		bitInfo->bmiHeader.biHeight = -mat_temp.rows;
+		bitInfo->bmiHeader.biPlanes = 1;
+		bitInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+		bitInfo->bmiHeader.biCompression = BI_RGB;
+		bitInfo->bmiHeader.biClrImportant = 0;
+		bitInfo->bmiHeader.biClrUsed = 0;
+		bitInfo->bmiHeader.biSizeImage = 0;
+		bitInfo->bmiHeader.biXPelsPerMeter = 0;
+		bitInfo->bmiHeader.biYPelsPerMeter = 0;
+
+
+		// Image is bigger or smaller than into destination rectangle
+		// we use stretch in full rect
+
+		if (mat_temp.cols == winSize.width && mat_temp.rows == winSize.height)
+		{
+			// source and destination have same size
+			// transfer memory block
+			// NOTE: the padding border will be shown here. Anyway it will be max 3px width
+
+			SetDIBitsToDevice(imageMfc.GetDC(),
+				//destination rectangle
+				0, 0, winSize.width, winSize.height,
+				0, 0, 0, mat_temp.rows,
+				mat_temp.data, bitInfo, DIB_RGB_COLORS);
+		}
+		else
+		{
+			// destination rectangle
+			int destx = 0, desty = 0;
+			int destw = winSize.width;
+			int desth = winSize.height;
+
+			// rectangle defined on source bitmap
+			// using imgWidth instead of mat_temp.cols will ignore the padding border
+			int imgx = 0, imgy = 0;
+			int imgWidth = mat_temp.cols - border;
+			int imgHeight = mat_temp.rows;
+
+			StretchDIBits(imageMfc.GetDC(),
+				destx, desty, destw, desth,
+				imgx, imgy, imgWidth, imgHeight,
+				mat_temp.data, bitInfo, DIB_RGB_COLORS, SRCCOPY);
+		}
+
+
+		HDC dc = ::GetDC(videoRect.m_hWnd);
+		imageMfc.BitBlt(dc, 0, 0);
+
+
+		::ReleaseDC(videoRect.m_hWnd, dc);
+
+		imageMfc.ReleaseDC();
+		imageMfc.Destroy();
+
+		break;
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
 }

@@ -5,6 +5,9 @@
 #pragma once
 
 #include "ConvayorBeltSP.h"
+#include "opencv2/opencv.hpp"
+
+using namespace cv;
 
 // CTinyFactoryDlg 대화 상자
 class CTinyFactoryDlg : public CDialogEx
@@ -38,8 +41,15 @@ public:
 
 private:
 	void Init();
-	ConvayorBeltSP* convayorBeltSp;
 	void SaveLogData();
+	void DisplayCamera();
+
+private:
+	VideoCapture* capture;
+	Mat matFrame;
+	CImage imageMfc;
+	ConvayorBeltSP* convayorBeltSp;
+
 
 public:
 	afx_msg void OnBnClickedBtn();
@@ -47,4 +57,6 @@ public:
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
 	CButton startBtn;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	CEdit videoRect;
 };
