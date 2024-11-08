@@ -58,5 +58,5 @@ public:
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
 	CButton startBtn;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	CEdit videoRect;
+	CStatic videoRect;
 };

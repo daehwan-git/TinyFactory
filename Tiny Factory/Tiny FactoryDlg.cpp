@@ -68,7 +68,7 @@ void CTinyFactoryDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, LOG_LIST_BOX, logListBox);
 	DDX_Control(pDX, START_BTN, startBtn);
-	DDX_Control(pDX, BELT_PORT, videoRect);
+	DDX_Control(pDX, CAMERARECT, videoRect);
 }
 
 BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
@@ -181,6 +181,8 @@ void CTinyFactoryDlg::OnBnClickedOk()
 void CTinyFactoryDlg::Init()
 {
 	LogManager::GetInstance().InitLogControl(&logListBox);
+
+	DisplayCamera();
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -206,11 +208,12 @@ void CTinyFactoryDlg::DisplayCamera()
 	capture = new VideoCapture(0);
 
 	if (!capture->isOpened())
-
 	{
-
-		MessageBox(_T("웹캠을 열수 없습니다. \n"));
-
+		LogManager::GetInstance().WriteLog("카메라를 연결할 수 없습니다.");
+	}
+	else
+	{
+		LogManager::GetInstance().WriteLog("카메라를 연결 성공");
 	}
 
 	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
@@ -266,18 +269,11 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 		capture->read(matFrame);
 
 
-		//이곳에 OpenCV 함수들을 적용합니다.
-		//여기에서는 그레이스케일 이미지로 변환합니다.
-		cvtColor(matFrame, matFrame, COLOR_BGR2GRAY);
-
-
-
-		//화면에 보여주기 위한 처리입니다.
 		int bpp = 8 * matFrame.elemSize();
 		assert((bpp == 8 || bpp == 24 || bpp == 32));
 
 		int padding = 0;
-		//32 bit image is always DWORD aligned because each pixel requires 4 bytes
+		
 		if (bpp < 32)
 			padding = 4 - (matFrame.cols % 4);
 
@@ -285,18 +281,16 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 			padding = 0;
 
 		int border = 0;
-		//32 bit image is always DWORD aligned because each pixel requires 4 bytes
+	
 		if (bpp < 32)
 		{
 			border = 4 - (matFrame.cols % 4);
 		}
 
 
-
 		Mat mat_temp;
 		if (border > 0 || matFrame.isContinuous() == false)
 		{
-			// Adding needed columns on the right (max 3 px)
 			cv::copyMakeBorder(matFrame, mat_temp, 0, 0, 0, border, cv::BORDER_CONSTANT, 0);
 		}
 		else
@@ -326,30 +320,19 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 		bitInfo->bmiHeader.biYPelsPerMeter = 0;
 
 
-		// Image is bigger or smaller than into destination rectangle
-		// we use stretch in full rect
-
 		if (mat_temp.cols == winSize.width && mat_temp.rows == winSize.height)
 		{
-			// source and destination have same size
-			// transfer memory block
-			// NOTE: the padding border will be shown here. Anyway it will be max 3px width
-
 			SetDIBitsToDevice(imageMfc.GetDC(),
-				//destination rectangle
 				0, 0, winSize.width, winSize.height,
 				0, 0, 0, mat_temp.rows,
 				mat_temp.data, bitInfo, DIB_RGB_COLORS);
 		}
 		else
 		{
-			// destination rectangle
 			int destx = 0, desty = 0;
 			int destw = winSize.width;
 			int desth = winSize.height;
 
-			// rectangle defined on source bitmap
-			// using imgWidth instead of mat_temp.cols will ignore the padding border
 			int imgx = 0, imgy = 0;
 			int imgWidth = mat_temp.cols - border;
 			int imgHeight = mat_temp.rows;
@@ -366,10 +349,8 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 
 
 		::ReleaseDC(videoRect.m_hWnd, dc);
-
 		imageMfc.ReleaseDC();
 		imageMfc.Destroy();
-
 		break;
 	}
 
