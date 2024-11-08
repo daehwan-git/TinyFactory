@@ -190,6 +190,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ConvayorBeltSP.h" />
+    <ClInclude Include="DataProcessSP.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="framework.h" />
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConvayorBeltSP.cpp" />
+    <ClCompile Include="DataProcessSP.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="pch.cpp">

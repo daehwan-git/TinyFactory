@@ -20,3 +20,7 @@
 #define CAMERA_WIDTH 320
 #define CAMERA_HEIGHT 260
 #define CAMERA_EVENT 1000
+
+//데이터 통신
+#define DATAPROCESS_ON_DATA "ON"
+#define DATAPROCESS_OFF_DATA "OFF"
