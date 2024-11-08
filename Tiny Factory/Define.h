@@ -9,6 +9,8 @@
 
 #define DATASTORE_PATH "./log.txt"
 
+#define OBJECT_DETECTION "OBJECTDETECTION"
+
 
 //커스텀 메시지
 #define ON_CONNECT_COMPLETE_MESSAGE WM_USER + 150

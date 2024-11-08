@@ -59,7 +59,7 @@ UINT ConvayorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 
 		if (!result.IsEmpty())
 		{
-			if (result.Compare("HELLOWORLD") == 0)
+			if (result.Compare(OBJECT_DETECTION) == 0)
 			{
 				LogManager::GetInstance().WriteLog("들어왔으유");
 				convayorBeltSP->StopConvayorBelt();
