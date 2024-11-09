@@ -15,12 +15,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	while (objectDetection->isRun)
 	{
-		if (!objectDetection->matQueue.empty())
-		{
-			Mat matFrame = objectDetection->matQueue.front();
-			objectDetection->matQueue.pop();
-			objectDetection->YOLO(matFrame);
-		}
+		objectDetection->YOLO(objectDetection->matFrame);
 		Sleep(10);
 	}
 	return 0;
@@ -32,7 +27,6 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 	if (!matFrame.empty())
 	{
 		matFrame.copyTo(this->matFrame);
-		matQueue.push(this->matFrame);
 	}
 }
 
@@ -55,7 +49,7 @@ void ObjectDetection::YOLO(Mat matFrame)
 		m_net.forward(outs, outNames);
 
 		printf("%s", "hello");
-		//processDetections(outs, matFrame, classes, THRESHOLD);
+		processDetections(outs, matFrame, classes, THRESHOLD);
 	}
 }
 
@@ -83,14 +77,10 @@ void ObjectDetection::InitTrainSet()
 	m_net.setPreferableTarget(DNN_TARGET_CPU);
 }
 
-void ObjectDetection::InitYoloThread()
-{
-
-}
-
 
 void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat& img, const std::vector<std::string>& classes, float confThreshold)
 {
+	bool flag = false;
 	for (size_t i = 0; i < outs.size(); ++i)
 	{
 		float* data = (float*)outs[i].data;
@@ -105,6 +95,7 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 
 			if (confidence > confThreshold)
 			{
+				flag = true;
 				//객체의 bounding box 좌표 계산
 				int centerX = (int)(data[0] * img.cols);
 				int centerY = (int)(data[1] * img.rows);
@@ -134,11 +125,17 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 			}
 		}
 	}
-	DrawObjectdetection(img);
+
+	if(flag)
+		DrawObjectdetection(img);
 }
 
 void ObjectDetection::DrawObjectdetection(const Mat& img)
 {
+	Mat detectionImage;
+
+	img.copyTo(detectionImage);
+
 	CRect rect;
 	CDC* pDC = detectionRect->GetDC();  
 	detectionRect->GetClientRect(&rect);  
@@ -146,11 +143,20 @@ void ObjectDetection::DrawObjectdetection(const Mat& img)
 	int height = rect.Height();
 
 	CImage image;
-	image.Create(width, height, 24);  
+	image.Create(detectionImage.cols, detectionImage.rows, 24);  // 24-bit BMP 이미지 생성
 
-	CImage image;
-	image.Create(img.cols, img.rows, 24);
+	// Mat 데이터를 CImage로 복사
+	uchar* psrc = detectionImage.data;  // OpenCV Mat 데이터 포인터
+	uchar* pdst = (uchar*)image.GetBits();  // CImage 데이터 포인터
+	int pitch = image.GetPitch();
 
+	// OpenCV의 Mat 데이터를 CImage로 복사하는 과정
+	for (int y = 0; y < detectionImage.rows; y++)
+	{
+		memcpy(pdst, psrc, detectionImage.cols * 3);  // 한 줄씩 복사
+		psrc += detectionImage.step;
+		pdst += pitch;
+	}
 
 	image.Draw(pDC->m_hDC, 0, 0, width, height);
 

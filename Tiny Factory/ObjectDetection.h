@@ -42,7 +42,6 @@ private:
 	void DrawObjectdetection(const Mat& img);
 	void YOLO(Mat matFrame);
 	void InitTrainSet();
-	void InitYoloThread();
 	static UINT RunThread_YOLO(LPVOID pParam);
 	void processDetections(const std::vector<Mat>& outs, const Mat& img,
 		const std::vector<std::string>& classes, float confThreshold);
