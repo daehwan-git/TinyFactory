@@ -15,6 +15,8 @@
 #define IDC_BUTTON2                     1005
 #define STOP_BTN                        1006
 #define CAMERARECT                      1007
+#define CAMERARECT2                     1008
+#define DERECTIONRECT                   1008
 
 // Next default values for new objects
 // 

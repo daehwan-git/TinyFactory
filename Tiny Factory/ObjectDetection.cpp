@@ -36,6 +36,15 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 	}
 }
 
+void ObjectDetection::StopObjectDetection()
+{
+	if (this != nullptr) {
+		isRun = false;
+	}
+}
+
+
+
 void ObjectDetection::YOLO(Mat matFrame)
 {
 	if (!matFrame.empty() && !m_net.empty()) {
@@ -45,6 +54,7 @@ void ObjectDetection::YOLO(Mat matFrame)
 		std::vector<String> outNames = m_net.getUnconnectedOutLayersNames();
 		m_net.forward(outs, outNames);
 
+		printf("%s", "hello");
 		//processDetections(outs, matFrame, classes, THRESHOLD);
 	}
 }
@@ -124,4 +134,25 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 			}
 		}
 	}
+	DrawObjectdetection(img);
+}
+
+void ObjectDetection::DrawObjectdetection(const Mat& img)
+{
+	CRect rect;
+	CDC* pDC = detectionRect->GetDC();  
+	detectionRect->GetClientRect(&rect);  
+	int width = rect.Width();
+	int height = rect.Height();
+
+	CImage image;
+	image.Create(width, height, 24);  
+
+	CImage image;
+	image.Create(img.cols, img.rows, 24);
+
+
+	image.Draw(pDC->m_hDC, 0, 0, width, height);
+
+	ReleaseDC(detectionRect->m_hWnd, pDC->m_hDC);
 }

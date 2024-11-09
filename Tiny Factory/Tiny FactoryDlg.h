@@ -56,6 +56,7 @@ private:
 	
 	CButton startBtn;
 	CStatic videoRect;
+	CStatic detectionRect;
 
 public:
 	afx_msg void OnBnClickedBtn();

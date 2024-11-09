@@ -69,6 +69,7 @@ void CTinyFactoryDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, LOG_LIST_BOX, logListBox);
 	DDX_Control(pDX, START_BTN, startBtn);
 	DDX_Control(pDX, CAMERARECT, videoRect);
+	DDX_Control(pDX, DERECTIONRECT, detectionRect);
 }
 
 BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
@@ -221,7 +222,7 @@ void CTinyFactoryDlg::DisplayCamera()
 
 	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
 
-	objectDetection = new ObjectDetection();
+	objectDetection = new ObjectDetection(&detectionRect);
 
 	SetTimer(CAMERA_EVENT, 30, NULL);
 }
@@ -234,7 +235,7 @@ void CTinyFactoryDlg::CameraLogic()
 
 	cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 
-	//objectDetection->StartObjectDetection(matFrame);
+	objectDetection->YoloDataFrame(matFrame);
 
 	int bpp = 8 * matFrame.elemSize();
 	assert((bpp == 8 || bpp == 24 || bpp == 32));
@@ -360,10 +361,10 @@ void CTinyFactoryDlg::OnDestroy()
 
 	if (objectDetection != nullptr)
 	{
+		objectDetection->StopObjectDetection();
 		delete objectDetection;
 	}
 }
-
 
 
 void CTinyFactoryDlg::OnStopBtnClicked()

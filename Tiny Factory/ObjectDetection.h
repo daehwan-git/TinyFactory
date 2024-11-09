@@ -16,15 +16,17 @@ class ObjectDetection
 
 private:
 	Mat matFrame;
+	Net m_net;
 	std::vector<std::string> classes;
 	std::vector<Mat> outs;
-	Net m_net;
 	bool isRun = false;
+	
+	CStatic* detectionRect;
 	
 	std::queue<Mat> matQueue;
 
 public:
-	ObjectDetection()
+	ObjectDetection(CStatic* detectionRect):detectionRect(detectionRect)
 	{
 		InitTrainSet();
 		isRun = true;
@@ -34,9 +36,10 @@ public:
 
 public:
 	void YoloDataFrame(Mat matFrame);
-
+	void StopObjectDetection();
 
 private:
+	void DrawObjectdetection(const Mat& img);
 	void YOLO(Mat matFrame);
 	void InitTrainSet();
 	void InitYoloThread();
