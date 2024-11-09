@@ -27,16 +27,19 @@ public:
 	ObjectDetection()
 	{
 		InitTrainSet();
+		isRun = true;
+		AfxBeginThread(RunThread_YOLO,this);
 	}
 
 
 public:
-	void StartObjectDetection(Mat matFrame);
+	void YoloDataFrame(Mat matFrame);
 
 
 private:
 	void YOLO(Mat matFrame);
 	void InitTrainSet();
+	void InitYoloThread();
 	static UINT RunThread_YOLO(LPVOID pParam);
 	void processDetections(const std::vector<Mat>& outs, const Mat& img,
 		const std::vector<std::string>& classes, float confThreshold);

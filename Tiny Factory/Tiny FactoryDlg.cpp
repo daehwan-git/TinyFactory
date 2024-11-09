@@ -183,8 +183,6 @@ void CTinyFactoryDlg::Init()
 	LogManager::GetInstance().InitLogControl(&logListBox);
 
 	DisplayCamera();
-
-	objectDetection = new ObjectDetection();
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -222,6 +220,8 @@ void CTinyFactoryDlg::DisplayCamera()
 	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
 
 	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
+
+	objectDetection = new ObjectDetection();
 
 	SetTimer(CAMERA_EVENT, 30, NULL);
 }

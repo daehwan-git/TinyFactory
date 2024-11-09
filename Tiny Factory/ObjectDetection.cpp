@@ -27,14 +27,12 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 }
 
 
-void ObjectDetection::StartObjectDetection(Mat matFrame)
+void ObjectDetection::YoloDataFrame(Mat matFrame)
 {
 	if (!matFrame.empty())
 	{
 		matFrame.copyTo(this->matFrame);
 		matQueue.push(this->matFrame);
-		isRun = true;
-		AfxBeginThread(RunThread_YOLO, this);
 	}
 }
 
@@ -73,6 +71,11 @@ void ObjectDetection::InitTrainSet()
 
 	m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
 	m_net.setPreferableTarget(DNN_TARGET_CPU);
+}
+
+void ObjectDetection::InitYoloThread()
+{
+
 }
 
 

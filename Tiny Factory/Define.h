@@ -22,9 +22,9 @@
 #define CAMERA_EVENT 1000
 
 
-const std::string yoloCfg = "C:/Users/biotite/Desktop/file/file/test.cfg";
-const std::string yoloWeight = "C:/Users/biotite/Desktop/file/file/test_last.weights";
-const std::string yoloClassFile = "C:/Users/biotite/Desktop/file/file//tiny.names";
+const std::string yoloCfg = "C:/Users/biotite/Desktop/TinyFactoryData/test.cfg";
+const std::string yoloWeight = "C:/Users/biotite/Desktop/TinyFactoryData/test_last.weights";
+const std::string yoloClassFile = "C:/Users/biotite/Desktop/TinyFactoryData/tiny.names";
 #define THRESHOLD 0.5
 
 //데이터 통신
