@@ -274,6 +274,7 @@ void CTinyFactoryDlg::OnStopBtnClicked()
 LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 {
 	GetDlgItem(START_BTN)->EnableWindow(FALSE);
+	printf("%s","hello");
 	return 0;
 }
 
