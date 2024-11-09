@@ -7,7 +7,7 @@
 #include "ConvayorBeltSP.h"
 #include "opencv2/opencv.hpp"
 #include "DataProcessSP.h"
-
+#include "ObjectDetection.h"
 
 
 // CTinyFactoryDlg 대화 상자
@@ -52,6 +52,7 @@ private:
 	CImage imageMfc;
 	ConvayorBeltSP* convayorBeltSp;
 	DataProcessSP* dataProcessSp;
+	ObjectDetection* objectDetection;
 	
 	CButton startBtn;
 	CStatic videoRect;

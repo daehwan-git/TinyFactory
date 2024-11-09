@@ -183,6 +183,8 @@ void CTinyFactoryDlg::Init()
 	LogManager::GetInstance().InitLogControl(&logListBox);
 
 	DisplayCamera();
+
+	objectDetection = new ObjectDetection();
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -260,7 +262,7 @@ void CTinyFactoryDlg::CameraLogic()
 	}
 
 	//here
-
+	objectDetection->StartObjectDetection(&matFrame);
 
 
 	RECT r;
@@ -352,7 +354,11 @@ void CTinyFactoryDlg::OnDestroy()
 		dataProcessSp->ReleaseDataProcess();
 		delete dataProcessSp;
 	}
-	
+
+	if (objectDetection != nullptr)
+	{
+		delete objectDetection;
+	}
 }
 
 

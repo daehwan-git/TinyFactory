@@ -15,11 +15,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	if (objectDetection)
 	{
-		while (objectDetection->isRun)
-		{
-			objectDetection->YOLO();
-			Sleep(1);
-		}
+		objectDetection->YOLO();
 	}
 
 	return 0;
