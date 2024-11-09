@@ -205,11 +205,12 @@ void CTinyFactoryDlg::SaveLogData()
 
 void CTinyFactoryDlg::DisplayCamera()
 {
-	capture = new VideoCapture(0);
+	capture = new VideoCapture();
 
 	if (!capture->isOpened())
 	{
 		LogManager::GetInstance().WriteLog("카메라를 연결할 수 없습니다.");
+		return;
 	}
 	else
 	{
