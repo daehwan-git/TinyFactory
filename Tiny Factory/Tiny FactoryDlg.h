@@ -6,6 +6,7 @@
 
 #include "ConvayorBeltSP.h"
 #include "opencv2/opencv.hpp"
+#include "DataProcessSP.h"
 
 using namespace cv;
 
@@ -49,7 +50,7 @@ private:
 	Mat matFrame;
 	CImage imageMfc;
 	ConvayorBeltSP* convayorBeltSp;
-
+	DataProcessSP* dataProcessSp;
 
 public:
 	afx_msg void OnBnClickedBtn();

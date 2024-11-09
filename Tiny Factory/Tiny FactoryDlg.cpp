@@ -234,14 +234,31 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 		convayorBeltSp = new ConvayorBeltSP(text, this);
 
 	convayorBeltSp->StartConvayorBelt();
+
+	GetDlgItemText(DATAPORT, text);
+
+	if (dataProcessSp == nullptr)
+		dataProcessSp = new DataProcessSP(text, this);
+
+	dataProcessSp->StartDataProcess();
 }
 
 
 void CTinyFactoryDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
-	convayorBeltSp->ReleaseConvayorBelt();
-	delete convayorBeltSp;
+
+	if (convayorBeltSp != nullptr)
+	{
+		convayorBeltSp->ReleaseConvayorBelt();
+		delete convayorBeltSp;
+	}
+
+	if (dataProcessSp != nullptr)
+	{
+		dataProcessSp->ReleaseDataProcess();
+		delete dataProcessSp;
+	}
 	
 }
 

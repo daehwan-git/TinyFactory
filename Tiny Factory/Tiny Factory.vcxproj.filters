@@ -57,6 +57,9 @@
     <ClInclude Include="FileManager.h">
       <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="DataProcessSP.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tiny Factory.cpp">
@@ -78,6 +81,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="FileManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DataProcessSP.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -57,18 +57,6 @@ UINT ConvayorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 
 		CString result(incomingData);
 
-		if (!result.IsEmpty())
-		{
-			if (result.Compare(OBJECT_DETECTION) == 0)
-			{
-				LogManager::GetInstance().WriteLog("들어왔으유");
-				convayorBeltSP->StopConvayorBelt();
-			}
-
-			result += _T("\r\n");
-			LogManager::GetInstance().WriteLog(result);
-		}
-
 		Sleep(SYNC_TIME);
 	}
 

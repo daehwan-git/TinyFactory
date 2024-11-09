@@ -4,6 +4,7 @@
 //
 #define IDM_ABOUTBOX                    0x0010
 #define BELT_PORT                       0x0010
+#define DATAPORT                        17
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
 #define IDD_TINY_FACTORY_DIALOG         102
