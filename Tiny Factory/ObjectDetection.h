@@ -6,6 +6,7 @@
 #include "vector"
 #include<string>
 #include <fstream>
+#include<queue>
 
 using namespace cv::dnn;
 using namespace cv;
@@ -14,12 +15,13 @@ class ObjectDetection
 {
 
 private:
-	Mat* matFrame;
+	Mat matFrame;
 	std::vector<std::string> classes;
 	std::vector<Mat> outs;
 	Net m_net;
-	float confThreshold = 0.5;
 	bool isRun = false;
+	
+	std::queue<Mat> matQueue;
 
 public:
 	ObjectDetection()
@@ -29,11 +31,11 @@ public:
 
 
 public:
-	void StartObjectDetection(Mat* matFrame);
+	void StartObjectDetection(Mat matFrame);
 
 
 private:
-	void YOLO();
+	void YOLO(Mat matFrame);
 	void InitTrainSet();
 	static UINT RunThread_YOLO(LPVOID pParam);
 	void processDetections(const std::vector<Mat>& outs, const Mat& img,

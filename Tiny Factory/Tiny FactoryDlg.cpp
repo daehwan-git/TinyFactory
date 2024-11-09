@@ -207,7 +207,7 @@ void CTinyFactoryDlg::SaveLogData()
 
 void CTinyFactoryDlg::DisplayCamera()
 {
-	capture = new VideoCapture();
+	capture = new VideoCapture(0);
 
 	if (!capture->isOpened())
 	{
@@ -226,11 +226,15 @@ void CTinyFactoryDlg::DisplayCamera()
 	SetTimer(CAMERA_EVENT, 30, NULL);
 }
 
+
+
 void CTinyFactoryDlg::CameraLogic()
 {
 	capture->read(matFrame);
 
 	cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
+
+	//objectDetection->StartObjectDetection(matFrame);
 
 	int bpp = 8 * matFrame.elemSize();
 	assert((bpp == 8 || bpp == 24 || bpp == 32));
@@ -262,7 +266,6 @@ void CTinyFactoryDlg::CameraLogic()
 	}
 
 	//here
-	objectDetection->StartObjectDetection(&matFrame);
 
 
 	RECT r;

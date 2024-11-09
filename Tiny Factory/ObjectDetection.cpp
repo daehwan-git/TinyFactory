@@ -13,41 +13,56 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 {
 	ObjectDetection* objectDetection = (ObjectDetection*)pParam;
 
-	if (objectDetection)
+	while (objectDetection->isRun)
 	{
-		objectDetection->YOLO();
+		if (!objectDetection->matQueue.empty())
+		{
+			Mat matFrame = objectDetection->matQueue.front();
+			objectDetection->matQueue.pop();
+			objectDetection->YOLO(matFrame);
+		}
+		Sleep(10);
 	}
-
 	return 0;
 }
 
 
-void ObjectDetection::StartObjectDetection(Mat* matFrame)
+void ObjectDetection::StartObjectDetection(Mat matFrame)
 {
-	this->matFrame = matFrame;
-
-	AfxBeginThread(RunThread_YOLO,this);
+	if (!matFrame.empty())
+	{
+		matFrame.copyTo(this->matFrame);
+		matQueue.push(this->matFrame);
+		isRun = true;
+		AfxBeginThread(RunThread_YOLO, this);
+	}
 }
 
-void ObjectDetection::YOLO()
+void ObjectDetection::YOLO(Mat matFrame)
 {
-	Mat inputBlob = blobFromImage(*matFrame, 1 / 255.f, Size(416, 416), Scalar(), true, false); // blob으로 변환
-	m_net.setInput(inputBlob); // YOLO 모델에 inputBlob을 입력으로 설정한다.
+	if (!matFrame.empty() && !m_net.empty()) {
+		Mat inputBlob = blobFromImage(matFrame, 1 / 255.f, Size(416, 416), Scalar(), true, false);
+		m_net.setInput(inputBlob);
 
-	std::vector<String > outNames = m_net.getUnconnectedOutLayersNames();
+		std::vector<String> outNames = m_net.getUnconnectedOutLayersNames();
+		m_net.forward(outs, outNames);
 
-	m_net.forward(outs, outNames);
+		//processDetections(outs, matFrame, classes, THRESHOLD);
+	}
 }
 
 void ObjectDetection::InitTrainSet()
 {
 	std::ifstream ifs(yoloClassFile.c_str());
 	std::string line;
+
 	while (getline(ifs, line))
 	{
 		classes.push_back(line);
 	}
+
 	m_net = readNetFromDarknet(yoloCfg, yoloWeight);
+
 	if (m_net.empty())
 	{
 		LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");

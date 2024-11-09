@@ -39,7 +39,6 @@ void DataProcessSP::ReleaseDataProcess()
 
 void DataProcessSP::ParsingData(CString& data)
 {
-	printf("%s",data);
 	if (data.Compare(OBJECT_DETECTION) == 0)
 	{
 		
