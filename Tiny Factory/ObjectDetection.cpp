@@ -15,21 +15,6 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	if (objectDetection)
 	{
-		std::ifstream ifs(yoloClassFile.c_str());
-		std::string line;
-		while (getline(ifs, line))
-		{
-			objectDetection->classes.push_back(line);
-		}
-		objectDetection->m_net = readNetFromDarknet(yoloCfg, yoloWeight);
-		if (objectDetection->m_net.empty())
-		{
-			LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");
-		}
-		
-		objectDetection->m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
-		objectDetection->m_net.setPreferableTarget(DNN_TARGET_CPU);
-
 		while (objectDetection->isRun)
 		{
 			objectDetection->YOLO();
@@ -56,6 +41,27 @@ void ObjectDetection::YOLO()
 	std::vector<String > outNames = m_net.getUnconnectedOutLayersNames();
 
 	m_net.forward(outs, outNames);
+}
+
+void ObjectDetection::InitTrainSet()
+{
+	std::ifstream ifs(yoloClassFile.c_str());
+	std::string line;
+	while (getline(ifs, line))
+	{
+		classes.push_back(line);
+	}
+	m_net = readNetFromDarknet(yoloCfg, yoloWeight);
+	if (m_net.empty())
+	{
+		LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");
+	}
+	else {
+		LogManager::GetInstance().WriteLog("데이터 셋 준비 완료.");
+	}
+
+	m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
+	m_net.setPreferableTarget(DNN_TARGET_CPU);
 }
 
 
