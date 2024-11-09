@@ -8,7 +8,7 @@
 #include "opencv2/opencv.hpp"
 #include "DataProcessSP.h"
 
-using namespace cv;
+
 
 // CTinyFactoryDlg 대화 상자
 class CTinyFactoryDlg : public CDialogEx
@@ -44,6 +44,7 @@ private:
 	void Init();
 	void SaveLogData();
 	void DisplayCamera();
+	void CameraLogic();
 
 private:
 	VideoCapture* capture;
@@ -51,26 +52,14 @@ private:
 	CImage imageMfc;
 	ConvayorBeltSP* convayorBeltSp;
 	DataProcessSP* dataProcessSp;
+	
+	CButton startBtn;
+	CStatic videoRect;
 
 public:
 	afx_msg void OnBnClickedBtn();
 	afx_msg void OnDestroy();
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
-	CButton startBtn;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	CStatic videoRect;
-
-	//kim
-	UINT RunThread_YOLO(LPVOID pParam);
-	void YOLO();
-	vector<string> classes;
-	vector<Mat> outs;
-	Net m_net;
-	string yolo_cfg = "C:/Users/82108/Desktop/file/test.cfg";
-	string yolo_weights = "C:/Users/82108/Desktop/file/test.weights";
-	String classesFile = "C:/Users/82108/source/repos/QualityTest1/obj.names";
-	bool m_bStop, m_bRun1;
-	float confThreshold = 0.5;
-	void processDetections(const vector<Mat>& outs, const Mat& img, const vector<std::string>& classes, float confThreshold);
 };

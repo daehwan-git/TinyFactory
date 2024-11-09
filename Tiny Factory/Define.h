@@ -1,4 +1,4 @@
-
+#include "string"	
 
 #define PORT_PREFIX "\\\\.\\"
 #define CONVAYORBELT_ON_DATA "ON"
@@ -20,6 +20,11 @@
 #define CAMERA_WIDTH 320
 #define CAMERA_HEIGHT 260
 #define CAMERA_EVENT 1000
+
+
+const std::string yoloCfg = "C:/Users/82108/Desktop/file/test.cfg";
+const std::string yoloWeight = "C:/Users/82108/Desktop/file/test.weights";
+const std::string yoloClassFile = "C:/Users/82108/source/repos/QualityTest1/obj.names";
 
 //데이터 통신
 #define DATAPROCESS_ON_DATA "ON"
