@@ -9,6 +9,7 @@ void ConvayorBeltSP::StopConvayorBelt()
 	{
 		if (sp->IsConnected())
 		{
+			LogManager::GetInstance().WriteLog("컨베이어 벨트 작동 중지");
 			sp->WriteData(CONVAYORBELT_OFF_DATA, DATA_LENGTH);
 		}
 		isRun = false;

@@ -330,14 +330,21 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	GetDlgItemText(BELT_PORT, text);
 
 	if (convayorBeltSp == nullptr)
+	{
 		convayorBeltSp = new ConvayorBeltSP(text, this);
+		WorkManager::GetInstance().InitConvayorBeltSP(convayorBeltSp);
+	}
 
 	convayorBeltSp->StartConvayorBelt();
 
 	GetDlgItemText(DATAPORT, text);
 
 	if (dataProcessSp == nullptr)
+	{
 		dataProcessSp = new DataProcessSP(text, this);
+		WorkManager::GetInstance().InitDataProcessSP(dataProcessSp);
+	}
+
 
 	dataProcessSp->StartDataProcess();
 }

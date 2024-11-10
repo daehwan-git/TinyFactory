@@ -90,23 +90,18 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 			Point classIdPoint;
 			double confidence;
 
-			//클래스 확률 중 가장 높은 값을 찾음
 			minMaxLoc(scores, 0, &confidence, 0, &classIdPoint);
 
 			if (confidence > confThreshold)
 			{
 				flag = true;
-				//객체의 bounding box 좌표 계산
+
 				int centerX = (int)(data[0] * img.cols);
 				int centerY = (int)(data[1] * img.rows);
 				int width = (int)(data[2] * img.cols);
 				int height = (int)(data[3] * img.rows);
-
-				//좌상단 좌표 계산
 				int left = centerX - width / 2;
 				int top = centerY - height / 2;
-
-				//bounding box 그리기
 
 				rectangle(img, Point(left, top), Point(left + width, top + height), Scalar(0, 255, 0), 3);
 				String label = format("%.2f", confidence);
@@ -126,8 +121,11 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 		}
 	}
 
-	if(flag)
+	if (classes.size() > 0)
+	{
 		DrawObjectdetection(img);
+		WorkManager::GetInstance().FinishObjectDetection(classes);
+	}
 }
 
 void ObjectDetection::DrawObjectdetection(const Mat& img)
@@ -145,15 +143,13 @@ void ObjectDetection::DrawObjectdetection(const Mat& img)
 	CImage image;
 	image.Create(detectionImage.cols, detectionImage.rows, 24);  // 24-bit BMP 이미지 생성
 
-	// Mat 데이터를 CImage로 복사
-	uchar* psrc = detectionImage.data;  // OpenCV Mat 데이터 포인터
-	uchar* pdst = (uchar*)image.GetBits();  // CImage 데이터 포인터
+	uchar* psrc = detectionImage.data;  
+	uchar* pdst = (uchar*)image.GetBits();
 	int pitch = image.GetPitch();
 
-	// OpenCV의 Mat 데이터를 CImage로 복사하는 과정
 	for (int y = 0; y < detectionImage.rows; y++)
 	{
-		memcpy(pdst, psrc, detectionImage.cols * 3);  // 한 줄씩 복사
+		memcpy(pdst, psrc, detectionImage.cols * 3);  
 		psrc += detectionImage.step;
 		pdst += pitch;
 	}

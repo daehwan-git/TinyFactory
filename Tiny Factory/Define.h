@@ -22,10 +22,15 @@
 #define CAMERA_EVENT 1000
 
 
+//데이터 셋
 const std::string yoloCfg = "C:/Users/82108/Desktop/file/tiny.cfg";
 const std::string yoloWeight = "C:/Users/82108/Desktop/file/tiny.weights";
 const std::string yoloClassFile = "C:/Users/82108/Desktop/file/tinytiny.names";
 #define THRESHOLD 0.1
+
+#define NORMALOBJECT "NormalObject"
+#define DIFFRENTSHAPEOBJECT "DIFFERENTSHAPEOBJECT"
+
 
 //데이터 통신
 #define DATAPROCESS_ON_DATA "ON"
