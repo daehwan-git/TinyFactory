@@ -1,11 +1,21 @@
 #pragma once
 
 #include"pch.h"
-#include "ConvayorBeltSP.h"
+#include  "ConvayorBeltSP.h"
 #include "DataProcessSP.h"
+
+class DataProcessSP;
+class ConvayorBeltSP;
 
 class WorkManager
 {
+private:
+	bool isDetection = false;
+	CString detectionClassName = "";
+	bool objectCheck = false;
+
+	ConvayorBeltSP* conbayorBeltSP = nullptr;
+	DataProcessSP* dataProcessSP = nullptr;
 
 public:
 	static WorkManager& GetInstance()
@@ -24,19 +34,12 @@ public:
 		this->dataProcessSP = dataProcessSP;
 	}
 
-private:
-	bool isDetection = false;
-	CString detectionClassName = "";
-	bool objectCheck = false;
-
-	ConvayorBeltSP* conbayorBeltSP;
-	DataProcessSP* dataProcessSP;
 
 private:
 	void FinishObjectDetection();
 
 public:
 	void ObjectDetection();
-	void FinishObjectDetection(std::vector<std::string> classNames);
+	void FinishYOLO(std::vector<std::string> classNames);
 };
 

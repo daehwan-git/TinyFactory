@@ -9,11 +9,12 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
-#include "LogManager.h"
-#include "WorkManager.h"
+#include "Define.h"
 #include<vector>
 #include<string>
-#include "Define.h"
+
+#include "LogManager.h"
+#include "WorkManager.h"
 
 
 #ifdef _DEBUG

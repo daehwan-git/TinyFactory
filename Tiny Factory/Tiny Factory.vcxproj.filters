@@ -22,6 +22,12 @@
     <Filter Include="헤더 파일\Custom Controls">
       <UniqueIdentifier>{133b0c76-08f1-4d44-8406-9325406988f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Manager">
+      <UniqueIdentifier>{ef7e8e34-2b1f-48e7-abb6-01e11926a405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Serial">
+      <UniqueIdentifier>{7c67faf9-74e6-405b-a5c1-8c525d1c3748}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -42,29 +48,29 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일\Others</Filter>
     </ClInclude>
-    <ClInclude Include="LogManager.h">
-      <Filter>헤더 파일\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="SerialClass.h">
       <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
       <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ConvayorBeltSP.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="FileManager.h">
-      <Filter>헤더 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="DataProcessSP.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectDetection.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WorkManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="LogManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="DataProcessSP.h">
+      <Filter>헤더 파일\Serial</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvayorBeltSP.h">
+      <Filter>헤더 파일\Serial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

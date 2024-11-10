@@ -7,7 +7,7 @@
 #define DATA_LENGTH 255
 #define SYNC_TIME 1000
 
-#define DATASTORE_PATH "./log.txt"
+#define DATASTORE_FILE_NAME "log.txt"
 
 #define OBJECT_DETECTION "OBJECTDETECTION"
 

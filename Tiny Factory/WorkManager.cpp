@@ -1,4 +1,4 @@
-#include "WorkManager.h"
+#include  "WorkManager.h"
 
 void WorkManager::FinishObjectDetection()
 {
@@ -31,11 +31,7 @@ void WorkManager::ObjectDetection()
 	}
 }
 
-
-
-
-//finish yolo 
-void WorkManager::FinishObjectDetection(std::vector<std::string> classNames)
+void WorkManager::FinishYOLO(std::vector<std::string> classNames)
 {
 	//case 1: keep going 
 	//case 2 robot arms moving
@@ -55,8 +51,8 @@ void WorkManager::FinishObjectDetection(std::vector<std::string> classNames)
 		//robot arms can move
 
 
-	}else{
+	}
+	else {
 		FinishObjectDetection();
 	}
 }
-

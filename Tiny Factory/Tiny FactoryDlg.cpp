@@ -190,18 +190,17 @@ void CTinyFactoryDlg::SaveLogData()
 {
 	int itemCount = logListBox.GetCount(); // 리스트박스 항목 개수 가져오기
 
-	CString* data = new CString[itemCount];
+	std::vector<CString> data;
 
 	for (int i = 0; i < itemCount; ++i)
 	{
 		CString text;
 		logListBox.GetText(i,text);
-		data[i] = text;
+		data.push_back(text);
 	}
 
-	FileManager::GetInstance().SaveFile(data);
 
-	delete[] data;
+	FileManager::GetInstance().SaveFile(data);
 }
 
 void CTinyFactoryDlg::DisplayCamera()
@@ -371,6 +370,8 @@ void CTinyFactoryDlg::OnDestroy()
 		objectDetection->StopObjectDetection();
 		delete objectDetection;
 	}
+
+	SaveLogData();
 }
 
 

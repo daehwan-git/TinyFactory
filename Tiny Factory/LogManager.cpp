@@ -10,7 +10,6 @@ void LogManager::InitLogControl(CListBox* listBox)
 
 void LogManager::WriteLog(CString insertData)
 {
-	printf("%s", insertData);
 	CTime cTime = CTime::GetCurrentTime();
 
 	CString strDate;

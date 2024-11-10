@@ -124,7 +124,7 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 	if (classes.size() > 0)
 	{
 		DrawObjectdetection(img);
-		WorkManager::GetInstance().FinishObjectDetection(classes);
+		WorkManager::GetInstance().FinishYOLO(classes);
 	}
 }
 

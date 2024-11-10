@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include<vector>
 
 class FileManager
 {
@@ -13,7 +14,7 @@ public:
 	}
 
 
-	bool SaveFile(CString* data, CString path = DATASTORE_PATH);
+	bool SaveFile(std::vector<CString> data);
 
 };
 
