@@ -2,25 +2,32 @@
 
 void WorkManager::FinishObjectDetection()
 {
-	//move convayor belt again
-	LogManager::GetInstance().WriteLog("컨베이어 벨트 재가동.");
-
-	if (conbayorBeltSP != nullptr)
+	if (isDetection)
 	{
-		conbayorBeltSP->StartConvayorBelt();
+		isDetection = false;
+		//move convayor belt again
+		LogManager::GetInstance().WriteLog("컨베이어 벨트 재가동.");
+
+		if (conbayorBeltSP != nullptr)
+		{
+			conbayorBeltSP->StartConvayorBelt();
+		}
 	}
 }
 
 //some object detected
 void WorkManager::ObjectDetection()
 {
-
-	//stop convayor while finish object detection
-	LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
-
-	if (conbayorBeltSP != nullptr)
+	if (!isDetection)
 	{
-		conbayorBeltSP->StopConvayorBelt();
+		isDetection = true;
+		//stop convayor while finish object detection
+		LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
+
+		if (conbayorBeltSP != nullptr)
+		{
+			conbayorBeltSP->StopConvayorBelt();
+		}
 	}
 }
 
