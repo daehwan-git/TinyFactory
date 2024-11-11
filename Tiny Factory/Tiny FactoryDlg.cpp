@@ -238,7 +238,7 @@ void CTinyFactoryDlg::CameraLogic()
 	capture->read(matFrame);
 
 
-	if(objectDetection != nullptr && WorkManager::GetInstance().IsDetection())
+	if(objectDetection != nullptr)
 		objectDetection->YoloDataFrame(matFrame);
 
 #pragma region DrawCam

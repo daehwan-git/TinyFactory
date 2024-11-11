@@ -27,7 +27,7 @@
 const std::string yoloCfg = "C:/Users/biotite/Desktop/file/test.cfg";
 const std::string yoloWeight = "C:/Users/biotite/Desktop/file/test_last.weights";
 const std::string yoloClassFile = "C:/Users/biotite/Desktop/file/tiny.names";
-#define THRESHOLD 0.5
+#define THRESHOLD 0.3
 
 
 const cv::String NORMALOBJECT = "NORMAL";
