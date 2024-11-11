@@ -33,15 +33,20 @@ public:
 		}
 	}
 
+	~RobotArmSP()
+	{
+		
+	}
+
 
 	void StartDataProcess();
 	void StopDataProcess();
-	void ReleaseDataProcess();
 	void SendCommand(CString command);
 	bool IsRun() { return isRun; }
 	
 
 private:
+	void ReleaseDataProcess();
 	static UINT DataProcessThread(LPVOID lpParam);
 };
 

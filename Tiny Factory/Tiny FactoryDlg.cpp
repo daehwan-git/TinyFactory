@@ -376,22 +376,16 @@ void CTinyFactoryDlg::OnDestroy()
 
 	if (conveyorBeltSp != nullptr)
 	{
-		conveyorBeltSp->StopConveyorBelt();
-		conveyorBeltSp->ReleaseConveyorBelt();
 		delete conveyorBeltSp;
 	}
 
 	if (dataProcessSp != nullptr)
 	{
-		dataProcessSp->StopDataProcess();
-		dataProcessSp->ReleaseDataProcess();
 		delete dataProcessSp;
 	}
 
 	if (objectDetection != nullptr)
 	{
-		objectDetection->StopObjectDetection();
-		objectDetection->ReleaseObjectDetection();
 		delete objectDetection;
 	}
 

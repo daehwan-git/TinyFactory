@@ -34,14 +34,19 @@ public:
 		}
 	}
 
+	~DataProcessSP()
+	{
+		StopDataProcess();
+		ReleaseDataProcess();
+	}
 
 	void StartDataProcess();
 	void StopDataProcess();
-	void ReleaseDataProcess();
 	bool IsRun() { return isRun; }
 	void ParsingData(CString& data);
 
 private:
+	void ReleaseDataProcess();
 	static UINT DataProcessThread(LPVOID lpParam);
 };
 
