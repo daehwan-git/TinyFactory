@@ -36,7 +36,14 @@ private:
 
 	RobotArmSP* robotArmSP;
 
+private:
+	void AddCommand(CString command);
+	void ResetCommand();
+	void ResetSliderPos();
+
 public:
 	virtual BOOL OnInitDialog();
 	void SetRobotArmSP(RobotArmSP* robotArmSP);
+	afx_msg void OnBnClickedRecordBtn();
+	afx_msg void OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 };

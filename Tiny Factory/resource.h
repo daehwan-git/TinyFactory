@@ -5,7 +5,6 @@
 #define IDM_ABOUTBOX                    0x0010
 #define BELT_PORT                       0x0010
 #define DATAPORT                        17
-#define DATAPORT2                       18
 #define ROBOT_ARM_PORT                  18
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101

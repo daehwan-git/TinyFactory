@@ -187,12 +187,6 @@ void CTinyFactoryDlg::Init()
 	if (!robotControlDlg.GetSafeHwnd()) {
 		robotControlDlg.Create(IDD_ROBOT_DLG, this);
 		robotControlDlg.CenterWindow();
-
-		CString robotArmPort = "";
-		GetDlgItemText(ROBOT_ARM_PORT,robotArmPort);
-
-		RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
-		robotControlDlg.SetRobotArmSP(robotArmSP);
 	}
 
 	DisplayCamera();
@@ -367,6 +361,12 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 
 
 	dataProcessSp->StartDataProcess();
+
+	CString robotArmPort = "";
+	GetDlgItemText(ROBOT_ARM_PORT, robotArmPort);
+
+	RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
+	robotControlDlg.SetRobotArmSP(robotArmSP);
 }
 
 
