@@ -195,12 +195,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClInclude Include="ConvayorBeltSP.h" />
     <ClInclude Include="RobotControlDlg.h" />
-=======
     <ClInclude Include="ConveyorBelt.h" />
->>>>>>> b6c4359aebecdf5025eb87173b6fb58760449abe
     <ClInclude Include="WorkManager.h" />
     <ClInclude Include="DataProcessSP.h" />
     <ClInclude Include="Define.h" />
@@ -216,12 +212,8 @@
     <ClInclude Include="Tiny FactoryDlg.h" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClCompile Include="ConvayorBeltSP.cpp" />
     <ClCompile Include="RobotControlDlg.cpp" />
-=======
     <ClCompile Include="ConveyorBeltSP.cpp" />
->>>>>>> b6c4359aebecdf5025eb87173b6fb58760449abe
     <ClCompile Include="WorkManager.cpp" />
     <ClCompile Include="DataProcessSP.cpp" />
     <ClCompile Include="FileManager.cpp" />
