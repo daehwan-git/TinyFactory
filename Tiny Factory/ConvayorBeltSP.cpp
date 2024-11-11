@@ -35,8 +35,9 @@ void ConvayorBeltSP::StartConvayorBelt()
 void ConvayorBeltSP::ReleaseConvayorBelt()
 {
 	if (sp != nullptr)
-	{
-		sp->~Serial();
+	{	
+		WaitForSingleObject(ConvayorBeltRun, INFINITE);
+		delete sp;
 	}
 }
 

@@ -12,7 +12,7 @@ bool FileManager::SaveFile(std::vector<CString>  data)
     CString folderPath(path);
     folderPath = folderPath.Left(folderPath.ReverseFind('\\'));
 
-    std::ofstream  fout(DATASTORE_FILE_NAME);
+    std::ofstream  fout(DATASTORE_FILE_NAME, std::ios::app | std::ios::out);
 
     if (fout.is_open())
     {

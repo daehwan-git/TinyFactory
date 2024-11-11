@@ -217,11 +217,16 @@ void CTinyFactoryDlg::DisplayCamera()
 		LogManager::GetInstance().WriteLog("카메라를 연결 성공");
 	}
 
+
+	if (objectDetection == nullptr)
+	{
+		objectDetection = new ObjectDetection(&detectionRect);
+	}
+
+
 	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
 
 	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
-
-	objectDetection = new ObjectDetection(&detectionRect);
 
 	SetTimer(CAMERA_EVENT, 30, NULL);
 }
@@ -232,9 +237,11 @@ void CTinyFactoryDlg::CameraLogic()
 {
 	capture->read(matFrame);
 
-	cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 
-	objectDetection->YoloDataFrame(matFrame);
+	if(objectDetection != nullptr && WorkManager::GetInstance().IsDetection())
+		objectDetection->YoloDataFrame(matFrame);
+
+#pragma region DrawCam
 
 	int bpp = 8 * matFrame.elemSize();
 	assert((bpp == 8 || bpp == 24 || bpp == 32));
@@ -320,27 +327,29 @@ void CTinyFactoryDlg::CameraLogic()
 	::ReleaseDC(videoRect.m_hWnd, dc);
 	imageMfc.ReleaseDC();
 	imageMfc.Destroy();
+#pragma endregion
 }
 
 
 void CTinyFactoryDlg::OnBnClickedBtn()
 {
-	CString text = "";
-	GetDlgItemText(BELT_PORT, text);
+	CString beltPort = "";
+	GetDlgItemText(BELT_PORT, beltPort);
 
 	if (convayorBeltSp == nullptr)
 	{
-		convayorBeltSp = new ConvayorBeltSP(text, this);
+		convayorBeltSp = new ConvayorBeltSP(beltPort, this);
 		WorkManager::GetInstance().InitConvayorBeltSP(convayorBeltSp);
 	}
 
 	convayorBeltSp->StartConvayorBelt();
 
-	GetDlgItemText(DATAPORT, text);
+	CString dataPort = "";
+	GetDlgItemText(DATAPORT, dataPort);
 
 	if (dataProcessSp == nullptr)
 	{
-		dataProcessSp = new DataProcessSP(text, this);
+		dataProcessSp = new DataProcessSP(dataPort, this);
 		WorkManager::GetInstance().InitDataProcessSP(dataProcessSp);
 	}
 
@@ -355,12 +364,14 @@ void CTinyFactoryDlg::OnDestroy()
 
 	if (convayorBeltSp != nullptr)
 	{
+		convayorBeltSp->StopConvayorBelt();
 		convayorBeltSp->ReleaseConvayorBelt();
 		delete convayorBeltSp;
 	}
 
 	if (dataProcessSp != nullptr)
 	{
+		dataProcessSp->StopDataProcess();
 		dataProcessSp->ReleaseDataProcess();
 		delete dataProcessSp;
 	}

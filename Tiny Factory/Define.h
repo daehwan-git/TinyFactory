@@ -1,4 +1,5 @@
 #include "string"	
+#include"opencv2/opencv.hpp"
 
 #define PORT_PREFIX "\\\\.\\"
 #define CONVAYORBELT_ON_DATA "ON"
@@ -23,13 +24,15 @@
 
 
 //데이터 셋
-const std::string yoloCfg = "C:/Users/82108/Desktop/file/tiny.cfg";
-const std::string yoloWeight = "C:/Users/82108/Desktop/file/tiny.weights";
-const std::string yoloClassFile = "C:/Users/82108/Desktop/file/tinytiny.names";
-#define THRESHOLD 0.1
+const std::string yoloCfg = "C:/Users/biotite/Desktop/file/test.cfg";
+const std::string yoloWeight = "C:/Users/biotite/Desktop/file/test_last.weights";
+const std::string yoloClassFile = "C:/Users/biotite/Desktop/file/tiny.names";
+#define THRESHOLD 0.5
 
-#define NORMALOBJECT "NormalObject"
-#define DIFFRENTSHAPEOBJECT "DIFFERENTSHAPEOBJECT"
+
+const cv::String NORMALOBJECT = "NORMAL";
+#define DIFFRENTSHAPEOBJECT "DIFFERENTSHAPE"
+#define DIFFRENTCOLOROBJECT "DIFFERENTCOLOR"
 
 
 //데이터 통신

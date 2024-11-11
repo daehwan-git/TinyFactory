@@ -22,6 +22,5 @@ void LogManager::WriteLog(CString insertData)
 
 	insertData = strDate +  " : " + insertData;
 
-	logListBox->AddString(insertData);
-	logListBox->SetCurSel(logListBox->GetCount() - 1);
+	logListBox->InsertString(0,insertData);
 }

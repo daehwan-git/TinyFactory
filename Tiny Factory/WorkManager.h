@@ -3,6 +3,7 @@
 #include"pch.h"
 #include  "ConvayorBeltSP.h"
 #include "DataProcessSP.h"
+#include <opencv2/core/cvstd.hpp>
 
 class DataProcessSP;
 class ConvayorBeltSP;
@@ -40,6 +41,7 @@ private:
 
 public:
 	void ObjectDetection();
-	void FinishYOLO(std::vector<std::string> classNames);
+	void FinishYOLO(std::vector<cv::String> classNames);
+	bool IsDetection() { return isDetection; }
 };
 
