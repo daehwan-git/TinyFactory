@@ -16,7 +16,7 @@ public:
 	{
 		if (portNumber == "" || sp != nullptr)
 		{
-			LogManager::GetInstance().WriteLog("포트의 번호가 유효하지 않음");
+			LogManager::GetInstance().WriteLog("데이터 포트의 번호가 유효하지 않음");
 		}
 		else
 		{

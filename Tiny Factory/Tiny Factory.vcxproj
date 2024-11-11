@@ -196,6 +196,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ConvayorBeltSP.h" />
+    <ClInclude Include="RobotControlDlg.h" />
     <ClInclude Include="WorkManager.h" />
     <ClInclude Include="DataProcessSP.h" />
     <ClInclude Include="Define.h" />
@@ -212,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConvayorBeltSP.cpp" />
+    <ClCompile Include="RobotControlDlg.cpp" />
     <ClCompile Include="WorkManager.cpp" />
     <ClCompile Include="DataProcessSP.cpp" />
     <ClCompile Include="FileManager.cpp" />

@@ -15,7 +15,7 @@ public:
 	{
 		if (portNumber == "" || sp != nullptr)
 		{
-			LogManager::GetInstance().WriteLog("포트의 번호가 유효하지 않음");
+			LogManager::GetInstance().WriteLog("컨베이어 벨트 포트의 번호가 유효하지 않음");
 		}
 		else
 		{

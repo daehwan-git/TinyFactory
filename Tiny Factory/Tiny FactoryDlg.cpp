@@ -81,6 +81,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 END_MESSAGE_MAP()
 
 
@@ -377,9 +378,12 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
-	convayorBeltSp->StopConvayorBelt();
-	GetDlgItem(START_BTN)->EnableWindow(TRUE);
-	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+	if (convayorBeltSp != nullptr)
+	{
+		convayorBeltSp->StopConvayorBelt();
+		GetDlgItem(START_BTN)->EnableWindow(TRUE);
+		LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+	}
 }
 
 LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
@@ -400,4 +404,14 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
+{
+	if (!robotControlDlg.GetSafeHwnd()) {
+		robotControlDlg.Create(IDD_ROBOT_DLG, this);
+		robotControlDlg.CenterWindow();
+	}
+	robotControlDlg.ShowWindow(SW_SHOW);
 }
