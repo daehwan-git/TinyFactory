@@ -5,6 +5,8 @@
 #define IDM_ABOUTBOX                    0x0010
 #define BELT_PORT                       0x0010
 #define DATAPORT                        17
+#define DATAPORT2                       18
+#define ROBOT_ARM_PORT                  18
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
 #define IDD_TINY_FACTORY_DIALOG         102
@@ -23,9 +25,13 @@
 #define DERECTIONRECT                   1008
 #define ROBOT_COMMAND_LISTBOX           1010
 #define IDC_SLIDER1                     1011
+#define IDC_A_MOTOR_SLIDER              1011
 #define IDC_SLIDER2                     1012
+#define IDC_B_MOTOR_SLIDER              1012
 #define IDC_SLIDER3                     1013
+#define IDC_C_MOTOR_SLIDER              1013
 #define IDC_SLIDER4                     1014
+#define IDC_D_MOTOR_SLIDER              1014
 #define ROBOT_SEND_COMMAND_BTN          1015
 
 // Next default values for new objects

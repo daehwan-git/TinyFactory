@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "afxdialogex.h"
+#include "RobotArmSP.h"
 
 
 // RobotControlDlg 대화 상자
@@ -22,5 +23,20 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+
+private:
+	bool isRecord = false;
+	CString currentCommand = "";
+
 	CListBox robotCommandListBox;
+	CSliderCtrl aMotorSlider;
+	CSliderCtrl bMotorSlider;
+	CSliderCtrl cMotorSlider;
+	CSliderCtrl dMotorSlider;
+
+	RobotArmSP* robotArmSP;
+
+public:
+	virtual BOOL OnInitDialog();
+	void SetRobotArmSP(RobotArmSP* robotArmSP);
 };

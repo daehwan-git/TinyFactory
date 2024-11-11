@@ -184,6 +184,17 @@ void CTinyFactoryDlg::Init()
 {
 	LogManager::GetInstance().InitLogControl(&logListBox);
 
+	if (!robotControlDlg.GetSafeHwnd()) {
+		robotControlDlg.Create(IDD_ROBOT_DLG, this);
+		robotControlDlg.CenterWindow();
+
+		CString robotArmPort = "";
+		GetDlgItemText(ROBOT_ARM_PORT,robotArmPort);
+
+		RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
+		robotControlDlg.SetRobotArmSP(robotArmSP);
+	}
+
 	DisplayCamera();
 }
 
@@ -424,9 +435,5 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
 {
-	if (!robotControlDlg.GetSafeHwnd()) {
-		robotControlDlg.Create(IDD_ROBOT_DLG, this);
-		robotControlDlg.CenterWindow();
-	}
 	robotControlDlg.ShowWindow(SW_SHOW);
 }
