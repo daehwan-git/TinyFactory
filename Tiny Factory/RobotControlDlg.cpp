@@ -68,7 +68,7 @@ void RobotControlDlg::OnBnClickedRecordBtn()
 	else {
 		isRecord = false;
 		SetDlgItemText(ROBOT_RECORD_BTN, "녹화 시작");
-		ResetCommand();
+		ResetSliderPos();
 	}
 }
 
