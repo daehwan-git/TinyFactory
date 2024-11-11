@@ -389,6 +389,11 @@ void CTinyFactoryDlg::OnDestroy()
 		delete objectDetection;
 	}
 
+	if (robotControlDlg.GetSafeHwnd() != nullptr)
+	{
+		robotControlDlg.DestroyWindow();
+	}
+
 	SaveLogData();
 }
 

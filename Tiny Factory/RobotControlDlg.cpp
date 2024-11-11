@@ -35,6 +35,7 @@ void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedRecordBtn)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureAMotorSlider)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -106,4 +107,15 @@ void RobotControlDlg::OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 
 	AddCommand(MOTOR_A + sPos);
 	*pResult = 0;
+}
+
+
+void RobotControlDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	if (robotArmSP != nullptr)
+	{
+		delete robotArmSP;
+	}
 }

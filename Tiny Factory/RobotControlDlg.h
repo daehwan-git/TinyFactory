@@ -46,4 +46,5 @@ public:
 	void SetRobotArmSP(RobotArmSP* robotArmSP);
 	afx_msg void OnBnClickedRecordBtn();
 	afx_msg void OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDestroy();
 };
