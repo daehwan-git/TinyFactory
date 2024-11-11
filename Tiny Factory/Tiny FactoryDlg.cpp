@@ -390,18 +390,15 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
-<<<<<<< HEAD
-	if (convayorBeltSp != nullptr)
+	if (conveyorBeltSp != nullptr)
 	{
-		convayorBeltSp->StopConvayorBelt();
+		conveyorBeltSp->StopConveyorBelt();
 		GetDlgItem(START_BTN)->EnableWindow(TRUE);
 		LogManager::GetInstance().WriteLog("공장을 정지합니다.");
 	}
-=======
 	conveyorBeltSp->StopConveyorBelt();
 	GetDlgItem(START_BTN)->EnableWindow(TRUE);
 	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
->>>>>>> b6c4359aebecdf5025eb87173b6fb58760449abe
 }
 
 LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
