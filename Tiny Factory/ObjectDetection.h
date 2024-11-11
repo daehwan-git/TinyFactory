@@ -37,6 +37,7 @@ public:
 public:
 	void YoloDataFrame(Mat matFrame);
 	void StopObjectDetection();
+	void ReleaseObjectDetection();
 
 private:
 	void DrawObjectdetection(const Mat& img);

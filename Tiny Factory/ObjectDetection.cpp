@@ -38,6 +38,11 @@ void ObjectDetection::StopObjectDetection()
 	}
 }
 
+void ObjectDetection::ReleaseObjectDetection()
+{
+	WaitForSingleObject(RunThread_YOLO,INFINITE);
+}
+
 
 
 void ObjectDetection::YOLO(Mat matFrame)

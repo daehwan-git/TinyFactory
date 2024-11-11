@@ -379,6 +379,7 @@ void CTinyFactoryDlg::OnDestroy()
 	if (objectDetection != nullptr)
 	{
 		objectDetection->StopObjectDetection();
+		objectDetection->ReleaseObjectDetection();
 		delete objectDetection;
 	}
 
