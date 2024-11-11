@@ -69,7 +69,7 @@
     <ClInclude Include="DataProcessSP.h">
       <Filter>헤더 파일\Serial</Filter>
     </ClInclude>
-    <ClInclude Include="ConvayorBeltSP.h">
+    <ClInclude Include="ConveyorBelt.h">
       <Filter>헤더 파일\Serial</Filter>
     </ClInclude>
     <ClInclude Include="RobotControlDlg.h">
@@ -95,7 +95,7 @@
     <ClCompile Include="Serial.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ConvayorBeltSP.cpp">
+    <ClCompile Include="ConveyorBeltSP.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="FileManager.cpp">

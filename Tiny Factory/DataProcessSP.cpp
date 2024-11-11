@@ -33,7 +33,8 @@ void DataProcessSP::ReleaseDataProcess()
 {
 	if (sp != nullptr)
 	{
-		sp->~Serial();
+		WaitForSingleObject(DataProcessThread, INFINITE);
+		delete sp;
 	}
 }
 

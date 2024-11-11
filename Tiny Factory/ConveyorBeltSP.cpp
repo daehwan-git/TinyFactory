@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "ConvayorBeltSP.h"
+#include "ConveyorBelt.h"
 
 
-void ConvayorBeltSP::StopConvayorBelt()
+void ConveyorBeltSP::StopConveyorBelt()
 {
 	if (sp == nullptr)return;
 	if (isRun)
@@ -16,7 +16,7 @@ void ConvayorBeltSP::StopConvayorBelt()
 	}
 }
 
-void ConvayorBeltSP::StartConvayorBelt()
+void ConveyorBeltSP::StartConveyorBelt()
 {
 	if (sp == nullptr)return;
 
@@ -32,18 +32,19 @@ void ConvayorBeltSP::StartConvayorBelt()
 	AfxBeginThread(ConvayorBeltRun,this);
 }
 
-void ConvayorBeltSP::ReleaseConvayorBelt()
+void ConveyorBeltSP::ReleaseConveyorBelt()
 {
 	if (sp != nullptr)
-	{
-		sp->~Serial();
+	{	
+		WaitForSingleObject(ConvayorBeltRun, INFINITE);
+		delete sp;
 	}
 }
 
-UINT ConvayorBeltSP::ConvayorBeltRun(LPVOID lpParam)
+UINT ConveyorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 {
 
-	ConvayorBeltSP* convayorBeltSP = (ConvayorBeltSP*)lpParam;
+	ConveyorBeltSP* convayorBeltSP = (ConveyorBeltSP*)lpParam;
 
 	char incomingData[256] = "";
 	int resultData = 0;

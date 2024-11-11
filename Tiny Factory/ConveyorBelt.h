@@ -3,7 +3,7 @@
 #include"pch.h"
 #include "resource.h"
 
-class ConvayorBeltSP
+class ConveyorBeltSP
 {
 private:
 	Serial* sp;
@@ -11,9 +11,9 @@ private:
 	bool isRun = false;
 
 public:
-	ConvayorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)
+	ConveyorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)
 	{
-		if (portNumber == "" || sp != nullptr)
+		if (portNumber == "")
 		{
 			LogManager::GetInstance().WriteLog("컨베이어 벨트 포트의 번호가 유효하지 않음");
 		}
@@ -34,9 +34,9 @@ public:
 		}
 	}
 
-	void StopConvayorBelt();
-	void StartConvayorBelt();
-	void ReleaseConvayorBelt();
+	void StopConveyorBelt();
+	void StartConveyorBelt();
+	void ReleaseConveyorBelt();
 	bool IsRun() { return isRun; }
 	
 private:

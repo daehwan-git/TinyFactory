@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 
 
 CTinyFactoryDlg::CTinyFactoryDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),convayorBeltSp(nullptr)
+	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),conveyorBeltSp(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -218,11 +218,16 @@ void CTinyFactoryDlg::DisplayCamera()
 		LogManager::GetInstance().WriteLog("카메라를 연결 성공");
 	}
 
+
+	if (objectDetection == nullptr)
+	{
+		objectDetection = new ObjectDetection(&detectionRect);
+	}
+
+
 	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
 
 	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
-
-	objectDetection = new ObjectDetection(&detectionRect);
 
 	SetTimer(CAMERA_EVENT, 30, NULL);
 }
@@ -233,9 +238,11 @@ void CTinyFactoryDlg::CameraLogic()
 {
 	capture->read(matFrame);
 
-	cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 
-	objectDetection->YoloDataFrame(matFrame);
+	if(objectDetection != nullptr && WorkManager::GetInstance().IsDetection())
+		objectDetection->YoloDataFrame(matFrame);
+
+#pragma region DrawCam
 
 	int bpp = 8 * matFrame.elemSize();
 	assert((bpp == 8 || bpp == 24 || bpp == 32));
@@ -321,27 +328,29 @@ void CTinyFactoryDlg::CameraLogic()
 	::ReleaseDC(videoRect.m_hWnd, dc);
 	imageMfc.ReleaseDC();
 	imageMfc.Destroy();
+#pragma endregion
 }
 
 
 void CTinyFactoryDlg::OnBnClickedBtn()
 {
-	CString text = "";
-	GetDlgItemText(BELT_PORT, text);
+	CString beltPort = "";
+	GetDlgItemText(BELT_PORT, beltPort);
 
-	if (convayorBeltSp == nullptr)
+	if (conveyorBeltSp == nullptr)
 	{
-		convayorBeltSp = new ConvayorBeltSP(text, this);
-		WorkManager::GetInstance().InitConvayorBeltSP(convayorBeltSp);
+		conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
+		WorkManager::GetInstance().InitConvayorBeltSP(conveyorBeltSp);
 	}
 
-	convayorBeltSp->StartConvayorBelt();
+	conveyorBeltSp->StartConveyorBelt();
 
-	GetDlgItemText(DATAPORT, text);
+	CString dataPort = "";
+	GetDlgItemText(DATAPORT, dataPort);
 
 	if (dataProcessSp == nullptr)
 	{
-		dataProcessSp = new DataProcessSP(text, this);
+		dataProcessSp = new DataProcessSP(dataPort, this);
 		WorkManager::GetInstance().InitDataProcessSP(dataProcessSp);
 	}
 
@@ -354,14 +363,16 @@ void CTinyFactoryDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	if (convayorBeltSp != nullptr)
+	if (conveyorBeltSp != nullptr)
 	{
-		convayorBeltSp->ReleaseConvayorBelt();
-		delete convayorBeltSp;
+		conveyorBeltSp->StopConveyorBelt();
+		conveyorBeltSp->ReleaseConveyorBelt();
+		delete conveyorBeltSp;
 	}
 
 	if (dataProcessSp != nullptr)
 	{
+		dataProcessSp->StopDataProcess();
 		dataProcessSp->ReleaseDataProcess();
 		delete dataProcessSp;
 	}
@@ -369,6 +380,7 @@ void CTinyFactoryDlg::OnDestroy()
 	if (objectDetection != nullptr)
 	{
 		objectDetection->StopObjectDetection();
+		objectDetection->ReleaseObjectDetection();
 		delete objectDetection;
 	}
 
@@ -378,12 +390,18 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
+<<<<<<< HEAD
 	if (convayorBeltSp != nullptr)
 	{
 		convayorBeltSp->StopConvayorBelt();
 		GetDlgItem(START_BTN)->EnableWindow(TRUE);
 		LogManager::GetInstance().WriteLog("공장을 정지합니다.");
 	}
+=======
+	conveyorBeltSp->StopConveyorBelt();
+	GetDlgItem(START_BTN)->EnableWindow(TRUE);
+	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+>>>>>>> b6c4359aebecdf5025eb87173b6fb58760449abe
 }
 
 LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)

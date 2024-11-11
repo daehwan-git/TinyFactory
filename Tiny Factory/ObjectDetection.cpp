@@ -26,6 +26,7 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 {
 	if (!matFrame.empty())
 	{
+		cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 		matFrame.copyTo(this->matFrame);
 	}
 }
@@ -35,6 +36,11 @@ void ObjectDetection::StopObjectDetection()
 	if (this != nullptr) {
 		isRun = false;
 	}
+}
+
+void ObjectDetection::ReleaseObjectDetection()
+{
+	WaitForSingleObject(RunThread_YOLO,INFINITE);
 }
 
 
@@ -48,7 +54,6 @@ void ObjectDetection::YOLO(Mat matFrame)
 		std::vector<String> outNames = m_net.getUnconnectedOutLayersNames();
 		m_net.forward(outs, outNames);
 
-		printf("%s", "hello");
 		processDetections(outs, matFrame, classes, THRESHOLD);
 	}
 }
@@ -63,24 +68,31 @@ void ObjectDetection::InitTrainSet()
 		classes.push_back(line);
 	}
 
-	m_net = readNetFromDarknet(yoloCfg, yoloWeight);
+	try {
+		m_net = readNetFromDarknet(yoloCfg, yoloWeight);
 
-	if (m_net.empty())
+		if (m_net.empty())
+		{
+			LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");
+		}
+		else {
+			LogManager::GetInstance().WriteLog("데이터 셋 준비 완료.");
+		}
+
+		m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
+		m_net.setPreferableTarget(DNN_TARGET_CPU);
+	}catch(Exception e)
 	{
-		LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");
+		LogManager::GetInstance().WriteLog("데이터 셋이 존재하지 않음.");
 	}
-	else {
-		LogManager::GetInstance().WriteLog("데이터 셋 준비 완료.");
-	}
-
-	m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
-	m_net.setPreferableTarget(DNN_TARGET_CPU);
 }
 
 
 void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat& img, const std::vector<std::string>& classes, float confThreshold)
 {
 	bool flag = false;
+	std::vector<String> classNames;
+
 	for (size_t i = 0; i < outs.size(); ++i)
 	{
 		float* data = (float*)outs[i].data;
@@ -109,6 +121,7 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 				{
 					CV_Assert(classIdPoint.x < (int)classes.size());
 					label = classes[classIdPoint.x] + ":" + label;
+					classNames.push_back(classes[classIdPoint.x]);
 				}
 
 				int baseLine;
@@ -121,10 +134,10 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 		}
 	}
 
-	if (classes.size() > 0)
+	if (flag)
 	{
 		DrawObjectdetection(img);
-		WorkManager::GetInstance().FinishYOLO(classes);
+		WorkManager::GetInstance().FinishYOLO(classNames);
 	}
 }
 

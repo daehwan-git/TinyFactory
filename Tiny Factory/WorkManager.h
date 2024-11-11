@@ -1,11 +1,12 @@
 #pragma once
 
 #include"pch.h"
-#include  "ConvayorBeltSP.h"
+#include  "ConveyorBelt.h"
 #include "DataProcessSP.h"
+#include <opencv2/core/cvstd.hpp>
 
 class DataProcessSP;
-class ConvayorBeltSP;
+class ConveyorBeltSP;
 
 class WorkManager
 {
@@ -14,7 +15,7 @@ private:
 	CString detectionClassName = "";
 	bool objectCheck = false;
 
-	ConvayorBeltSP* conbayorBeltSP = nullptr;
+	ConveyorBeltSP* conbayorBeltSP = nullptr;
 	DataProcessSP* dataProcessSP = nullptr;
 
 public:
@@ -24,7 +25,7 @@ public:
 		return dataManager;
 	}
 
-	void InitConvayorBeltSP(ConvayorBeltSP* conbayorBeltSP)
+	void InitConvayorBeltSP(ConveyorBeltSP* conbayorBeltSP)
 	{
 		this->conbayorBeltSP = conbayorBeltSP;
 	}
@@ -40,6 +41,7 @@ private:
 
 public:
 	void ObjectDetection();
-	void FinishYOLO(std::vector<std::string> classNames);
+	void FinishYOLO(std::vector<cv::String> classNames);
+	bool IsDetection() { return isDetection; }
 };
 

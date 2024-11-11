@@ -1,4 +1,5 @@
 #include  "WorkManager.h"
+#include <opencv2/core/cvstd.hpp>
 
 void WorkManager::FinishObjectDetection()
 {
@@ -10,7 +11,7 @@ void WorkManager::FinishObjectDetection()
 
 		if (conbayorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StartConvayorBelt();
+			conbayorBeltSP->StartConveyorBelt();
 		}
 	}
 }
@@ -26,15 +27,17 @@ void WorkManager::ObjectDetection()
 
 		if (conbayorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StopConvayorBelt();
+			conbayorBeltSP->StopConveyorBelt();
 		}
 	}
 }
 
-void WorkManager::FinishYOLO(std::vector<std::string> classNames)
+void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 {
 	//case 1: keep going 
 	//case 2 robot arms moving
+
+	objectCheck = true;
 
 	bool isNormal = false;
 
@@ -43,6 +46,8 @@ void WorkManager::FinishYOLO(std::vector<std::string> classNames)
 		if (classNames[i] == NORMALOBJECT)
 		{
 			isNormal = true;
+			LogManager::GetInstance().WriteLog("정상적인 오브젝트 감지됨.");
+			break;
 		}
 	}
 
@@ -50,9 +55,15 @@ void WorkManager::FinishYOLO(std::vector<std::string> classNames)
 	{
 		//robot arms can move
 
-
+		LogManager::GetInstance().WriteLog("비정상적인 오브젝트 감지됨.");
 	}
 	else {
-		FinishObjectDetection();
+		//FinishObjectDetection();
+	}
+
+
+	if (!objectCheck)
+	{
+		
 	}
 }
