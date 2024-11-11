@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 
 
 CTinyFactoryDlg::CTinyFactoryDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),convayorBeltSp(nullptr)
+	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),conveyorBeltSp(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -336,13 +336,13 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	CString beltPort = "";
 	GetDlgItemText(BELT_PORT, beltPort);
 
-	if (convayorBeltSp == nullptr)
+	if (conveyorBeltSp == nullptr)
 	{
-		convayorBeltSp = new ConvayorBeltSP(beltPort, this);
-		WorkManager::GetInstance().InitConvayorBeltSP(convayorBeltSp);
+		conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
+		WorkManager::GetInstance().InitConvayorBeltSP(conveyorBeltSp);
 	}
 
-	convayorBeltSp->StartConvayorBelt();
+	conveyorBeltSp->StartConveyorBelt();
 
 	CString dataPort = "";
 	GetDlgItemText(DATAPORT, dataPort);
@@ -362,11 +362,11 @@ void CTinyFactoryDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	if (convayorBeltSp != nullptr)
+	if (conveyorBeltSp != nullptr)
 	{
-		convayorBeltSp->StopConvayorBelt();
-		convayorBeltSp->ReleaseConvayorBelt();
-		delete convayorBeltSp;
+		conveyorBeltSp->StopConveyorBelt();
+		conveyorBeltSp->ReleaseConveyorBelt();
+		delete conveyorBeltSp;
 	}
 
 	if (dataProcessSp != nullptr)
@@ -389,7 +389,7 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
-	convayorBeltSp->StopConvayorBelt();
+	conveyorBeltSp->StopConveyorBelt();
 	GetDlgItem(START_BTN)->EnableWindow(TRUE);
 	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
 }

@@ -11,7 +11,7 @@ void WorkManager::FinishObjectDetection()
 
 		if (conbayorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StartConvayorBelt();
+			conbayorBeltSP->StartConveyorBelt();
 		}
 	}
 }
@@ -27,7 +27,7 @@ void WorkManager::ObjectDetection()
 
 		if (conbayorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StopConvayorBelt();
+			conbayorBeltSP->StopConveyorBelt();
 		}
 	}
 }

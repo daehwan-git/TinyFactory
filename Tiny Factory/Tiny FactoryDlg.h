@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ConvayorBeltSP.h"
+#include "ConveyorBelt.h"
 #include "opencv2/opencv.hpp"
 #include "DataProcessSP.h"
 #include "ObjectDetection.h"
@@ -50,7 +50,7 @@ private:
 	VideoCapture* capture;
 	Mat matFrame;
 	CImage imageMfc;
-	ConvayorBeltSP* convayorBeltSp;
+	ConveyorBeltSP* conveyorBeltSp;
 	DataProcessSP* dataProcessSp;
 	ObjectDetection* objectDetection;
 	

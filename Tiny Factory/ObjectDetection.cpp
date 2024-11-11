@@ -80,7 +80,7 @@ void ObjectDetection::InitTrainSet()
 		}
 
 		m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
-		m_net.setPreferableTarget(DNN_TARGET_CUDA);
+		m_net.setPreferableTarget(DNN_TARGET_CPU);
 	}catch(Exception e)
 	{
 		LogManager::GetInstance().WriteLog("데이터 셋이 존재하지 않음.");

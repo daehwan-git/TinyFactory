@@ -3,7 +3,7 @@
 #include"pch.h"
 #include "resource.h"
 
-class ConvayorBeltSP
+class ConveyorBeltSP
 {
 private:
 	Serial* sp;
@@ -11,7 +11,7 @@ private:
 	bool isRun = false;
 
 public:
-	ConvayorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)
+	ConveyorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)
 	{
 		if (portNumber == "")
 		{
@@ -34,9 +34,9 @@ public:
 		}
 	}
 
-	void StopConvayorBelt();
-	void StartConvayorBelt();
-	void ReleaseConvayorBelt();
+	void StopConveyorBelt();
+	void StartConveyorBelt();
+	void ReleaseConveyorBelt();
 	bool IsRun() { return isRun; }
 	
 private:
