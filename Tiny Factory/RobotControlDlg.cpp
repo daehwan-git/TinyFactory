@@ -50,10 +50,10 @@ BOOL RobotControlDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	aMotorSlider.SetRange(ROBOT_ARM_MIN_RANGE,ROBOT_ARM_MAX_RANGE);
-	bMotorSlider.SetRange(ROBOT_ARM_MIN_RANGE,ROBOT_ARM_MAX_RANGE);
-	cMotorSlider.SetRange(ROBOT_ARM_MIN_RANGE,ROBOT_ARM_MAX_RANGE);
-	dMotorSlider.SetRange(ROBOT_ARM_MIN_RANGE,ROBOT_ARM_MAX_RANGE);
+	aMotorSlider.SetRange(AMOTOR_MIN_RANGE, AMOTOR_MAX_RANGE);
+	bMotorSlider.SetRange(BMOTOR_MIN_RANGE, BMOTOR_MAX_RANGE);
+	cMotorSlider.SetRange(CMOTOR_MIN_RANGE, CMOTOR_MAX_RANGE);
+	dMotorSlider.SetRange(AMOTOR_MIN_RANGE, CMOTOR_MAX_RANGE);
 
 	return TRUE;  
 }
@@ -86,9 +86,8 @@ void RobotControlDlg::OnBnClickedRecordBtn()
 
 void RobotControlDlg::AddCommand(CString command)
 {
-	this->currentCommand += command + ":";
-	robotCommandListBox.ResetContent();
-	robotCommandListBox.AddString(this->currentCommand);
+	robotCommandListBox.AddString(command);
+	robotCommandListBox.SetCurSel(robotCommandListBox.GetCount() - 1);
 }
 
 void RobotControlDlg::ResetCommand()
@@ -116,6 +115,7 @@ void RobotControlDlg::OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 	sPos.Format("%d", pos);
 
 	AddCommand(MOTOR_A + sPos);
+	robotArmSP->SendCommand(MOTOR_A + sPos);
 	*pResult = 0;
 }
 
@@ -135,12 +135,12 @@ void RobotControlDlg::OnNMCustomdrawBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult
 {
 	if (!isRecord)return;
 
-	int pos = aMotorSlider.GetPos();
+	int pos = bMotorSlider.GetPos();
 	CString sPos;
 	sPos.Format("%d", pos);
 
 	AddCommand(MOTOR_B + sPos);
-
+	robotArmSP->SendCommand(MOTOR_B + sPos);
 	*pResult = 0;
 }
 
@@ -149,12 +149,13 @@ void RobotControlDlg::OnNMCustomdrawCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult
 {	
 	if (!isRecord)return;
 
-	int pos = aMotorSlider.GetPos();
+	int pos = cMotorSlider.GetPos();
 	CString sPos;
 	sPos.Format("%d", pos);
 
 	AddCommand(MOTOR_C+ sPos);
-	
+	robotArmSP->SendCommand(MOTOR_C + sPos);
+
 	*pResult = 0;
 }
 
@@ -175,9 +176,18 @@ void RobotControlDlg::OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 
 void RobotControlDlg::OnBnClickedSendCommandBtn()
 {
-	if (currentCommand != "" && !isRecord)
+	if (!isRecord)
 	{
-		robotArmSP->SendCommand(currentCommand);
+		CString command = "";
+		for (int i = 0; i < robotCommandListBox.GetCount(); i++)
+		{
+			CString item;
+			robotCommandListBox.GetText(i,item);
+			command += item + ":";
+		}
+
+		if(command != "")
+			robotArmSP->SendCommandList(command);
 	}
 }
 

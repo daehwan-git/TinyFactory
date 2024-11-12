@@ -36,6 +36,36 @@ void RobotArmSP::SendCommand(CString command)
 	}
 }
 
+void RobotArmSP::SendCommandList(CString command)
+{
+	if (isFinishCommand)
+	{
+		command = STORECOMMAND + command;
+		isFinishCommand = false;
+
+		if (sp == nullptr)return;
+
+		LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
+
+		if (sp->IsConnected())
+		{
+			sp->WriteData(command, DATA_LENGTH);
+		}
+	}
+	else {
+		LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ¸í·É ¼öÇàÁß...");
+	}
+}
+
+void RobotArmSP::ParsingData(CString command)
+{
+	printf("%s", command);
+	if (command == COMMANDFNINISH)
+	{
+		isFinishCommand = true;
+	}
+}
+
 UINT RobotArmSP::DataProcessThread(LPVOID lpParam)
 {
 	RobotArmSP* robotArm = (RobotArmSP*)lpParam;
@@ -52,6 +82,8 @@ UINT RobotArmSP::DataProcessThread(LPVOID lpParam)
 		incomingData[resultData] = '\0';
 
 		CString result(incomingData);
+
+		robotArm->ParsingData(result);
 
 		Sleep(SYNC_TIME);
 	}

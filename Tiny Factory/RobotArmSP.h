@@ -8,6 +8,7 @@ private:
 	CDialogEx* dialog;
 	Serial* sp;
 	bool isRun = false;
+	bool isFinishCommand = true;
 
 
 public:
@@ -42,6 +43,8 @@ public:
 	void StartDataProcess();
 	void StopDataProcess();
 	void SendCommand(CString command);
+	void SendCommandList(CString command);
+	void ParsingData(CString command);
 	bool IsRun() { return isRun; }
 	
 
