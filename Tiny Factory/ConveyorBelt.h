@@ -34,12 +34,18 @@ public:
 		}
 	}
 
+	~ConveyorBeltSP()
+	{
+		StopConveyorBelt();
+		ReleaseConveyorBelt();
+	}
+
 	void StopConveyorBelt();
 	void StartConveyorBelt();
-	void ReleaseConveyorBelt();
 	bool IsRun() { return isRun; }
 	
 private:
+	void ReleaseConveyorBelt();
 	static UINT ConvayorBeltRun(LPVOID lpParam);
 };
 

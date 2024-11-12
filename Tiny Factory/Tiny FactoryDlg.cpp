@@ -81,6 +81,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 END_MESSAGE_MAP()
 
 
@@ -182,6 +183,11 @@ void CTinyFactoryDlg::OnBnClickedOk()
 void CTinyFactoryDlg::Init()
 {
 	LogManager::GetInstance().InitLogControl(&logListBox);
+
+	if (!robotControlDlg.GetSafeHwnd()) {
+		robotControlDlg.Create(IDD_ROBOT_DLG, this);
+		robotControlDlg.CenterWindow();
+	}
 
 	DisplayCamera();
 }
@@ -355,6 +361,12 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 
 
 	dataProcessSp->StartDataProcess();
+
+	CString robotArmPort = "";
+	GetDlgItemText(ROBOT_ARM_PORT, robotArmPort);
+
+	RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
+	robotControlDlg.SetRobotArmSP(robotArmSP);
 }
 
 
@@ -364,23 +376,22 @@ void CTinyFactoryDlg::OnDestroy()
 
 	if (conveyorBeltSp != nullptr)
 	{
-		conveyorBeltSp->StopConveyorBelt();
-		conveyorBeltSp->ReleaseConveyorBelt();
 		delete conveyorBeltSp;
 	}
 
 	if (dataProcessSp != nullptr)
 	{
-		dataProcessSp->StopDataProcess();
-		dataProcessSp->ReleaseDataProcess();
 		delete dataProcessSp;
 	}
 
 	if (objectDetection != nullptr)
 	{
-		objectDetection->StopObjectDetection();
-		objectDetection->ReleaseObjectDetection();
 		delete objectDetection;
+	}
+
+	if (robotControlDlg.GetSafeHwnd() != nullptr)
+	{
+		robotControlDlg.DestroyWindow();
 	}
 
 	SaveLogData();
@@ -389,6 +400,12 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
+	if (conveyorBeltSp != nullptr)
+	{
+		conveyorBeltSp->StopConveyorBelt();
+		GetDlgItem(START_BTN)->EnableWindow(TRUE);
+		LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+	}
 	conveyorBeltSp->StopConveyorBelt();
 	GetDlgItem(START_BTN)->EnableWindow(TRUE);
 	LogManager::GetInstance().WriteLog("공장을 정지합니다.");
@@ -412,4 +429,10 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
+{
+	robotControlDlg.ShowWindow(SW_SHOW);
 }

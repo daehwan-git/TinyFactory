@@ -38,3 +38,14 @@ const cv::String NORMALOBJECT = "NORMAL";
 //µ•¿Ã≈Õ ≈ÎΩ≈
 #define DATAPROCESS_ON_DATA "ON"
 #define DATAPROCESS_OFF_DATA "OFF"
+
+
+//∑Œ∫ø ∆»
+
+#define ROBOT_ARM_MAX_RANGE 180
+#define ROBOT_ARM_MIN_RANGE 0
+
+#define MOTOR_A "AMOTOR"
+#define MOTOR_B "BMOTOR"
+#define MOTOR_C "CMOTOR"
+#define MOTOR_D "DMOTOR"

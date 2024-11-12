@@ -8,6 +8,7 @@
 #include "opencv2/opencv.hpp"
 #include "DataProcessSP.h"
 #include "ObjectDetection.h"
+#include "RobotControlDlg.h"
 
 
 // CTinyFactoryDlg 대화 상자
@@ -53,7 +54,8 @@ private:
 	ConveyorBeltSP* conveyorBeltSp;
 	DataProcessSP* dataProcessSp;
 	ObjectDetection* objectDetection;
-	
+	RobotControlDlg robotControlDlg;
+
 	CButton startBtn;
 	CStatic videoRect;
 	CStatic detectionRect;
@@ -64,4 +66,5 @@ public:
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedRobotcontrolbtn();
 };
