@@ -436,3 +436,4 @@ void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
 {
 	robotControlDlg.ShowWindow(SW_SHOW);
 }
+
