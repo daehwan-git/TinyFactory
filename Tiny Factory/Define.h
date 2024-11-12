@@ -49,3 +49,9 @@ const cv::String NORMALOBJECT = "NORMAL";
 #define MOTOR_B "BMOTOR"
 #define MOTOR_C "CMOTOR"
 #define MOTOR_D "DMOTOR"
+
+
+#define ROBOTTEST "TEST"
+#define ROBOTRECORD "RECORD"
+#define ROBOTSTOP "STOP"
+

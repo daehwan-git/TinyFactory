@@ -35,11 +35,12 @@ void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedRecordBtn)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureAMotorSlider)
-	ON_WM_DESTROY()
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawBMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawCMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_D_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureDMotorSlider)
 	ON_BN_CLICKED(ROBOT_SEND_COMMAND_BTN, &RobotControlDlg::OnBnClickedSendCommandBtn)
+	ON_WM_DESTROY()
+	ON_BN_CLICKED(ROBOT_TEST_BTN, &RobotControlDlg::OnBnClickedTestBtn)
 END_MESSAGE_MAP()
 
 
@@ -177,5 +178,15 @@ void RobotControlDlg::OnBnClickedSendCommandBtn()
 	if (currentCommand != "" && !isRecord)
 	{
 		robotArmSP->SendCommand(currentCommand);
+	}
+}
+
+
+void RobotControlDlg::OnBnClickedTestBtn()
+{
+	if (!isTest)
+	{
+		isTest = true;
+		robotArmSP->SendCommand(ROBOTTEST + currentCommand);
 	}
 }

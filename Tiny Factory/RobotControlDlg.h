@@ -25,7 +25,9 @@ protected:
 public:
 
 private:
+
 	bool isRecord = false;
+	bool isTest = false;
 	CString currentCommand = "";
 
 	CListBox robotCommandListBox;
@@ -51,4 +53,5 @@ public:
 	afx_msg void OnNMCustomdrawCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedSendCommandBtn();
+	afx_msg void OnBnClickedTestBtn();
 };
