@@ -38,8 +38,7 @@ void RobotArmSP::SendCommand(CString command)
 
 void RobotArmSP::SendCommandList(CString command)
 {
-	if (isFinishCommand)
-	{
+
 		command = STORECOMMAND + command;
 		isFinishCommand = false;
 
@@ -51,10 +50,7 @@ void RobotArmSP::SendCommandList(CString command)
 		{
 			sp->WriteData(command, DATA_LENGTH);
 		}
-	}
-	else {
-		LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ¸í·É ¼öÇàÁß...");
-	}
+	
 }
 
 void RobotArmSP::ParsingData(CString command)
