@@ -10,6 +10,20 @@ class ConveyorBeltSP;
 
 class WorkManager
 {
+public:
+	static WorkManager* instance;
+	static WorkManager* GetInstance()
+	{
+		if (instance != nullptr) {
+			return instance;
+		}
+		else {
+			instance = new WorkManager();
+			return instance;
+		}
+	}
+
+
 private:
 	bool isDetection = false;
 	CString detectionClassName = "";
@@ -19,12 +33,6 @@ private:
 	DataProcessSP* dataProcessSP = nullptr;
 
 public:
-	static WorkManager& GetInstance()
-	{
-		static WorkManager dataManager;
-		return dataManager;
-	}
-
 	void InitConvayorBeltSP(ConveyorBeltSP* conbayorBeltSP)
 	{
 		this->conbayorBeltSP = conbayorBeltSP;

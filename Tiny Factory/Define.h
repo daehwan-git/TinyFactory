@@ -24,10 +24,10 @@
 
 
 //데이터 셋
-const std::string yoloCfg = "C:/Users/biotite/Desktop/file/test.cfg";
-const std::string yoloWeight = "C:/Users/biotite/Desktop/file/test_last.weights";
-const std::string yoloClassFile = "C:/Users/biotite/Desktop/file/tiny.names";
-#define THRESHOLD 0.3
+const std::string yoloCfg = "C:/Users/biotite/Desktop/TinyFactoryData/test.cfg";
+const std::string yoloWeight = "C:/Users/biotite/Desktop/TinyFactoryData/test_last.weights";
+const std::string yoloClassFile = "C:/Users/biotite/Desktop/TinyFactoryData/tiny.names";
+#define THRESHOLD 0.5
 
 
 const cv::String NORMALOBJECT = "NORMAL";

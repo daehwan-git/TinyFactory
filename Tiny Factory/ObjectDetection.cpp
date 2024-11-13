@@ -40,7 +40,7 @@ void ObjectDetection::StopObjectDetection()
 
 void ObjectDetection::ReleaseObjectDetection()
 {
-	WaitForSingleObject(RunThread_YOLO,INFINITE);
+	WaitForSingleObject(detectionThread,INFINITE);
 }
 
 
@@ -137,7 +137,7 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 	if (flag)
 	{
 		DrawObjectdetection(img);
-		WorkManager::GetInstance().FinishYOLO(classNames);
+		WorkManager::GetInstance()->FinishYOLO(classNames);
 	}
 }
 

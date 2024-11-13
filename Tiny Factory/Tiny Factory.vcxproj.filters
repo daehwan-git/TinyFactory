@@ -54,9 +54,6 @@
     <ClInclude Include="Define.h">
       <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectDetection.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WorkManager.h">
       <Filter>헤더 파일\Manager</Filter>
     </ClInclude>
@@ -80,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="RobotArmSP.h">
       <Filter>헤더 파일\Serial</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDetection.h">
+      <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

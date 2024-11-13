@@ -10,6 +10,7 @@ private:
 	Serial* sp;
 	bool isRun = false;
 
+	CWinThread* dataProcessThread;
 
 public:
 	DataProcessSP(CString portNumber, CDialogEx* dialog):sp(nullptr),dialog(dialog)
