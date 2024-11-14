@@ -23,14 +23,14 @@ private:
 	
 	CStatic* detectionRect;
 	
-	std::queue<Mat> matQueue;
+	CWinThread* detectionThread;
 
 public:
 	ObjectDetection(CStatic* detectionRect):detectionRect(detectionRect)
 	{
 		InitTrainSet();
 		isRun = true;
-		AfxBeginThread(RunThread_YOLO,this);
+		detectionThread = AfxBeginThread(RunThread_YOLO,this);
 	}
 
 

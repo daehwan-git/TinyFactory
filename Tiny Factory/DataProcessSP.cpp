@@ -13,7 +13,7 @@ void DataProcessSP::StartDataProcess()
 		sp->WriteData(DATAPROCESS_ON_DATA, DATA_LENGTH);
 	}
 
-	AfxBeginThread(DataProcessThread, this);
+	dataProcessThread = AfxBeginThread(DataProcessThread, this);
 }
 
 void DataProcessSP::StopDataProcess()
@@ -33,7 +33,7 @@ void DataProcessSP::ReleaseDataProcess()
 {
 	if (sp != nullptr)
 	{
-		WaitForSingleObject(DataProcessThread, INFINITE);
+		WaitForSingleObject(dataProcessThread, INFINITE);
 		delete sp;
 	}
 }
@@ -42,7 +42,7 @@ void DataProcessSP::ParsingData(CString& data)
 {
 	if (data.Compare(OBJECT_DETECTION) == 0)
 	{
-		WorkManager::GetInstance().ObjectDetection();
+		WorkManager::GetInstance()->ObjectDetection();
 	}
 }
 

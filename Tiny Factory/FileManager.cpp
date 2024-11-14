@@ -3,6 +3,8 @@
 #include<vector>
 #include<string>
 
+FileManager* FileManager::instance = nullptr;
+
 bool FileManager::SaveFile(std::vector<CString>  data)
 {
     //메모장에 데이터 저장

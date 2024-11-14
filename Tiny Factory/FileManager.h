@@ -7,10 +7,18 @@ class FileManager
 {
 
 public:
-	static FileManager& GetInstance()
+	static FileManager* instance;
+
+	static FileManager* GetInstance()
 	{
-		static FileManager instance;
-		return instance;
+		if (instance != nullptr)
+		{
+			return instance;
+		}
+		else {
+			instance = new FileManager();
+			return instance;
+		}
 	}
 
 

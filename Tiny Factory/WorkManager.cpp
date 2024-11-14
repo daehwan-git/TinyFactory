@@ -1,6 +1,8 @@
 #include  "WorkManager.h"
 #include <opencv2/core/cvstd.hpp>
 
+WorkManager* WorkManager::instance = nullptr;
+
 void WorkManager::FinishObjectDetection()
 {
 	if (isDetection)

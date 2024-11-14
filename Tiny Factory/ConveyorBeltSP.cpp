@@ -29,14 +29,14 @@ void ConveyorBeltSP::StartConveyorBelt()
 		sp->WriteData(CONVAYORBELT_ON_DATA, DATA_LENGTH);
 	}
 
-	AfxBeginThread(ConvayorBeltRun,this);
+	conveyorBeltThread = AfxBeginThread(ConvayorBeltRun,this);
 }
 
 void ConveyorBeltSP::ReleaseConveyorBelt()
 {
 	if (sp != nullptr)
 	{	
-		WaitForSingleObject(ConvayorBeltRun, INFINITE);
+		WaitForSingleObject(conveyorBeltThread, INFINITE);
 		delete sp;
 	}
 }

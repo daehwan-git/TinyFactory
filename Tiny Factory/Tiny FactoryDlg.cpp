@@ -206,7 +206,7 @@ void CTinyFactoryDlg::SaveLogData()
 	}
 
 
-	FileManager::GetInstance().SaveFile(data);
+	FileManager::GetInstance()->SaveFile(data);
 }
 
 void CTinyFactoryDlg::DisplayCamera()
@@ -345,7 +345,7 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	if (conveyorBeltSp == nullptr)
 	{
 		conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
-		WorkManager::GetInstance().InitConvayorBeltSP(conveyorBeltSp);
+		WorkManager::GetInstance()->InitConvayorBeltSP(conveyorBeltSp);
 	}
 
 	conveyorBeltSp->StartConveyorBelt();
@@ -356,7 +356,7 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	if (dataProcessSp == nullptr)
 	{
 		dataProcessSp = new DataProcessSP(dataPort, this);
-		WorkManager::GetInstance().InitDataProcessSP(dataProcessSp);
+		WorkManager::GetInstance()->InitDataProcessSP(dataProcessSp);
 	}
 
 
