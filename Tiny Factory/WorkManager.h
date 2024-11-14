@@ -10,8 +10,11 @@ class ConveyorBeltSP;
 
 class WorkManager
 {
-public:
+private:
 	static WorkManager* instance;
+	
+
+public:
 	static WorkManager* GetInstance()
 	{
 		if (instance != nullptr) {

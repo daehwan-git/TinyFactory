@@ -5,9 +5,10 @@
 
 class FileManager
 {
+private:
+	static FileManager* instance;
 
 public:
-	static FileManager* instance;
 
 	static FileManager* GetInstance()
 	{
