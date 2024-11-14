@@ -6,6 +6,8 @@
 class ConveyorBeltSP
 {
 private:
+	const CString OBJECT_DETECTION = "OBJECTDETECTION";
+
 	Serial* sp;
 	CDialogEx* dialog;
 	bool isRun = false;
@@ -45,8 +47,11 @@ public:
 	void StopConveyorBelt();
 	void StartConveyorBelt();
 	bool IsRun() { return isRun; }
+	void KnockDown();
+	void ResetDetect();
 	
 private:
+	void ParsingReciveData(CString data);
 	void ReleaseConveyorBelt();
 	static UINT ConvayorBeltRun(LPVOID lpParam);
 };

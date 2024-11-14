@@ -40,10 +40,10 @@ void DataProcessSP::ReleaseDataProcess()
 
 void DataProcessSP::ParsingData(CString& data)
 {
-	if (data.Compare(OBJECT_DETECTION) == 0)
+	/*if (data.Compare(OBJECT_DETECTION) == 0)
 	{
 		WorkManager::GetInstance()->ObjectDetection();
-	}
+	}*/
 }
 
 UINT DataProcessSP::DataProcessThread(LPVOID lpParam)

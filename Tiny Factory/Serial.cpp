@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SerialClass.h"
 
-Serial::Serial(const char* portName)
+Serial::Serial(const char* portName,int baudRate)
 {
     //We're not yet connected
     this->connected = false;
@@ -44,7 +44,7 @@ Serial::Serial(const char* portName)
         else
         {
             //Define serial connection parameters for the arduino board
-            dcbSerialParams.BaudRate = CBR_9600;
+            dcbSerialParams.BaudRate = baudRate;
             dcbSerialParams.ByteSize = 8;
             dcbSerialParams.StopBits = ONESTOPBIT;
             dcbSerialParams.Parity = NOPARITY;

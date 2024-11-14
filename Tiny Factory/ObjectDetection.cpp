@@ -40,7 +40,8 @@ void ObjectDetection::StopObjectDetection()
 
 void ObjectDetection::ReleaseObjectDetection()
 {
-	WaitForSingleObject(detectionThread,INFINITE);
+	DWORD exitCode = NULL;
+	TerminateJobObject(detectionThread->m_hThread, exitCode);
 }
 
 

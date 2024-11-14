@@ -199,6 +199,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="RobotArmSP.h" />
     <ClInclude Include="RobotControlDlg.h" />
     <ClInclude Include="ConveyorBelt.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Tiny FactoryDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="RobotArmSP.cpp" />
     <ClCompile Include="RobotControlDlg.cpp" />
     <ClCompile Include="ConveyorBeltSP.cpp" />

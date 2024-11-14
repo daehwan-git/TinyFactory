@@ -32,6 +32,35 @@ void ConveyorBeltSP::StartConveyorBelt()
 	conveyorBeltThread = AfxBeginThread(ConvayorBeltRun,this);
 }
 
+void ConveyorBeltSP::KnockDown()
+{
+	if (sp == nullptr)return;
+
+	if (sp->IsConnected())
+	{
+		sp->WriteData(KNOCKDOWN, DATA_LENGTH);
+	}
+
+}
+
+void ConveyorBeltSP::ResetDetect()
+{
+	if (sp == nullptr)return;
+
+	if (sp->IsConnected())
+	{
+		sp->WriteData(RESETDETECT, DATA_LENGTH);
+	}
+}
+
+void ConveyorBeltSP::ParsingReciveData(CString data)
+{
+	if (data == OBJECT_DETECTION)
+	{
+		WorkManager::GetInstance()->ObjectDetection();
+	}
+}
+
 void ConveyorBeltSP::ReleaseConveyorBelt()
 {
 	if (sp != nullptr)
@@ -44,20 +73,22 @@ void ConveyorBeltSP::ReleaseConveyorBelt()
 UINT ConveyorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 {
 
-	ConveyorBeltSP* convayorBeltSP = (ConveyorBeltSP*)lpParam;
+	ConveyorBeltSP* conveyorBeltSP = (ConveyorBeltSP*)lpParam;
 
 	char incomingData[256] = "";
 	int resultData = 0;
 
-	while (convayorBeltSP->IsRun())
+	while (conveyorBeltSP->IsRun())
 	{
 		memset(incomingData, 0, DATA_LENGTH);
 
-		int resultData = convayorBeltSP->sp->ReadData(incomingData, DATA_LENGTH - 1);
+		int resultData = conveyorBeltSP->sp->ReadData(incomingData, DATA_LENGTH - 1);
 
 		incomingData[resultData] = '\0';
 
 		CString result(incomingData);
+
+		conveyorBeltSP->ParsingReciveData(result);
 
 		Sleep(SYNC_TIME);
 	}

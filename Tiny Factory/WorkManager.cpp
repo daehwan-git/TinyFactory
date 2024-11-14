@@ -8,13 +8,15 @@ void WorkManager::FinishObjectDetection()
 	if (isDetection)
 	{
 		isDetection = false;
-		//move convayor belt again
-		LogManager::GetInstance().WriteLog("컨베이어 벨트 재가동.");
 
-		if (conbayorBeltSP != nullptr)
+		if (conveyorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StartConveyorBelt();
+			conveyorBeltSP->StartConveyorBelt();
 		}
+
+		Sleep(5000);
+
+		conveyorBeltSP->ResetDetect();
 	}
 }
 
@@ -24,12 +26,12 @@ void WorkManager::ObjectDetection()
 	if (!isDetection)
 	{
 		isDetection = true;
-		//stop convayor while finish object detection
+
 		LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
 
-		if (conbayorBeltSP != nullptr)
+		if (conveyorBeltSP != nullptr)
 		{
-			conbayorBeltSP->StopConveyorBelt();
+			conveyorBeltSP->StopConveyorBelt();
 		}
 	}
 }
@@ -56,11 +58,12 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	if (!isNormal)
 	{
 		//robot arms can move
-
+		
 		LogManager::GetInstance().WriteLog("비정상적인 오브젝트 감지됨.");
+		conveyorBeltSP->KnockDown();
 	}
 	else {
-		//FinishObjectDetection();
+		FinishObjectDetection();
 	}
 
 

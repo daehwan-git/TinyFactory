@@ -80,7 +80,6 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
-	ON_WM_TIMER()
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 END_MESSAGE_MAP()
 
@@ -90,31 +89,6 @@ END_MESSAGE_MAP()
 BOOL CTinyFactoryDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
-
-	// IDM_ABOUTBOX는 시스템 명령 범위에 있어야 합니다.
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
-
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != nullptr)
-	{
-		BOOL bNameValid;
-		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
-
-	// 이 대화 상자의 아이콘을 설정합니다.  응용 프로그램의 주 창이 대화 상자가 아닐 경우에는
-	//  프레임워크가 이 작업을 자동으로 수행합니다.
-	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
-	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	Init();
@@ -189,7 +163,10 @@ void CTinyFactoryDlg::Init()
 		robotControlDlg.CenterWindow();
 	}
 
-	DisplayCamera();
+	if (camera == nullptr)
+	{
+		camera = new Camera(&videoRect,&detectionRect,0);
+	}
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -207,134 +184,10 @@ void CTinyFactoryDlg::SaveLogData()
 
 
 	FileManager::GetInstance()->SaveFile(data);
-}
 
-void CTinyFactoryDlg::DisplayCamera()
-{
-	capture = new VideoCapture(0);
-
-	if (!capture->isOpened())
-	{
-		LogManager::GetInstance().WriteLog("카메라를 연결할 수 없습니다.");
-		return;
-	}
-	else
-	{
-		LogManager::GetInstance().WriteLog("카메라를 연결 성공");
-	}
-
-
-	if (objectDetection == nullptr)
-	{
-		objectDetection = new ObjectDetection(&detectionRect);
-	}
-
-
-	capture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
-
-	capture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
-
-	SetTimer(CAMERA_EVENT, 30, NULL);
 }
 
 
-
-void CTinyFactoryDlg::CameraLogic()
-{
-	capture->read(matFrame);
-
-
-	if(objectDetection != nullptr)
-		objectDetection->YoloDataFrame(matFrame);
-
-#pragma region DrawCam
-
-	int bpp = 8 * matFrame.elemSize();
-	assert((bpp == 8 || bpp == 24 || bpp == 32));
-
-	int padding = 0;
-
-	if (bpp < 32)
-		padding = 4 - (matFrame.cols % 4);
-
-	if (padding == 4)
-		padding = 0;
-
-	int border = 0;
-
-	if (bpp < 32)
-	{
-		border = 4 - (matFrame.cols % 4);
-	}
-
-
-	Mat mat_temp;
-	if (border > 0 || matFrame.isContinuous() == false)
-	{
-		cv::copyMakeBorder(matFrame, mat_temp, 0, 0, 0, border, cv::BORDER_CONSTANT, 0);
-	}
-	else
-	{
-		mat_temp = matFrame;
-	}
-
-	//here
-
-
-	RECT r;
-	videoRect.GetClientRect(&r);
-	cv::Size winSize(r.right, r.bottom);
-
-	imageMfc.Create(winSize.width, winSize.height, 24);
-
-
-	BITMAPINFO* bitInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
-	bitInfo->bmiHeader.biBitCount = bpp;
-	bitInfo->bmiHeader.biWidth = mat_temp.cols;
-	bitInfo->bmiHeader.biHeight = -mat_temp.rows;
-	bitInfo->bmiHeader.biPlanes = 1;
-	bitInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bitInfo->bmiHeader.biCompression = BI_RGB;
-	bitInfo->bmiHeader.biClrImportant = 0;
-	bitInfo->bmiHeader.biClrUsed = 0;
-	bitInfo->bmiHeader.biSizeImage = 0;
-	bitInfo->bmiHeader.biXPelsPerMeter = 0;
-	bitInfo->bmiHeader.biYPelsPerMeter = 0;
-
-
-	if (mat_temp.cols == winSize.width && mat_temp.rows == winSize.height)
-	{
-		SetDIBitsToDevice(imageMfc.GetDC(),
-			0, 0, winSize.width, winSize.height,
-			0, 0, 0, mat_temp.rows,
-			mat_temp.data, bitInfo, DIB_RGB_COLORS);
-	}
-	else
-	{
-		int destx = 0, desty = 0;
-		int destw = winSize.width;
-		int desth = winSize.height;
-
-		int imgx = 0, imgy = 0;
-		int imgWidth = mat_temp.cols - border;
-		int imgHeight = mat_temp.rows;
-
-		StretchDIBits(imageMfc.GetDC(),
-			destx, desty, destw, desth,
-			imgx, imgy, imgWidth, imgHeight,
-			mat_temp.data, bitInfo, DIB_RGB_COLORS, SRCCOPY);
-	}
-
-
-	HDC dc = ::GetDC(videoRect.m_hWnd);
-	imageMfc.BitBlt(dc, 0, 0);
-
-
-	::ReleaseDC(videoRect.m_hWnd, dc);
-	imageMfc.ReleaseDC();
-	imageMfc.Destroy();
-#pragma endregion
-}
 
 
 void CTinyFactoryDlg::OnBnClickedBtn()
@@ -349,18 +202,6 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	}
 
 	conveyorBeltSp->StartConveyorBelt();
-
-	CString dataPort = "";
-	GetDlgItemText(DATAPORT, dataPort);
-
-	if (dataProcessSp == nullptr)
-	{
-		dataProcessSp = new DataProcessSP(dataPort, this);
-		WorkManager::GetInstance()->InitDataProcessSP(dataProcessSp);
-	}
-
-
-	dataProcessSp->StartDataProcess();
 
 	CString robotArmPort = "";
 	GetDlgItemText(ROBOT_ARM_PORT, robotArmPort);
@@ -379,10 +220,6 @@ void CTinyFactoryDlg::OnDestroy()
 		delete conveyorBeltSp;
 	}
 
-	if (dataProcessSp != nullptr)
-	{
-		delete dataProcessSp;
-	}
 
 	if (objectDetection != nullptr)
 	{
@@ -392,6 +229,11 @@ void CTinyFactoryDlg::OnDestroy()
 	if (robotControlDlg.GetSafeHwnd() != nullptr)
 	{
 		robotControlDlg.DestroyWindow();
+	}
+
+	if (camera != nullptr)
+	{
+		delete camera;
 	}
 
 	SaveLogData();
@@ -417,19 +259,6 @@ LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
-
-void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
-{
-	switch(nIDEvent)
-	{
-	case CAMERA_EVENT:
-		CameraLogic();
-		break;
-	}
-
-	CDialogEx::OnTimer(nIDEvent);
-}
 
 
 void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()

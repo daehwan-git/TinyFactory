@@ -2,15 +2,19 @@
 #include"opencv2/opencv.hpp"
 
 #define PORT_PREFIX "\\\\.\\"
+
+#define KNOCKDOWN "KNOCKDOWN"
 #define CONVAYORBELT_ON_DATA "ON"
 #define CONVAYORBELT_OFF_DATA "OFF"
+#define RESETDETECT "RESET"
+
 #define MAXIMUM_COMMUNICATION_COUNT 20
 #define DATA_LENGTH 255
 #define SYNC_TIME 1000
 
-#define DATASTORE_FILE_NAME "log.txt"
+#define BAUDRATE 115200
 
-#define OBJECT_DETECTION "OBJECTDETECTION"
+#define DATASTORE_FILE_NAME "log.txt"
 
 
 //커스텀 메시지
@@ -23,10 +27,12 @@
 #define CAMERA_EVENT 1000
 
 
+
+
 //데이터 셋
-const std::string yoloCfg = "C:/Users/biotite/Desktop/TinyFactoryData/test.cfg";
-const std::string yoloWeight = "C:/Users/biotite/Desktop/TinyFactoryData/test_last.weights";
-const std::string yoloClassFile = "C:/Users/biotite/Desktop/TinyFactoryData/tiny.names";
+const std::string yoloCfg = "C:/Users/biotite/Desktop/file/test.cfg";
+const std::string yoloWeight = "C:/Users/biotite/Desktop/file/test_last.weights";
+const std::string yoloClassFile = "C:/Users/biotite/Desktop/file/tiny.names";
 #define THRESHOLD 0.5
 
 

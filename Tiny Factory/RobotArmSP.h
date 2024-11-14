@@ -22,7 +22,7 @@ public:
 		{
 			LogManager::GetInstance().WriteLog("·Îº¿ÆÈ : " + portNumber + " port ¿¡ ¿¬°á½Ãµµ");
 
-			this->sp = new Serial(PORT_PREFIX + portNumber);
+			this->sp = new Serial(PORT_PREFIX + portNumber, BAUDRATE);
 
 			if (sp->IsConnected())
 			{

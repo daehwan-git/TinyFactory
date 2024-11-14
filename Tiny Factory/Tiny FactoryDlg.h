@@ -6,9 +6,9 @@
 
 #include "ConveyorBelt.h"
 #include "opencv2/opencv.hpp"
-#include "DataProcessSP.h"
 #include "ObjectDetection.h"
 #include "RobotControlDlg.h"
+#include "Camera.h"
 
 
 // CTinyFactoryDlg 대화 상자
@@ -44,17 +44,18 @@ public:
 private:
 	void Init();
 	void SaveLogData();
-	void DisplayCamera();
-	void CameraLogic();
 
 private:
 	VideoCapture* capture;
 	Mat matFrame;
 	CImage imageMfc;
+
 	ConveyorBeltSP* conveyorBeltSp;
-	DataProcessSP* dataProcessSp;
+
 	ObjectDetection* objectDetection;
 	RobotControlDlg robotControlDlg;
+
+	Camera* camera;
 
 	CButton startBtn;
 	CStatic videoRect;
@@ -65,6 +66,5 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedRobotcontrolbtn();
 };

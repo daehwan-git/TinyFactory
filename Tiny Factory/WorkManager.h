@@ -32,18 +32,12 @@ private:
 	CString detectionClassName = "";
 	bool objectCheck = false;
 
-	ConveyorBeltSP* conbayorBeltSP = nullptr;
-	DataProcessSP* dataProcessSP = nullptr;
+	ConveyorBeltSP* conveyorBeltSP = nullptr;
 
 public:
-	void InitConvayorBeltSP(ConveyorBeltSP* conbayorBeltSP)
+	void InitConvayorBeltSP(ConveyorBeltSP* conveyorBeltSP)
 	{
-		this->conbayorBeltSP = conbayorBeltSP;
-	}
-
-	void InitDataProcessSP(DataProcessSP* dataProcessSP)
-	{
-		this->dataProcessSP = dataProcessSP;
+		this->conveyorBeltSP = conveyorBeltSP;
 	}
 
 
