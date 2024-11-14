@@ -86,8 +86,7 @@ void RobotControlDlg::OnBnClickedRecordBtn()
 
 void RobotControlDlg::AddCommand(CString command)
 {
-	robotCommandListBox.AddString(command);
-	robotCommandListBox.SetCurSel(robotCommandListBox.GetCount() - 1);
+	robotCommandListBox.InsertString(-1,command);
 }
 
 void RobotControlDlg::ResetCommand()
@@ -164,11 +163,12 @@ void RobotControlDlg::OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 {
 	if (!isRecord)return;
 
-	int pos = aMotorSlider.GetPos();
+	int pos = dMotorSlider.GetPos();
 	CString sPos;
 	sPos.Format("%d", pos);
 
 	AddCommand(MOTOR_D + sPos);
+	robotArmSP->SendCommand(MOTOR_D + sPos);
 	
 	*pResult = 0;
 }
