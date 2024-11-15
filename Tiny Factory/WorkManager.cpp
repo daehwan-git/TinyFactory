@@ -7,17 +7,30 @@ void WorkManager::FinishObjectDetection()
 {
 	if (isDetection)
 	{
-		isDetection = false;
 
 		if (conveyorBeltSP != nullptr)
 		{
 			conveyorBeltSP->StartConveyorBelt();
 		}
 
-		Sleep(5000);
-
-		conveyorBeltSP->ResetDetect();
+		SetTimer(mainHandle, DETECTIONFINISH, DETECTIONWAITTIME, NULL);
 	}
+}
+
+void WorkManager::ResetDetection()
+{
+	isDetection = false;
+	conveyorBeltSP->ResetDetect();
+}
+
+void WorkManager::ResetYolo()
+{
+	objectDetection->ResetFinishFlag();
+}
+
+void WorkManager::SetMainHandle(HWND hwnd)
+{
+	mainHandle = hwnd;
 }
 
 //some object detected
@@ -38,10 +51,6 @@ void WorkManager::ObjectDetection()
 
 void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 {
-	//case 1: keep going 
-	//case 2 robot arms moving
-
-	objectCheck = true;
 
 	bool isNormal = false;
 
@@ -50,7 +59,6 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		if (classNames[i] == NORMALOBJECT)
 		{
 			isNormal = true;
-			LogManager::GetInstance().WriteLog("정상적인 오브젝트 감지됨.");
 			break;
 		}
 	}
@@ -63,12 +71,8 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		conveyorBeltSP->KnockDown();
 	}
 	else {
+		LogManager::GetInstance().WriteLog("정상적인 오브젝트 감지됨.");
 		FinishObjectDetection();
 	}
 
-
-	if (!objectCheck)
-	{
-		
-	}
 }

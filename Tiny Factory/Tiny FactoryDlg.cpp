@@ -81,6 +81,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -167,6 +168,9 @@ void CTinyFactoryDlg::Init()
 	{
 		camera = new Camera(&videoRect,&detectionRect,0);
 	}
+
+	WorkManager::GetInstance()->SetMainHandle(m_hWnd);
+	WorkManager::GetInstance()->InitObjectDetection(camera->GetObjectDetection());
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -221,11 +225,6 @@ void CTinyFactoryDlg::OnDestroy()
 	}
 
 
-	if (objectDetection != nullptr)
-	{
-		delete objectDetection;
-	}
-
 	if (robotControlDlg.GetSafeHwnd() != nullptr)
 	{
 		robotControlDlg.DestroyWindow();
@@ -266,3 +265,16 @@ void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
 	robotControlDlg.ShowWindow(SW_SHOW);
 }
 
+
+
+void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == DETECTIONFINISH)
+	{
+		WorkManager::GetInstance()->ResetDetection();
+		WorkManager::GetInstance()->ResetYolo();
+		KillTimer(DETECTIONFINISH);
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
+}

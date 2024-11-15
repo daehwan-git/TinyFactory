@@ -20,6 +20,7 @@ private:
 	std::vector<std::string> classes;
 	std::vector<Mat> outs;
 	bool isRun = false;
+	bool isFinishYolo = false;
 	
 	CStatic* detectionRect;
 	
@@ -44,6 +45,8 @@ public:
 public:
 	void YoloDataFrame(Mat matFrame);
 	void StopObjectDetection();
+	void ResetFinishFlag() { isFinishYolo = false; }
+	bool IsFinishYolo() { return isFinishYolo; }
 
 private:
 	void InitTrainSet();

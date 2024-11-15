@@ -12,7 +12,7 @@ private:
 	CDialogEx* dialog;
 	bool isRun = false;
 
-	CWinThread* conveyorBeltThread;
+	CWinThread* conveyorBeltThread = nullptr;
 
 public:
 	ConveyorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)

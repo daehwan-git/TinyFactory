@@ -51,8 +51,6 @@ private:
 	CImage imageMfc;
 
 	ConveyorBeltSP* conveyorBeltSp;
-
-	ObjectDetection* objectDetection;
 	RobotControlDlg robotControlDlg;
 
 	Camera* camera;
@@ -67,4 +65,5 @@ public:
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBnClickedRobotcontrolbtn();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

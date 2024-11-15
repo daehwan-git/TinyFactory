@@ -62,6 +62,7 @@ public:
 public:
 	void DisplayCamera(int fps = 30);
 	void StopCamera();
+	ObjectDetection* GetObjectDetection() { return objectDetction; }
 
 private:
 	void DrawRect();

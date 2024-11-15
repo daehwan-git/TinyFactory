@@ -4,9 +4,11 @@
 #include  "ConveyorBelt.h"
 #include "DataProcessSP.h"
 #include <opencv2/core/cvstd.hpp>
+#include "ObjectDetection.h"
 
 class DataProcessSP;
 class ConveyorBeltSP;
+class ObjectDetection;
 
 class WorkManager
 {
@@ -33,6 +35,8 @@ private:
 	bool objectCheck = false;
 
 	ConveyorBeltSP* conveyorBeltSP = nullptr;
+	ObjectDetection* objectDetection = nullptr;
+	HWND mainHandle = nullptr;
 
 public:
 	void InitConvayorBeltSP(ConveyorBeltSP* conveyorBeltSP)
@@ -40,6 +44,10 @@ public:
 		this->conveyorBeltSP = conveyorBeltSP;
 	}
 
+	void InitObjectDetection(ObjectDetection* objectDetection)
+	{
+		this->objectDetection = objectDetection;
+	}
 
 private:
 	void FinishObjectDetection();
@@ -48,5 +56,8 @@ public:
 	void ObjectDetection();
 	void FinishYOLO(std::vector<cv::String> classNames);
 	bool IsDetection() { return isDetection; }
+	void ResetDetection();
+	void ResetYolo();
+	void SetMainHandle(HWND hwnd);
 };
 

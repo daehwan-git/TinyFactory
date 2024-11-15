@@ -15,6 +15,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	while (objectDetection->isRun)
 	{
+		printf("%d", objectDetection->isFinishYolo);
 		objectDetection->YOLO(objectDetection->matFrame);
 		Sleep(10);
 	}
@@ -48,6 +49,7 @@ void ObjectDetection::ReleaseObjectDetection()
 
 void ObjectDetection::YOLO(Mat matFrame)
 {
+	if (isFinishYolo)return;
 	if (!matFrame.empty() && !m_net.empty()) {
 		Mat inputBlob = blobFromImage(matFrame, 1 / 255.f, Size(416, 416), Scalar(), true, false);
 		m_net.setInput(inputBlob);
@@ -92,6 +94,7 @@ void ObjectDetection::InitTrainSet()
 void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat& img, const std::vector<std::string>& classes, float confThreshold)
 {
 	bool flag = false;
+	isFinishYolo = true;
 	std::vector<String> classNames;
 
 	for (size_t i = 0; i < outs.size(); ++i)

@@ -29,7 +29,8 @@ void ConveyorBeltSP::StartConveyorBelt()
 		sp->WriteData(CONVAYORBELT_ON_DATA, DATA_LENGTH);
 	}
 
-	conveyorBeltThread = AfxBeginThread(ConvayorBeltRun,this);
+	if(conveyorBeltThread == nullptr)
+		conveyorBeltThread = AfxBeginThread(ConvayorBeltRun,this);
 }
 
 void ConveyorBeltSP::KnockDown()
@@ -65,7 +66,7 @@ void ConveyorBeltSP::ReleaseConveyorBelt()
 {
 	if (sp != nullptr)
 	{	
-		WaitForSingleObject(conveyorBeltThread, INFINITE);
+		WaitForSingleObject(conveyorBeltThread->m_hThread, INFINITE);
 		delete sp;
 	}
 }
