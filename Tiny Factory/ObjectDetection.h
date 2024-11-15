@@ -30,8 +30,7 @@ public:
 	ObjectDetection(CStatic* detectionRect):detectionRect(detectionRect)
 	{
 		InitTrainSet();
-		isRun = true;
-		detectionThread = AfxBeginThread(RunThread_YOLO,this);
+		StartObjectDetection();
 	}
 
 
@@ -45,8 +44,8 @@ public:
 public:
 	void YoloDataFrame(Mat matFrame);
 	void StopObjectDetection();
+	void StartObjectDetection();
 	void ResetFinishFlag() { isFinishYolo = false; }
-	bool IsFinishYolo() { return isFinishYolo; }
 
 private:
 	void InitTrainSet();

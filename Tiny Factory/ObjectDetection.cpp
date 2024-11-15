@@ -15,10 +15,11 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	while (objectDetection->isRun)
 	{
-		printf("%d", objectDetection->isFinishYolo);
-		objectDetection->YOLO(objectDetection->matFrame);
+		if(!objectDetection->isFinishYolo)
+			objectDetection->YOLO(objectDetection->matFrame);
 		Sleep(10);
 	}
+
 	return 0;
 }
 
@@ -34,22 +35,32 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 
 void ObjectDetection::StopObjectDetection()
 {
-	if (this != nullptr) {
+	if (detectionThread && detectionThread->m_hThread) {
 		isRun = false;
+		WaitForSingleObject(detectionThread->m_hThread, INFINITE);
+		CloseHandle(detectionThread->m_hThread);
+		detectionThread = nullptr;
+	}
+}
+
+void ObjectDetection::StartObjectDetection()
+{
+	if (!isRun) {
+		isRun = true;
+		detectionThread = AfxBeginThread(RunThread_YOLO, this);
 	}
 }
 
 void ObjectDetection::ReleaseObjectDetection()
 {
 	DWORD exitCode = NULL;
-	TerminateJobObject(detectionThread->m_hThread, exitCode);
+	TerminateThread(detectionThread->m_hThread, exitCode);
 }
 
 
 
 void ObjectDetection::YOLO(Mat matFrame)
 {
-	if (isFinishYolo)return;
 	if (!matFrame.empty() && !m_net.empty()) {
 		Mat inputBlob = blobFromImage(matFrame, 1 / 255.f, Size(416, 416), Scalar(), true, false);
 		m_net.setInput(inputBlob);
@@ -94,7 +105,6 @@ void ObjectDetection::InitTrainSet()
 void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat& img, const std::vector<std::string>& classes, float confThreshold)
 {
 	bool flag = false;
-	isFinishYolo = true;
 	std::vector<String> classNames;
 
 	for (size_t i = 0; i < outs.size(); ++i)
@@ -140,38 +150,37 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 
 	if (flag)
 	{
-		DrawObjectdetection(img);
+		isFinishYolo = true;
 		WorkManager::GetInstance()->FinishYOLO(classNames);
+		DrawObjectdetection(img);
 	}
 }
 
 void ObjectDetection::DrawObjectdetection(const Mat& img)
 {
 	Mat detectionImage;
-
 	img.copyTo(detectionImage);
 
 	CRect rect;
-	CDC* pDC = detectionRect->GetDC();  
-	detectionRect->GetClientRect(&rect);  
+	CDC* pDC = detectionRect->GetDC();
+	detectionRect->GetClientRect(&rect);
 	int width = rect.Width();
 	int height = rect.Height();
 
 	CImage image;
-	image.Create(detectionImage.cols, detectionImage.rows, 24);  // 24-bit BMP 이미지 생성
+	image.Create(detectionImage.cols, detectionImage.rows, 24);  
 
-	uchar* psrc = detectionImage.data;  
+	uchar* psrc = detectionImage.data;
 	uchar* pdst = (uchar*)image.GetBits();
 	int pitch = image.GetPitch();
 
-	for (int y = 0; y < detectionImage.rows; y++)
-	{
-		memcpy(pdst, psrc, detectionImage.cols * 3);  
+	for (int y = 0; y < detectionImage.rows; y++) {
+		memcpy(pdst, psrc, detectionImage.cols * 3);
 		psrc += detectionImage.step;
 		pdst += pitch;
 	}
 
 	image.Draw(pDC->m_hDC, 0, 0, width, height);
 
-	ReleaseDC(detectionRect->m_hWnd, pDC->m_hDC);
+	detectionRect->ReleaseDC(pDC);
 }

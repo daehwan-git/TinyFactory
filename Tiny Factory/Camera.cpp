@@ -42,7 +42,7 @@ void Camera::DrawRect()
     }
 
     int bpp = 8 * matFrame.elemSize();
-    assert(bpp == 8 || bpp == 24 || bpp == 32);
+    assert((bpp == 8 || bpp == 24 || bpp == 32));
 
     int padding = 0;
 
@@ -58,10 +58,13 @@ void Camera::DrawRect()
     {
         border = 4 - (matFrame.cols % 4);
     }
-   
+
+
+
     Mat matTemp;
     if (border > 0 || matFrame.isContinuous() == false)
     {
+
         cv::copyMakeBorder(matFrame, matTemp, 0, 0, 0, border, cv::BORDER_CONSTANT, 0);
     }
     else
@@ -69,28 +72,33 @@ void Camera::DrawRect()
         matTemp = matFrame;
     }
 
-    BITMAPINFO* bitinfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
-    bitinfo->bmiHeader.biBitCount = bpp;
-    bitinfo->bmiHeader.biWidth = matTemp.cols;
-    bitinfo->bmiHeader.biHeight = matTemp.rows;
-    bitinfo->bmiHeader.biPlanes = 1;
-    bitinfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bitinfo->bmiHeader.biCompression = BI_RGB;
-    bitinfo->bmiHeader.biClrImportant = 0;
-    bitinfo->bmiHeader.biClrUsed = 0;
-    bitinfo->bmiHeader.biSizeImage = 0;
-    bitinfo->bmiHeader.biXPelsPerMeter = 0;
-    bitinfo->bmiHeader.biYPelsPerMeter = 0;
+
+    BITMAPINFO* bitInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
+    bitInfo->bmiHeader.biBitCount = bpp;
+    bitInfo->bmiHeader.biWidth = matTemp.cols;
+    bitInfo->bmiHeader.biHeight = -matTemp.rows;
+    bitInfo->bmiHeader.biPlanes = 1;
+    bitInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bitInfo->bmiHeader.biCompression = BI_RGB;
+    bitInfo->bmiHeader.biClrImportant = 0;
+    bitInfo->bmiHeader.biClrUsed = 0;
+    bitInfo->bmiHeader.biSizeImage = 0;
+    bitInfo->bmiHeader.biXPelsPerMeter = 0;
+    bitInfo->bmiHeader.biYPelsPerMeter = 0;
+
+
 
     if (matTemp.cols == winSize.width && matTemp.rows == winSize.height)
     {
+
         SetDIBitsToDevice(imageMfc.GetDC(),
             0, 0, winSize.width, winSize.height,
             0, 0, 0, matTemp.rows,
-            matTemp.data, bitinfo, DIB_RGB_COLORS);
+            matTemp.data, bitInfo, DIB_RGB_COLORS);
     }
     else
     {
+
         int destx = 0, desty = 0;
         int destw = winSize.width;
         int desth = winSize.height;
@@ -102,8 +110,9 @@ void Camera::DrawRect()
         StretchDIBits(imageMfc.GetDC(),
             destx, desty, destw, desth,
             imgx, imgy, imgWidth, imgHeight,
-            matTemp.data, bitinfo, DIB_RGB_COLORS, SRCCOPY);
+            matTemp.data, bitInfo, DIB_RGB_COLORS, SRCCOPY);
     }
+
 
     HDC dc = ::GetDC(videoRect->m_hWnd);
     imageMfc.BitBlt(dc, 0, 0);

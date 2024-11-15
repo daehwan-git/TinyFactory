@@ -7,7 +7,6 @@ void WorkManager::FinishObjectDetection()
 {
 	if (isDetection)
 	{
-
 		if (conveyorBeltSP != nullptr)
 		{
 			conveyorBeltSP->StartConveyorBelt();
@@ -19,7 +18,6 @@ void WorkManager::FinishObjectDetection()
 
 void WorkManager::ResetDetection()
 {
-	isDetection = false;
 	conveyorBeltSP->ResetDetect();
 }
 
@@ -42,16 +40,12 @@ void WorkManager::ObjectDetection()
 
 		LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
 
-		if (conveyorBeltSP != nullptr)
-		{
-			conveyorBeltSP->StopConveyorBelt();
-		}
+		objectDetection->StartObjectDetection();
 	}
 }
 
 void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 {
-
 	bool isNormal = false;
 
 	for (int i = 0; i < classNames.size(); i++)
