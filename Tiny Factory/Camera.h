@@ -19,6 +19,7 @@ private:
 
 	ObjectDetection* objectDetction;
 
+
 public:
 	Camera(IN CStatic* videoRect,CStatic* detectionRect ,int videoNumber):winSize(),imageMfc(),cameraThread(nullptr),fps(0),
 		videoCapture(nullptr),objectDetction(nullptr)
@@ -49,6 +50,7 @@ public:
 		videoCapture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
 		videoCapture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
 
+
 		DisplayCamera();
 	}
 
@@ -65,6 +67,7 @@ public:
 	ObjectDetection* GetObjectDetection() { return objectDetction; }
 
 private:
+	void SetBitMapInfo(DWORD bpp, Mat matTemp);
 	void DrawRect();
 	void ReleaseCamera();
 	static UINT CameraDrawThread(LPVOID lpParam);

@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Device.h" />
     <ClInclude Include="RobotArmSP.h" />
     <ClInclude Include="RobotControlDlg.h" />
     <ClInclude Include="ConveyorBelt.h" />

@@ -49,9 +49,10 @@ public:
 	afx_msg void OnBnClickedRecordBtn();
 	afx_msg void OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
-	afx_msg void OnNMCustomdrawBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMCustomdrawCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedSendCommandBtn();
 	afx_msg void OnBnClickedTestBtn();
+	afx_msg void OnBnClickedArmStopBtn();
 };

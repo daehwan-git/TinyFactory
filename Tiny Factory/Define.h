@@ -10,7 +10,7 @@
 
 #define MAXIMUM_COMMUNICATION_COUNT 20
 #define DATA_LENGTH 255
-#define SYNC_TIME 1000
+#define SYNC_TIME 100
 
 #define BAUDRATE 115200
 
@@ -66,5 +66,5 @@ const cv::String NORMALOBJECT = "NORMAL";
 #define ROBOTTEST "TEST\n"
 #define STORECOMMAND "STORE\n"
 #define ROBOTRECORD "RECORD\n"
-#define ROBOTSTOP "STOP\n"
+#define ROBOTSTOP "RESET\n"
 

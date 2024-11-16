@@ -17,7 +17,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 	{
 		if(!objectDetection->isFinishYolo)
 			objectDetection->YOLO(objectDetection->matFrame);
-		Sleep(10);
+		Sleep(100);
 	}
 
 	return 0;
@@ -28,6 +28,7 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 {
 	if (!matFrame.empty())
 	{
+		if (!WorkManager::GetInstance()->IsDetection())return;
 		cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 		matFrame.copyTo(this->matFrame);
 	}
@@ -53,8 +54,10 @@ void ObjectDetection::StartObjectDetection()
 
 void ObjectDetection::ReleaseObjectDetection()
 {
-	DWORD exitCode = NULL;
-	TerminateThread(detectionThread->m_hThread, exitCode);
+	if (detectionThread) {
+		WaitForSingleObject(detectionThread->m_hThread, INFINITE);
+		detectionThread = nullptr;  // 스레드 객체 해제
+	}
 }
 
 
@@ -147,40 +150,42 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 			}
 		}
 	}
+	DrawObjectdetection(img);
 
 	if (flag)
 	{
 		isFinishYolo = true;
 		WorkManager::GetInstance()->FinishYOLO(classNames);
-		DrawObjectdetection(img);
 	}
 }
 
 void ObjectDetection::DrawObjectdetection(const Mat& img)
 {
-	Mat detectionImage;
-	img.copyTo(detectionImage);
+	if (img.empty()) return;
 
 	CRect rect;
-	CDC* pDC = detectionRect->GetDC();
 	detectionRect->GetClientRect(&rect);
 	int width = rect.Width();
 	int height = rect.Height();
 
-	CImage image;
-	image.Create(detectionImage.cols, detectionImage.rows, 24);  
 
-	uchar* psrc = detectionImage.data;
-	uchar* pdst = (uchar*)image.GetBits();
-	int pitch = image.GetPitch();
+	BITMAPINFO bitInfo;
+	bitInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bitInfo.bmiHeader.biWidth = img.cols;
+	bitInfo.bmiHeader.biHeight = -img.rows; 
+	bitInfo.bmiHeader.biPlanes = 1;
+	bitInfo.bmiHeader.biBitCount = 24;
+	bitInfo.bmiHeader.biCompression = BI_RGB;
+	bitInfo.bmiHeader.biSizeImage = 0;
+	bitInfo.bmiHeader.biXPelsPerMeter = 0;
+	bitInfo.bmiHeader.biYPelsPerMeter = 0;
+	bitInfo.bmiHeader.biClrUsed = 0;
+	bitInfo.bmiHeader.biClrImportant = 0;
 
-	for (int y = 0; y < detectionImage.rows; y++) {
-		memcpy(pdst, psrc, detectionImage.cols * 3);
-		psrc += detectionImage.step;
-		pdst += pitch;
-	}
-
-	image.Draw(pDC->m_hDC, 0, 0, width, height);
-
+	CDC* pDC = detectionRect->GetDC();
+	StretchDIBits(pDC->m_hDC,
+		0, 0, width, height,
+		0, 0, img.cols, img.rows,
+		img.data, &bitInfo, DIB_RGB_COLORS, SRCCOPY);
 	detectionRect->ReleaseDC(pDC);
 }

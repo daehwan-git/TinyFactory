@@ -32,11 +32,18 @@ void Camera::ReleaseCamera()
     }
 }
 
+void Camera::SetBitMapInfo(DWORD bpp, Mat matTemp)
+{
+   
+   
+
+}
+
 void Camera::DrawRect()
 {
     videoCapture->read(matFrame);
 
-    if (objectDetction != nullptr && WorkManager::GetInstance()->IsDetection())
+    if (objectDetction != nullptr)
     {
         objectDetction->YoloDataFrame(matFrame);
     }
@@ -72,7 +79,6 @@ void Camera::DrawRect()
         matTemp = matFrame;
     }
 
-
     BITMAPINFO* bitInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD));
     bitInfo->bmiHeader.biBitCount = bpp;
     bitInfo->bmiHeader.biWidth = matTemp.cols;
@@ -85,7 +91,6 @@ void Camera::DrawRect()
     bitInfo->bmiHeader.biSizeImage = 0;
     bitInfo->bmiHeader.biXPelsPerMeter = 0;
     bitInfo->bmiHeader.biYPelsPerMeter = 0;
-
 
 
     if (matTemp.cols == winSize.width && matTemp.rows == winSize.height)
@@ -117,6 +122,7 @@ void Camera::DrawRect()
     HDC dc = ::GetDC(videoRect->m_hWnd);
     imageMfc.BitBlt(dc, 0, 0);
     ::ReleaseDC(videoRect->m_hWnd, dc);
+    free(bitInfo);
 }
 
 

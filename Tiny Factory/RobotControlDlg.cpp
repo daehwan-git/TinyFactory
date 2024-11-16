@@ -35,12 +35,13 @@ void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedRecordBtn)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureAMotorSlider)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawBMotorSlider)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaputreBMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawCMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_D_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureDMotorSlider)
 	ON_BN_CLICKED(ROBOT_SEND_COMMAND_BTN, &RobotControlDlg::OnBnClickedSendCommandBtn)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(ROBOT_TEST_BTN, &RobotControlDlg::OnBnClickedTestBtn)
+	ON_BN_CLICKED(ROBOT_ARM_STOP_BTN, &RobotControlDlg::OnBnClickedArmStopBtn)
 END_MESSAGE_MAP()
 
 
@@ -130,7 +131,7 @@ void RobotControlDlg::OnDestroy()
 }
 
 
-void RobotControlDlg::OnNMCustomdrawBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
+void RobotControlDlg::OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	if (!isRecord)return;
 
@@ -199,4 +200,10 @@ void RobotControlDlg::OnBnClickedTestBtn()
 		isTest = true;
 		robotArmSP->SendCommand(ROBOTTEST + currentCommand);
 	}
+}
+
+
+void RobotControlDlg::OnBnClickedArmStopBtn()
+{
+	robotArmSP->SendCommand(ROBOTSTOP);
 }

@@ -66,7 +66,8 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	}
 	else {
 		LogManager::GetInstance().WriteLog("정상적인 오브젝트 감지됨.");
-		FinishObjectDetection();
 	}
+
+	FinishObjectDetection();
 
 }
