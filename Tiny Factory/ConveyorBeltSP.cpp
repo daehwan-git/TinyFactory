@@ -60,6 +60,10 @@ void ConveyorBeltSP::ParsingReciveData(CString data)
 	{
 		WorkManager::GetInstance()->ObjectDetection();
 	}
+	else if (data == OBJECT_GOAL)
+	{
+		WorkManager::GetInstance()->ObjectGoal();
+	}
 }
 
 void ConveyorBeltSP::ReleaseConveyorBelt()

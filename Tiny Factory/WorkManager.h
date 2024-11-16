@@ -5,20 +5,24 @@
 #include "DataProcessSP.h"
 #include <opencv2/core/cvstd.hpp>
 #include "ObjectDetection.h"
+#include "RobotArmSP.h"
 
 class DataProcessSP;
 class ConveyorBeltSP;
 class ObjectDetection;
+class RobotArmSP;
 
 class WorkManager
 {
 private:
 	static WorkManager* instance;
+	static std::mutex mtx;
 	
 
 public:
 	static WorkManager* GetInstance()
 	{
+		std::lock_guard<std::mutex> lock(mtx);
 		if (instance != nullptr) {
 			return instance;
 		}
@@ -36,6 +40,7 @@ private:
 
 	ConveyorBeltSP* conveyorBeltSP = nullptr;
 	ObjectDetection* objectDetection = nullptr;
+	RobotArmSP* robotArmSP = nullptr;
 	HWND mainHandle = nullptr;
 
 public:
@@ -49,6 +54,11 @@ public:
 		this->objectDetection = objectDetection;
 	}
 
+	void InitRobotArmSP(RobotArmSP* robotArmSp)
+	{
+		this->robotArmSP = robotArmSP;
+	}
+
 private:
 	void FinishObjectDetection();
 
@@ -59,5 +69,6 @@ public:
 	void ResetDetection();
 	void ResetYolo();
 	void SetMainHandle(HWND hwnd);
+	void ObjectGoal();
 };
 

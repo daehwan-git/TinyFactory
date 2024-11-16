@@ -13,38 +13,35 @@ public:
 
     static std::vector<CString> ListUsbPorts()
     {
-        std::vector<CString> portNames; 
+		std::vector<CString> portNames;
+		HKEY hKey;
+		RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"), &hKey);
 
-        GUID usbGuid = GUID_DEVCLASS_USB;
-        HDEVINFO hDevInfo = SetupDiGetClassDevs(&usbGuid, NULL, NULL, DIGCF_PRESENT);
+		TCHAR szData[20];
+		TCHAR szName[100];
+		DWORD index = 0;
+		DWORD dwSize = 100;
+		DWORD dwSize2 = 20;
+		DWORD dwType = REG_SZ;
 
-        if (hDevInfo == INVALID_HANDLE_VALUE) {
-            LogManager::GetInstance().WriteLog("연결된 USB 포트가 없음");
-            return portNames;  
-        }
+		memset(szData, 0x00, sizeof(szData));
+		memset(szName, 0x00, sizeof(szName));
 
-        SP_DEVINFO_DATA devInfoData;
-        devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
+		while (ERROR_SUCCESS == RegEnumValue(hKey, index, szName, &dwSize, NULL, NULL, NULL, NULL)) {
+			index++;
+			RegQueryValueEx(hKey, szName, NULL, &dwType, (LPBYTE)szData, &dwSize2);
+			portNames.push_back(CString(szData));
 
-        for (DWORD i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &devInfoData); ++i) {
-            DWORD dataType, dataSize;
-            BYTE buffer[1024];
+			memset(szData, 0x00, sizeof(szData));
+			memset(szName, 0x00, sizeof(szName));
+			dwSize = 100;
+			dwSize2 = 20;
+		}
+		RegCloseKey(hKey);
 
-            // 장치 설명 가져오기
-            if (SetupDiGetDeviceRegistryProperty(hDevInfo, &devInfoData, SPDRP_DEVICEDESC, &dataType, buffer, sizeof(buffer), &dataSize)) {
-                std::wcout << L"Device Description: " << (wchar_t*)buffer << std::endl;
-            }
 
-            // 친숙한 이름을 포트 이름으로 저장
-            if (SetupDiGetDeviceRegistryProperty(hDevInfo, &devInfoData, SPDRP_FRIENDLYNAME, &dataType, buffer, sizeof(buffer), &dataSize)) {
-                CString name((wchar_t*)buffer);
-                portNames.push_back(name);
-            }
-        }
 
-        SetupDiDestroyDeviceInfoList(hDevInfo); 
-
-        return portNames; 
+		return portNames;
     }
 };
 

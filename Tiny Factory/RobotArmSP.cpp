@@ -39,7 +39,7 @@ void RobotArmSP::SendCommand(CString command)
 void RobotArmSP::SendCommandList(CString command)
 {
 
-		command = STORECOMMAND + command;
+		command = STORECOMMAND + command + "\n";
 		isFinishCommand = false;
 
 		if (sp == nullptr)return;
@@ -53,9 +53,21 @@ void RobotArmSP::SendCommandList(CString command)
 	
 }
 
+void RobotArmSP::PlayRobotArm()
+{
+
+	if (sp == nullptr)return;
+
+
+	if (sp->IsConnected())
+	{
+		sp->WriteData(PLAYROBOT, DATA_LENGTH);
+	}
+
+}
+
 void RobotArmSP::ParsingData(CString command)
 {
-	printf("%s", command);
 	if (command == COMMANDFNINISH)
 	{
 		isFinishCommand = true;

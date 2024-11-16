@@ -36,7 +36,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedRecordBtn)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureAMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaputreBMotorSlider)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawCMotorSlider)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedCaptureCMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_D_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureDMotorSlider)
 	ON_BN_CLICKED(ROBOT_SEND_COMMAND_BTN, &RobotControlDlg::OnBnClickedSendCommandBtn)
 	ON_WM_DESTROY()
@@ -73,9 +73,11 @@ void RobotControlDlg::OnBnClickedRecordBtn()
 		SetDlgItemText(ROBOT_RECORD_BTN,"녹화 종료");
 		GetDlgItem(ROBOT_SEND_COMMAND_BTN)->EnableWindow(FALSE);
 		GetDlgItem(ROBOT_TEST_BTN)->EnableWindow(FALSE);
+		robotCommandListBox.ResetContent();
 	}
 	else {
 		isRecord = false;
+		robotArmSP->SendCommand(ROBOTSTOP);
 		SetDlgItemText(ROBOT_RECORD_BTN, "녹화 시작");
 		GetDlgItem(ROBOT_SEND_COMMAND_BTN)->EnableWindow(TRUE);
 		GetDlgItem(ROBOT_TEST_BTN)->EnableWindow(TRUE);
@@ -145,7 +147,7 @@ void RobotControlDlg::OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 }
 
 
-void RobotControlDlg::OnNMCustomdrawCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
+void RobotControlDlg::OnNMReleasedCaptureCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {	
 	if (!isRecord)return;
 
@@ -205,5 +207,6 @@ void RobotControlDlg::OnBnClickedTestBtn()
 
 void RobotControlDlg::OnBnClickedArmStopBtn()
 {
+	robotCommandListBox.ResetContent();
 	robotArmSP->SendCommand(ROBOTSTOP);
 }

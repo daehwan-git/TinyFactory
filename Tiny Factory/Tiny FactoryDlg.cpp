@@ -77,12 +77,14 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(START_BTN, &CTinyFactoryDlg::OnBnClickedBtn)
+	ON_BN_CLICKED(START_BTN, &CTinyFactoryDlg::OnBnClickedStartBtn)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
+	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnConnectCompleteMessage)
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -136,6 +138,13 @@ void CTinyFactoryDlg::OnPaint()
 	}
 	else
 	{
+		CPaintDC dc(this);
+
+		CRect rect;
+		GetClientRect(&rect);  
+		dc.FillSolidRect(&rect, RGB(54, 57, 63));
+
+
 		CDialogEx::OnPaint();
 	}
 }
@@ -159,7 +168,16 @@ void CTinyFactoryDlg::OnBnClickedOk()
 void CTinyFactoryDlg::Init()
 {
 
-	Device::ListUsbPorts();
+	 std::vector<CString> portNames = Device::ListUsbPorts();
+	 CComboBox* beltComboBox = (CComboBox*)GetDlgItem(CONVEYORPORT);
+	 CComboBox* robotComboBox = (CComboBox*)GetDlgItem(ROBOTPORT);
+
+	 for (int i = 0; i < portNames.size(); i++)
+	 {
+		 beltComboBox->AddString(portNames[i]);
+		 robotComboBox->AddString(portNames[i]);
+	 }
+
 
 	LogManager::GetInstance().InitLogControl(&logListBox);
 
@@ -198,10 +216,10 @@ void CTinyFactoryDlg::SaveLogData()
 
 
 
-void CTinyFactoryDlg::OnBnClickedBtn()
+void CTinyFactoryDlg::OnBnClickedStartBtn()
 {
 	CString beltPort = "";
-	GetDlgItemText(BELT_PORT, beltPort);
+	GetDlgItemText(CONVEYORPORT, beltPort);
 
 	if (conveyorBeltSp == nullptr)
 	{
@@ -212,10 +230,11 @@ void CTinyFactoryDlg::OnBnClickedBtn()
 	conveyorBeltSp->StartConveyorBelt();
 
 	CString robotArmPort = "";
-	GetDlgItemText(ROBOT_ARM_PORT, robotArmPort);
+	GetDlgItemText(ROBOTPORT, robotArmPort);
 
 	RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
 	robotControlDlg.SetRobotArmSP(robotArmSP);
+	WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
 }
 
 
@@ -259,6 +278,13 @@ LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+LRESULT CTinyFactoryDlg::OnDectionFinish(WPARAM wParam, LPARAM lParam)
+{
+	SetTimer(DETECTION_RESET, DETECTIONWAITTIME, NULL);
+
+	return LRESULT();
+}
+
 
 
 void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
@@ -270,12 +296,36 @@ void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
 
 void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	if (nIDEvent == DETECTIONFINISH)
+	if (nIDEvent == DETECTION_RESET)
 	{
-		WorkManager::GetInstance()->ResetDetection();
 		WorkManager::GetInstance()->ResetYolo();
-		KillTimer(DETECTIONFINISH);
+		WorkManager::GetInstance()->ResetDetection();
+		KillTimer(DETECTION_RESET);
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+
+	static HBRUSH hbrBackground = CreateSolidBrush(RGB(54, 57, 63)); // #36393F
+	static HBRUSH hbrButton = CreateSolidBrush(RGB(114, 137, 218)); // 강조 파란색 (#7289DA)
+
+	// 텍스트 색상
+	pDC->SetTextColor(RGB(185, 187, 190)); // 텍스트 색상 밝은 회색 (#B9BBBE)
+	pDC->SetBkMode(TRANSPARENT);  // 배경 투명하게
+
+	// 버튼 색상 처리
+	if (pWnd->GetDlgCtrlID() == START_BTN) {
+		return hbrButton;  // 버튼 색상을 파란색 (#7289DA)로 설정
+	}
+
+	// 다이얼로그 배경 설정
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC) {
+		return hbrBackground;
+	}
+
+	return CDialogEx::OnCtlColor(pDC, pWnd,nCtlColor);
 }

@@ -50,7 +50,7 @@ public:
 	afx_msg void OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
 	afx_msg void OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnNMCustomdrawCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMReleasedCaptureCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedSendCommandBtn();
 	afx_msg void OnBnClickedTestBtn();

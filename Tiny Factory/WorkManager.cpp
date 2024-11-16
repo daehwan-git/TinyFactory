@@ -2,6 +2,7 @@
 #include <opencv2/core/cvstd.hpp>
 
 WorkManager* WorkManager::instance = nullptr;
+std::mutex WorkManager::mtx;
 
 void WorkManager::FinishObjectDetection()
 {
@@ -11,8 +12,8 @@ void WorkManager::FinishObjectDetection()
 		{
 			conveyorBeltSP->StartConveyorBelt();
 		}
-
-		SetTimer(mainHandle, DETECTIONFINISH, DETECTIONWAITTIME, NULL);
+		
+		PostMessage(mainHandle,DETECTIONFINISH,NULL,NULL);
 	}
 }
 
@@ -31,6 +32,11 @@ void WorkManager::SetMainHandle(HWND hwnd)
 	mainHandle = hwnd;
 }
 
+void WorkManager::ObjectGoal()
+{
+	
+}
+
 //some object detected
 void WorkManager::ObjectDetection()
 {
@@ -40,7 +46,8 @@ void WorkManager::ObjectDetection()
 
 		LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
 
-		objectDetection->StartObjectDetection();
+		if(objectDetection != nullptr)
+			objectDetection->StartObjectDetection();
 	}
 }
 

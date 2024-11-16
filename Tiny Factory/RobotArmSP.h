@@ -44,12 +44,13 @@ public:
 	void StopDataProcess();
 	void SendCommand(CString command);
 	void SendCommandList(CString command);
-	void ParsingData(CString command);
-	bool IsRun() { return isRun; }
+	void PlayRobotArm();
 	
 
 private:
 	void ReleaseDataProcess();
+	bool IsRun() { return isRun; }
+	void ParsingData(CString command);
 	static UINT DataProcessThread(LPVOID lpParam);
 };
 
