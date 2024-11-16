@@ -81,7 +81,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
-	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnConnectCompleteMessage)
+	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnDectionFinish)
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
 	ON_WM_CTLCOLOR()
@@ -179,7 +179,7 @@ void CTinyFactoryDlg::Init()
 	 }
 
 
-	LogManager::GetInstance().InitLogControl(&logListBox);
+	LogManager::GetInstance()->InitLogControl(&logListBox);
 
 	if (!robotControlDlg.GetSafeHwnd()) {
 		robotControlDlg.Create(IDD_ROBOT_DLG, this);
@@ -268,7 +268,7 @@ void CTinyFactoryDlg::OnStopBtnClicked()
 	{
 		conveyorBeltSp->StopConveyorBelt();
 		GetDlgItem(START_BTN)->EnableWindow(TRUE);
-		LogManager::GetInstance().WriteLog("공장을 정지합니다.");
+		LogManager::GetInstance()->WriteLog("공장을 정지합니다.");
 	}
 }
 
@@ -298,7 +298,6 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == DETECTION_RESET)
 	{
-		WorkManager::GetInstance()->ResetYolo();
 		WorkManager::GetInstance()->ResetDetection();
 		KillTimer(DETECTION_RESET);
 	}

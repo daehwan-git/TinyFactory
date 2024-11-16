@@ -4,26 +4,11 @@
 WorkManager* WorkManager::instance = nullptr;
 std::mutex WorkManager::mtx;
 
-void WorkManager::FinishObjectDetection()
-{
-	if (isDetection)
-	{
-		if (conveyorBeltSP != nullptr)
-		{
-			conveyorBeltSP->StartConveyorBelt();
-		}
-		
-		PostMessage(mainHandle,DETECTIONFINISH,NULL,NULL);
-	}
-}
 
 void WorkManager::ResetDetection()
 {
+	isDetection = false;
 	conveyorBeltSP->ResetDetect();
-}
-
-void WorkManager::ResetYolo()
-{
 	objectDetection->ResetFinishFlag();
 }
 
@@ -44,10 +29,7 @@ void WorkManager::ObjectDetection()
 	{
 		isDetection = true;
 
-		LogManager::GetInstance().WriteLog("오브젝트 감지됨.");
-
-		if(objectDetection != nullptr)
-			objectDetection->StartObjectDetection();
+		LogManager::GetInstance()->WriteLog("오브젝트 감지됨.");
 	}
 }
 
@@ -68,13 +50,24 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	{
 		//robot arms can move
 		
-		LogManager::GetInstance().WriteLog("비정상적인 오브젝트 감지됨.");
-		conveyorBeltSP->KnockDown();
+		LogManager::GetInstance()->WriteLog("비정상적인 오브젝트 감지됨.");
+
+		if (conveyorBeltSP != nullptr)
+		{
+			conveyorBeltSP->KnockDown();
+		}
+
+		PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 	}
 	else {
-		LogManager::GetInstance().WriteLog("정상적인 오브젝트 감지됨.");
+		LogManager::GetInstance()->WriteLog("정상적인 오브젝트 감지됨.");
+
+		if (conveyorBeltSP != nullptr)
+		{
+			conveyorBeltSP->StartConveyorBelt();
+		}
 	}
 
-	FinishObjectDetection();
+	PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 
 }

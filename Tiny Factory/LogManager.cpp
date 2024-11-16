@@ -2,6 +2,13 @@
 #include "LogManager.h"
 
 
+LogManager* LogManager::instance = nullptr;
+std::mutex LogManager::mtx;
+
+LogManager::~LogManager()
+{
+}
+
 void LogManager::InitLogControl(CListBox* listBox)
 {
 	this->logListBox = listBox;

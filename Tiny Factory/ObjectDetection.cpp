@@ -15,6 +15,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 
 	while (objectDetection->isRun)
 	{
+		if (!WorkManager::GetInstance()->IsDetection())continue;
 		if(!objectDetection->isFinishYolo)
 			objectDetection->YOLO(objectDetection->matFrame);
 		Sleep(100);
@@ -28,7 +29,6 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 {
 	if (!matFrame.empty())
 	{
-		if (!WorkManager::GetInstance()->IsDetection())return;
 		cvtColor(matFrame, matFrame, COLOR_BGRA2BGR);
 		matFrame.copyTo(this->matFrame);
 	}
@@ -90,17 +90,17 @@ void ObjectDetection::InitTrainSet()
 
 		if (m_net.empty())
 		{
-			LogManager::GetInstance().WriteLog("데이터 셋이 로드 되지 않았습니다.");
+			LogManager::GetInstance()->WriteLog("데이터 셋이 로드 되지 않았습니다.");
 		}
 		else {
-			LogManager::GetInstance().WriteLog("데이터 셋 준비 완료.");
+			LogManager::GetInstance()->WriteLog("데이터 셋 준비 완료.");
 		}
 
 		m_net.setPreferableBackend(DNN_BACKEND_OPENCV);
 		m_net.setPreferableTarget(DNN_TARGET_CPU);
 	}catch(Exception e)
 	{
-		LogManager::GetInstance().WriteLog("데이터 셋이 존재하지 않음.");
+		LogManager::GetInstance()->WriteLog("데이터 셋이 존재하지 않음.");
 	}
 }
 
@@ -150,10 +150,10 @@ void ObjectDetection::processDetections(const std::vector<Mat>& outs, const Mat&
 			}
 		}
 	}
-	DrawObjectdetection(img);
 
 	if (flag)
 	{
+		DrawObjectdetection(img);
 		isFinishYolo = true;
 		WorkManager::GetInstance()->FinishYOLO(classNames);
 	}

@@ -4,7 +4,7 @@ void RobotArmSP::StartDataProcess()
 {
 	if (sp == nullptr)return;
 
-	LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ÀÛµ¿");
+	LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ÀÛµ¿");
 
 	isRun = true;
 
@@ -28,7 +28,7 @@ void RobotArmSP::SendCommand(CString command)
 {
 	if (sp == nullptr)return;
 
-	LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
+	LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
 
 	if (sp->IsConnected())
 	{
@@ -44,7 +44,7 @@ void RobotArmSP::SendCommandList(CString command)
 
 		if (sp == nullptr)return;
 
-		LogManager::GetInstance().WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
+		LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
 
 		if (sp->IsConnected())
 		{

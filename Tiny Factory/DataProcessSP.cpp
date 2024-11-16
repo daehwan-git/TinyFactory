@@ -4,7 +4,7 @@ void DataProcessSP::StartDataProcess()
 {
 	if (sp == nullptr)return;
 
-	LogManager::GetInstance().WriteLog("데이터 통신 작동");
+	LogManager::GetInstance()->WriteLog("데이터 통신 작동");
 
 	isRun = true;
 
@@ -67,7 +67,7 @@ UINT DataProcessSP::DataProcessThread(LPVOID lpParam)
 		if (!result.IsEmpty())
 		{
 			dataProcess->ParsingData(result);
-			LogManager::GetInstance().WriteLog(result);
+			LogManager::GetInstance()->WriteLog(result);
 		}
 
 		Sleep(SYNC_TIME);

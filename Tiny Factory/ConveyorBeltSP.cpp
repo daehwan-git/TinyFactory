@@ -9,7 +9,7 @@ void ConveyorBeltSP::StopConveyorBelt()
 	{
 		if (sp->IsConnected())
 		{
-			LogManager::GetInstance().WriteLog("컨베이어 벨트 작동 중지");
+			LogManager::GetInstance()->WriteLog("컨베이어 벨트 작동 중지");
 			sp->WriteData(CONVAYORBELT_OFF_DATA, DATA_LENGTH);
 		}
 		isRun = false;
@@ -20,7 +20,7 @@ void ConveyorBeltSP::StartConveyorBelt()
 {
 	if (sp == nullptr)return;
 
-	LogManager::GetInstance().WriteLog("컨베이어 벨트 작동");
+	LogManager::GetInstance()->WriteLog("컨베이어 벨트 작동");
 
 	isRun = true;
 

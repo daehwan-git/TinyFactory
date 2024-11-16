@@ -35,11 +35,11 @@ public:
 
 		if (!videoCapture->isOpened())
 		{
-			LogManager::GetInstance().WriteLog("카메라를 연결 할 수 없습니다.");
+			LogManager::GetInstance()->WriteLog("카메라를 연결 할 수 없습니다.");
 			return;
 		}
 		else {
-			LogManager::GetInstance().WriteLog("카메라를 연결 완료했습니다.");
+			LogManager::GetInstance()->WriteLog("카메라를 연결 완료했습니다.");
 
 			if (objectDetction == nullptr)
 			{

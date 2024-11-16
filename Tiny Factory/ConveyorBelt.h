@@ -19,21 +19,21 @@ public:
 	{
 		if (portNumber == "")
 		{
-			LogManager::GetInstance().WriteLog("컨베이어 벨트 포트의 번호가 유효하지 않음");
+			LogManager::GetInstance()->WriteLog("컨베이어 벨트 포트의 번호가 유효하지 않음");
 		}
 		else
 		{
-			LogManager::GetInstance().WriteLog("컨베이어 벨트 : " + portNumber + " port 에 연결시도");
+			LogManager::GetInstance()->WriteLog("컨베이어 벨트 : " + portNumber + " port 에 연결시도");
 
-			this->sp = new Serial(PORT_PREFIX + portNumber);
+			this->sp = new Serial(PORT_PREFIX + portNumber,115200);
 
 			if (sp->IsConnected())
 			{
-				LogManager::GetInstance().WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 완료");
+				LogManager::GetInstance()->WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 완료");
 				dialog->PostMessageA(ON_CONNECT_COMPLETE_MESSAGE,0,0);
 			}
 			else {
-				LogManager::GetInstance().WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 실패...");
+				LogManager::GetInstance()->WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 실패...");
 			}
 		}
 	}

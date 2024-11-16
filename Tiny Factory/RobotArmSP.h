@@ -16,20 +16,20 @@ public:
 	{
 		if (portNumber == "")
 		{
-			LogManager::GetInstance().WriteLog("·Îº¿ÆÈ Æ÷Æ®ÀÇ ¹øÈ£°¡ À¯È¿ÇÏÁö ¾ÊÀ½");
+			LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ Æ÷Æ®ÀÇ ¹øÈ£°¡ À¯È¿ÇÏÁö ¾ÊÀ½");
 		}
 		else
 		{
-			LogManager::GetInstance().WriteLog("·Îº¿ÆÈ : " + portNumber + " port ¿¡ ¿¬°á½Ãµµ");
+			LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port ¿¡ ¿¬°á½Ãµµ");
 
 			this->sp = new Serial(PORT_PREFIX + portNumber);
 
 			if (sp->IsConnected())
 			{
-				LogManager::GetInstance().WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ¿Ï·á");
+				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ¿Ï·á");
 			}
 			else {
-				LogManager::GetInstance().WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ½ÇÆÐ...");
+				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ½ÇÆÐ...");
 			}
 		}
 	}

@@ -25,10 +25,10 @@ bool FileManager::SaveFile(std::vector<CString>  data)
 
         fout.close();
 
-        LogManager::GetInstance().WriteLog("로그 데이터 저장 완료.");
+        LogManager::GetInstance()->WriteLog("로그 데이터 저장 완료.");
     }
     else {
-        LogManager::GetInstance().WriteLog("로그 데이터 저장 실패.");
+        LogManager::GetInstance()->WriteLog("로그 데이터 저장 실패.");
     }
 
     return false;

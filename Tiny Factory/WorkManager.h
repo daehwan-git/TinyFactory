@@ -22,14 +22,13 @@ private:
 public:
 	static WorkManager* GetInstance()
 	{
-		std::lock_guard<std::mutex> lock(mtx);
-		if (instance != nullptr) {
-			return instance;
+		if (instance == nullptr) { 
+			std::lock_guard<std::mutex> lock(mtx); 
+			if (instance == nullptr) { 
+				instance = new WorkManager();
+			}
 		}
-		else {
-			instance = new WorkManager();
-			return instance;
-		}
+		return instance;
 	}
 
 
@@ -59,15 +58,12 @@ public:
 		this->robotArmSP = robotArmSP;
 	}
 
-private:
-	void FinishObjectDetection();
 
 public:
 	void ObjectDetection();
 	void FinishYOLO(std::vector<cv::String> classNames);
 	bool IsDetection() { return isDetection; }
 	void ResetDetection();
-	void ResetYolo();
 	void SetMainHandle(HWND hwnd);
 	void ObjectGoal();
 };
