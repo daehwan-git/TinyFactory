@@ -19,7 +19,7 @@ void WorkManager::SetMainHandle(HWND hwnd)
 
 void WorkManager::ObjectGoal()
 {
-	
+	robotArmSP->PlayRobotArm();
 }
 
 //some object detected
