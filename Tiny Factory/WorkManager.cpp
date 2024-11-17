@@ -19,7 +19,8 @@ void WorkManager::SetMainHandle(HWND hwnd)
 
 void WorkManager::ObjectGoal()
 {
-	robotArmSP->PlayRobotArm();
+	if(robotArmSP != nullptr)
+		robotArmSP->PlayRobotArm();
 }
 
 //some object detected
@@ -56,8 +57,6 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		{
 			conveyorBeltSP->KnockDown();
 		}
-
-		PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 	}
 	else {
 		LogManager::GetInstance()->WriteLog("정상적인 오브젝트 감지됨.");
@@ -68,6 +67,7 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		}
 	}
 
+	robotArmSP->SendObjectType(isNormal);
 	PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 
 }

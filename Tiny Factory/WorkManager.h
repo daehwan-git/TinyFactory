@@ -53,7 +53,7 @@ public:
 		this->objectDetection = objectDetection;
 	}
 
-	void InitRobotArmSP(RobotArmSP* robotArmSp)
+	void InitRobotArmSP(RobotArmSP* robotArmSP)
 	{
 		this->robotArmSP = robotArmSP;
 	}

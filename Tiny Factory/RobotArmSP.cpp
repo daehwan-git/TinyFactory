@@ -39,18 +39,18 @@ void RobotArmSP::SendCommand(CString command)
 void RobotArmSP::SendCommandList(CString command)
 {
 
-		command = STORECOMMAND + command + "\n";
-		isFinishCommand = false;
+	command = STORECOMMAND + command + "\n";
+	isFinishCommand = false;
 
-		if (sp == nullptr)return;
+	if (sp == nullptr)return;
 
-		LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
+	LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ¸í·É¾î ¼Û½Å");
 
-		if (sp->IsConnected())
-		{
-			sp->WriteData(command, DATA_LENGTH);
-		}
-	
+	if (sp->IsConnected())
+	{
+		sp->WriteData(command, DATA_LENGTH);
+	}
+
 }
 
 void RobotArmSP::PlayRobotArm()
@@ -58,19 +58,40 @@ void RobotArmSP::PlayRobotArm()
 
 	if (sp == nullptr)return;
 
+	if (!isPlaying)
+	{
+		if (sp->IsConnected())
+		{
+			isPlaying = true;
+			Sleep(ROBOT_WAIT_TIME);
+			sp->WriteData(PLAYROBOT, DATA_LENGTH);
+		}
+	}
+}
+
+void RobotArmSP::SendObjectType(bool isNormal)
+{
+	if (sp == nullptr)return;
 
 	if (sp->IsConnected())
 	{
-		sp->WriteData(PLAYROBOT, DATA_LENGTH);
+		if (isNormal)
+		{
+			sp->WriteData(RIGHT_OBJECT, DATA_LENGTH);
+		}
+		else {
+			sp->WriteData(WRONG_OBJECT, DATA_LENGTH);
+		}
 	}
 
 }
 
 void RobotArmSP::ParsingData(CString command)
 {
+	if (command == "")return;
 	if (command == COMMANDFNINISH)
 	{
-		isFinishCommand = true;
+		isPlaying = false;
 	}
 }
 

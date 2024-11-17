@@ -9,6 +9,7 @@ private:
 	Serial* sp;
 	bool isRun = false;
 	bool isFinishCommand = true;
+	bool isPlaying = false;
 
 
 public:
@@ -27,6 +28,7 @@ public:
 			if (sp->IsConnected())
 			{
 				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ¿Ï·á");
+				StartDataProcess();
 			}
 			else {
 				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ½ÇÆÐ...");
@@ -36,7 +38,8 @@ public:
 
 	~RobotArmSP()
 	{
-		
+		StopDataProcess();
+		ReleaseDataProcess();
 	}
 
 
@@ -45,6 +48,7 @@ public:
 	void SendCommand(CString command);
 	void SendCommandList(CString command);
 	void PlayRobotArm();
+	void SendObjectType(bool isNormal);
 	
 
 private:
