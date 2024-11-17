@@ -12,6 +12,11 @@ void WorkManager::ResetDetection()
 	objectDetection->ResetFinishFlag();
 }
 
+void WorkManager::ResetGoal()
+{
+	conveyorBeltSP->ResetGoal();
+}
+
 void WorkManager::SetMainHandle(HWND hwnd)
 {
 	mainHandle = hwnd;

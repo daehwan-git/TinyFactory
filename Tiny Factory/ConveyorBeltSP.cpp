@@ -54,6 +54,17 @@ void ConveyorBeltSP::ResetDetect()
 	}
 }
 
+void ConveyorBeltSP::ResetGoal()
+{
+
+	if (sp == nullptr)return;
+
+	if (sp->IsConnected())
+	{
+		sp->WriteData(RESETDETECT, DATA_LENGTH);
+	}
+}
+
 void ConveyorBeltSP::ParsingReciveData(CString data)
 {
 	if (data == OBJECT_DETECTION)

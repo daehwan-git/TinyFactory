@@ -49,6 +49,7 @@ public:
 	bool IsRun() { return isRun; }
 	void KnockDown();
 	void ResetDetect();
+	void ResetGoal();
 	
 private:
 	void ParsingReciveData(CString data);

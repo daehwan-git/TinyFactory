@@ -64,6 +64,7 @@ public:
 	void FinishYOLO(std::vector<cv::String> classNames);
 	bool IsDetection() { return isDetection; }
 	void ResetDetection();
+	void ResetGoal();
 	void SetMainHandle(HWND hwnd);
 	void ObjectGoal();
 };
