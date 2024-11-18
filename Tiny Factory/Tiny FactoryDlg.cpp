@@ -228,7 +228,6 @@ void CTinyFactoryDlg::SaveLogData()
 
 
 
-
 void CTinyFactoryDlg::OnBnClickedStartBtn()
 {
 	CString beltPort = "";
