@@ -92,6 +92,7 @@ void RobotArmSP::ParsingData(CString command)
 	if (command == COMMANDFNINISH)
 	{
 		isPlaying = false;
+		WorkManager::GetInstance()->ResetGoal();
 	}
 }
 

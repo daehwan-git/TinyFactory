@@ -61,7 +61,7 @@ void ConveyorBeltSP::ResetGoal()
 
 	if (sp->IsConnected())
 	{
-		sp->WriteData(RESETDETECT, DATA_LENGTH);
+		sp->WriteData(RESETGOAL, DATA_LENGTH);
 	}
 }
 

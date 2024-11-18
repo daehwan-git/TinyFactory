@@ -43,6 +43,7 @@ public:
 
 private:
 	void Init();
+	void InitDevicePort();
 	void SaveLogData();
 
 private:
@@ -65,7 +66,10 @@ public:
 	afx_msg void OnStopBtnClicked();
 	afx_msg LRESULT OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDectionFinish(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnNormalObjectInc(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnWrongObjectInc(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBnClickedRobotcontrolbtn();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
 };

@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DataManager.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="RobotArmSP.h" />
     <ClInclude Include="RobotControlDlg.h" />
@@ -220,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="RobotArmSP.cpp" />
     <ClCompile Include="RobotControlDlg.cpp" />
     <ClCompile Include="ConveyorBeltSP.cpp" />

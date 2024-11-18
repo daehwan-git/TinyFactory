@@ -8,6 +8,7 @@
 #include "Tiny FactoryDlg.h"
 #include "afxdialogex.h"
 #include "Device.h"
+#include <dbt.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,6 +16,7 @@
 #include "FileManager.h"
 
 #include "opencv2/opencv.hpp"
+#include "DataManager.h"
 using namespace cv;
 
 
@@ -81,7 +83,10 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(STOP_BTN, &CTinyFactoryDlg::OnStopBtnClicked)
 	ON_MESSAGE(ON_CONNECT_COMPLETE_MESSAGE, &CTinyFactoryDlg::OnConnectCompleteMessage)
+	ON_MESSAGE(NORMAL_OBJECT_INC, &CTinyFactoryDlg::OnNormalObjectInc)
+	ON_MESSAGE(WRONG_OBJECT_INC, &CTinyFactoryDlg::OnWrongObjectInc)
 	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnDectionFinish)
+	ON_WM_DEVICECHANGE()
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
 	ON_WM_CTLCOLOR()
@@ -167,17 +172,7 @@ void CTinyFactoryDlg::OnBnClickedOk()
 
 void CTinyFactoryDlg::Init()
 {
-
-	 std::vector<CString> portNames = Device::ListUsbPorts();
-	 CComboBox* beltComboBox = (CComboBox*)GetDlgItem(CONVEYORPORT);
-	 CComboBox* robotComboBox = (CComboBox*)GetDlgItem(ROBOTPORT);
-
-	 for (int i = 0; i < portNames.size(); i++)
-	 {
-		 beltComboBox->AddString(portNames[i]);
-		 robotComboBox->AddString(portNames[i]);
-	 }
-
+	InitDevicePort();
 
 	LogManager::GetInstance()->InitLogControl(&logListBox);
 
@@ -192,7 +187,25 @@ void CTinyFactoryDlg::Init()
 	}
 
 	WorkManager::GetInstance()->SetMainHandle(m_hWnd);
+	DataManager::GetInstance()->SetMainHandle(m_hWnd);
 	WorkManager::GetInstance()->InitObjectDetection(camera->GetObjectDetection());
+}
+
+
+void CTinyFactoryDlg::InitDevicePort()
+{
+	std::vector<CString> portNames = Device::ListUsbPorts();
+	CComboBox* beltComboBox = (CComboBox*)GetDlgItem(CONVEYORPORT);
+	CComboBox* robotComboBox = (CComboBox*)GetDlgItem(ROBOTPORT);
+
+	beltComboBox->ResetContent();
+	robotComboBox->ResetContent();
+
+	for (int i = 0; i < portNames.size(); i++)
+	{
+		beltComboBox->AddString(portNames[i]);
+		robotComboBox->AddString(portNames[i]);
+	}
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -258,6 +271,11 @@ void CTinyFactoryDlg::OnDestroy()
 		delete camera;
 	}
 
+	if (WorkManager::GetInstance() != nullptr)
+	{
+		delete WorkManager::GetInstance();
+	}
+
 	SaveLogData();
 }
 
@@ -281,6 +299,30 @@ LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 LRESULT CTinyFactoryDlg::OnDectionFinish(WPARAM wParam, LPARAM lParam)
 {
 	SetTimer(DETECTION_RESET, DETECTIONWAITTIME, NULL);
+
+	return LRESULT();
+}
+
+
+LRESULT CTinyFactoryDlg::OnNormalObjectInc(WPARAM wParam, LPARAM lParam)
+{
+	int normalCount = static_cast<int>(wParam);
+
+	CString intToStr;
+	intToStr.Format("%d개",normalCount);
+
+	SetDlgItemText(NORMAL_COUNT_TEXT, intToStr);
+
+	return LRESULT();
+}
+
+LRESULT CTinyFactoryDlg::OnWrongObjectInc(WPARAM wParam, LPARAM lParam)
+{
+	int wrongCount = static_cast<int>(wParam);
+	CString intToStr;
+	intToStr.Format("%d개", wrongCount);
+
+	SetDlgItemText(WRONG_COUNT_TEXT, intToStr);
 
 	return LRESULT();
 }
@@ -328,3 +370,10 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	return CDialogEx::OnCtlColor(pDC, pWnd,nCtlColor);
 }
+
+BOOL CTinyFactoryDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
+{
+	InitDevicePort();
+	return 0;
+}
+

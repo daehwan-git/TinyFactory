@@ -35,8 +35,9 @@
 #define IDC_BUTTON3                     1016
 #define ROBOT_ARM_STOP_BTN              1016
 #define ROBOTPORT                       1018
-#define ROBOTPORT2                      1019
 #define CONVEYORPORT                    1019
+#define NORMAL_COUNT_TEXT               1020
+#define WRONG_COUNT_TEXT                1021
 
 // Next default values for new objects
 // 
@@ -44,7 +45,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1018
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

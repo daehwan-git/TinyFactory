@@ -1,5 +1,6 @@
 #include  "WorkManager.h"
 #include <opencv2/core/cvstd.hpp>
+#include "DataManager.h"
 
 WorkManager* WorkManager::instance = nullptr;
 std::mutex WorkManager::mtx;
@@ -58,6 +59,8 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		
 		LogManager::GetInstance()->WriteLog("비정상적인 오브젝트 감지됨.");
 
+		DataManager::GetInstance()->IncreaseWrongCount();
+
 		if (conveyorBeltSP != nullptr)
 		{
 			conveyorBeltSP->KnockDown();
@@ -65,6 +68,8 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	}
 	else {
 		LogManager::GetInstance()->WriteLog("정상적인 오브젝트 감지됨.");
+
+		DataManager::GetInstance()->IncreaseNormalCount();
 
 		if (conveyorBeltSP != nullptr)
 		{
