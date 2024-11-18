@@ -29,15 +29,15 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
-// 구현입니다.
+	// 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -61,7 +61,7 @@ END_MESSAGE_MAP()
 
 
 CTinyFactoryDlg::CTinyFactoryDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent),conveyorBeltSp(nullptr)
+	: CDialogEx(IDD_TINY_FACTORY_DIALOG, pParent), conveyorBeltSp(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -70,9 +70,11 @@ void CTinyFactoryDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, LOG_LIST_BOX, logListBox);
-	DDX_Control(pDX, START_BTN, startBtn);
 	DDX_Control(pDX, CAMERARECT, videoRect);
 	DDX_Control(pDX, DERECTIONRECT, detectionRect);
+	DDX_Control(pDX, STOP_BTN, stopBtn);
+	DDX_Control(pDX, START_BTN, startBtn);
+	DDX_Control(pDX, ROBOTCONTROLBTN, robotcontrolBtn);
 }
 
 BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
@@ -89,7 +91,8 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_DEVICECHANGE()
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
-	ON_WM_CTLCOLOR()
+	ON_WM_SIZE()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -99,7 +102,40 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	ModifyStyle(WS_SIZEBOX, 0);
+
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	m_font.CreateFont(
+		25,                        // 폰트 크기 (높이)
+		0,                         // 문자 너비 (0이면 자동 계산)
+		0,                         // 텍스트 각도
+		0,                         // 베이스라인 각도
+		FW_BOLD,                   // 폰트 굵기 (FW_NORMAL 또는 FW_BOLD)
+		FALSE,                     // 이탤릭체 여부
+		FALSE,                     // 밑줄 여부
+		0,                         // 취소선 여부
+		DEFAULT_CHARSET,           // 문자 집합
+		OUT_DEFAULT_PRECIS,        // 출력 정확도
+		CLIP_DEFAULT_PRECIS,       // 클리핑 정확도
+		DEFAULT_QUALITY,           // 출력 품질
+		DEFAULT_PITCH | FF_SWISS,  // 글꼴 종류
+		_T("Arial"));              // 폰트 이름
+
+	if (startBtn)
+	{
+		startBtn.SetFont(&m_font);
+	}
+
+	if (stopBtn)
+	{
+		stopBtn.SetFont(&m_font);
+	}
+
+	if (robotcontrolBtn)
+	{
+		robotcontrolBtn.SetFont(&m_font);
+	}
+
 	Init();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -146,9 +182,8 @@ void CTinyFactoryDlg::OnPaint()
 		CPaintDC dc(this);
 
 		CRect rect;
-		GetClientRect(&rect);  
+		GetClientRect(&rect);
 		dc.FillSolidRect(&rect, RGB(54, 57, 63));
-
 
 		CDialogEx::OnPaint();
 	}
@@ -183,7 +218,7 @@ void CTinyFactoryDlg::Init()
 
 	if (camera == nullptr)
 	{
-		camera = new Camera(&videoRect,&detectionRect,0);
+		camera = new Camera(&videoRect, &detectionRect, 0);
 	}
 
 	WorkManager::GetInstance()->SetMainHandle(m_hWnd);
@@ -217,7 +252,7 @@ void CTinyFactoryDlg::SaveLogData()
 	for (int i = 0; i < itemCount; ++i)
 	{
 		CString text;
-		logListBox.GetText(i,text);
+		logListBox.GetText(i, text);
 		data.push_back(text);
 	}
 
@@ -308,7 +343,7 @@ LRESULT CTinyFactoryDlg::OnNormalObjectInc(WPARAM wParam, LPARAM lParam)
 	int normalCount = static_cast<int>(wParam);
 
 	CString intToStr;
-	intToStr.Format("%d개",normalCount);
+	intToStr.Format("%d개", normalCount);
 
 	SetDlgItemText(NORMAL_COUNT_TEXT, intToStr);
 
@@ -347,28 +382,7 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
-{
 
-	static HBRUSH hbrBackground = CreateSolidBrush(RGB(54, 57, 63)); // #36393F
-	static HBRUSH hbrButton = CreateSolidBrush(RGB(114, 137, 218)); // 강조 파란색 (#7289DA)
-
-	// 텍스트 색상
-	pDC->SetTextColor(RGB(185, 187, 190)); // 텍스트 색상 밝은 회색 (#B9BBBE)
-	pDC->SetBkMode(TRANSPARENT);  // 배경 투명하게
-
-	// 버튼 색상 처리
-	if (pWnd->GetDlgCtrlID() == START_BTN) {
-		return hbrButton;  // 버튼 색상을 파란색 (#7289DA)로 설정
-	}
-
-	// 다이얼로그 배경 설정
-	if (pWnd->GetDlgCtrlID() == IDC_STATIC) {
-		return hbrBackground;
-	}
-
-	return CDialogEx::OnCtlColor(pDC, pWnd,nCtlColor);
-}
 
 BOOL CTinyFactoryDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
 {
@@ -376,3 +390,18 @@ BOOL CTinyFactoryDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
 	return 0;
 }
 
+
+
+void CTinyFactoryDlg::OnSize(UINT nType, int cx, int cy)
+{
+
+	CDialogEx::OnSize(nType, cx, cy);
+
+}
+
+
+void CTinyFactoryDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	CDialogEx::OnGetMinMaxInfo(lpMMI);
+}
+	

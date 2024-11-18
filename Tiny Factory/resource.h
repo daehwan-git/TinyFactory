@@ -2,6 +2,7 @@
 // Microsoft Visual C++에서 생성한 포함 파일입니다.
 // TinyFactory.rc에서 사용되고 있습니다.
 //
+#define IDD_TinyFactory_DIALOG          9
 #define IDM_ABOUTBOX                    0x0010
 #define BELT_PORT                       0x0010
 #define DATAPORT                        17
