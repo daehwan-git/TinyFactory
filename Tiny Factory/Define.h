@@ -49,6 +49,11 @@ const cv::String NORMALOBJECT = "NORMAL";
 #define DATAPROCESS_OFF_DATA "OFF\n"
 
 
+
+//화물차
+#define MAX_CARRIAGE 5
+
+
 //로봇 팔
 
 #define AMOTOR_MAX_RANGE 180
@@ -79,3 +84,7 @@ const cv::String NORMALOBJECT = "NORMAL";
 //데이터 매니저
 #define NORMAL_OBJECT_INC ON_CONNECT_COMPLETE_MESSAGE + 300
 #define WRONG_OBJECT_INC ON_CONNECT_COMPLETE_MESSAGE + 350
+
+
+//색상
+#define WHITE_COLOR RGB(255, 255, 255)

@@ -6,11 +6,13 @@
 #include <opencv2/core/cvstd.hpp>
 #include "ObjectDetection.h"
 #include "RobotArmSP.h"
+#include"Carriage.h"
 
 class DataProcessSP;
 class ConveyorBeltSP;
 class ObjectDetection;
 class RobotArmSP;
+class Carriage;
 
 class WorkManager
 {
@@ -39,6 +41,7 @@ private:
 
 	ConveyorBeltSP* conveyorBeltSP = nullptr;
 	ObjectDetection* objectDetection = nullptr;
+	Carriage* carriage = nullptr;
 	RobotArmSP* robotArmSP = nullptr;
 	HWND mainHandle = nullptr;
 
@@ -58,6 +61,11 @@ public:
 		this->robotArmSP = robotArmSP;
 	}
 
+	void InitCarriage(Carriage* carriage)
+	{
+		this->carriage = carriage;
+	}
+
 
 public:
 	void ObjectDetection();
@@ -67,5 +75,6 @@ public:
 	void ResetGoal();
 	void SetMainHandle(HWND hwnd);
 	void ObjectGoal();
+	void StartCarriage();
 };
 

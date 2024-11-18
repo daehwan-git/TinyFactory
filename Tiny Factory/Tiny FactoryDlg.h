@@ -39,7 +39,7 @@ public:
     CListBox logListBox;
 
 private:
-    CFont m_font;
+    CFont btnFont;
     void Init();
     void InitDevicePort();
     void SaveLogData();
@@ -75,4 +75,5 @@ public:
     afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+    afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

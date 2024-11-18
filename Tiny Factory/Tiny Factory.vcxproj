@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Carriage.h" />
     <ClInclude Include="CustomBtn.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="Device.h" />
@@ -222,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Carriage.cpp" />
     <ClCompile Include="CustomBtn.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="RobotArmSP.cpp" />

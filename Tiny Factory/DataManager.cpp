@@ -13,5 +13,15 @@ void DataManager::IncreaseWrongCount()
 void DataManager::IncreaseNormalCount()
 {
 	normalObjectCount++;
+	carriageObjectCount++;
 	PostMessage(mainHandle,NORMAL_OBJECT_INC,normalObjectCount,NULL);
+}
+
+void DataManager::CheckNormalCount()
+{
+	if (normalObjectCount >= MAX_CARRIAGE)
+	{
+		normalObjectCount -= MAX_CARRIAGE;
+		WorkManager::GetInstance()->StartCarriage();
+	}
 }

@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "Device.h"
 #include <dbt.h>
+#include "Carriage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -93,6 +94,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -105,7 +107,7 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 	ModifyStyle(WS_SIZEBOX, 0);
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	m_font.CreateFont(
+	btnFont.CreateFont(
 		25,                        // 폰트 크기 (높이)
 		0,                         // 문자 너비 (0이면 자동 계산)
 		0,                         // 텍스트 각도
@@ -123,17 +125,17 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 
 	if (startBtn)
 	{
-		startBtn.SetFont(&m_font);
+		startBtn.SetFont(&btnFont);
 	}
 
 	if (stopBtn)
 	{
-		stopBtn.SetFont(&m_font);
+		stopBtn.SetFont(&btnFont);
 	}
 
 	if (robotcontrolBtn)
 	{
-		robotcontrolBtn.SetFont(&m_font);
+		robotcontrolBtn.SetFont(&btnFont);
 	}
 
 	Init();
@@ -282,6 +284,12 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 	RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
 	robotControlDlg.SetRobotArmSP(robotArmSP);
 	WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
+
+	CString carriageIP = "";
+	GetDlgItemText(CARRIAGE_IP,carriageIP);
+
+	Carriage* carriage = new Carriage(carriageIP);
+	WorkManager::GetInstance()->InitCarriage(carriage);
 }
 
 
@@ -309,6 +317,8 @@ void CTinyFactoryDlg::OnDestroy()
 	{
 		delete WorkManager::GetInstance();
 	}
+
+	btnFont.DeleteObject();
 
 	SaveLogData();
 }
@@ -405,3 +415,22 @@ void CTinyFactoryDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	CDialogEx::OnGetMinMaxInfo(lpMMI);
 }
 	
+
+
+HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC)
+	{
+		pDC->SetTextColor(WHITE_COLOR);
+
+		pDC->SetBkMode(TRANSPARENT);
+
+		static HBRUSH hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+		return hbrBackground;
+	}
+
+	return hbr;
+}

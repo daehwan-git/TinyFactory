@@ -29,6 +29,12 @@ void WorkManager::ObjectGoal()
 		robotArmSP->PlayRobotArm();
 }
 
+void WorkManager::StartCarriage()
+{
+	if (carriage != nullptr)
+		carriage->StartCarriage();
+}
+
 //some object detected
 void WorkManager::ObjectDetection()
 {

@@ -11,6 +11,8 @@ private:
 private:
 	int normalObjectCount = 0;
 	int wrongObjectCount = 0;
+	int carriageObjectCount = 0;
+
 	HWND mainHandle = nullptr;
 
 	DataManager() {}
@@ -37,5 +39,6 @@ public:
 public:
 	void IncreaseWrongCount();
 	void IncreaseNormalCount();
+	void CheckNormalCount();
 };
 
