@@ -24,16 +24,17 @@ RobotControlDlg::~RobotControlDlg()
 void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, ROBOT_COMMAND_LISTBOX, robotCommandListBox);
+	DDX_Control(pDX, ROBOT_COMMAND_LISTBOX, robotFrameBox);
 	DDX_Control(pDX, IDC_A_MOTOR_SLIDER, aMotorSlider);
 	DDX_Control(pDX, IDC_B_MOTOR_SLIDER, bMotorSlider);
 	DDX_Control(pDX, IDC_C_MOTOR_SLIDER, cMotorSlider);
 	DDX_Control(pDX, IDC_D_MOTOR_SLIDER, dMotorSlider);
+	DDX_Control(pDX, IDC_SLIDER5, carriageCountSlider);
 }
 
 
 BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
-	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedRecordBtn)
+	ON_BN_CLICKED(ROBOT_RECORD_BTN, &RobotControlDlg::OnBnClickedAddFrame)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaptureAMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedcaputreBMotorSlider)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMReleasedCaptureCMotorSlider)
@@ -42,6 +43,8 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(ROBOT_TEST_BTN, &RobotControlDlg::OnBnClickedTestBtn)
 	ON_BN_CLICKED(ROBOT_ARM_STOP_BTN, &RobotControlDlg::OnBnClickedArmStopBtn)
+	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &RobotControlDlg::OnNMReleasedcaptureCarriageCount)
+	ON_BN_CLICKED(DELETE_FRAME_BTN, &RobotControlDlg::OnBnClickedFrameBtn)
 END_MESSAGE_MAP()
 
 
@@ -55,6 +58,8 @@ BOOL RobotControlDlg::OnInitDialog()
 	bMotorSlider.SetRange(BMOTOR_MIN_RANGE, BMOTOR_MAX_RANGE);
 	cMotorSlider.SetRange(CMOTOR_MIN_RANGE, CMOTOR_MAX_RANGE);
 	dMotorSlider.SetRange(AMOTOR_MIN_RANGE, CMOTOR_MAX_RANGE);
+	carriageCountSlider.SetRange(0,MAX_CARRIAGE_COUNT);
+
 
 	return TRUE;  
 }
@@ -64,37 +69,55 @@ void RobotControlDlg::SetRobotArmSP(RobotArmSP* robotArmSP)
 	this->robotArmSP = robotArmSP;
 }
 
-
-void RobotControlDlg::OnBnClickedRecordBtn()
+void RobotControlDlg::SetCarriage(Carriage* carriage)
 {
-	if(!isRecord)
-	{
-		isRecord = true;
-		SetDlgItemText(ROBOT_RECORD_BTN,"녹화 종료");
-		GetDlgItem(ROBOT_SEND_COMMAND_BTN)->EnableWindow(FALSE);
-		GetDlgItem(ROBOT_TEST_BTN)->EnableWindow(FALSE);
-		robotCommandListBox.ResetContent();
-	}
-	else {
-		isRecord = false;
-		robotArmSP->SendCommand(ROBOTSTOP);
-		SetDlgItemText(ROBOT_RECORD_BTN, "녹화 시작");
-		GetDlgItem(ROBOT_SEND_COMMAND_BTN)->EnableWindow(TRUE);
-		GetDlgItem(ROBOT_TEST_BTN)->EnableWindow(TRUE);
-	}
+	this->carriage = carriage;
+	carriageCountSlider.SetPos(carriage->GetCarriageCount());
+	this->carriage->WaitCarriage();
+}
 
+
+void RobotControlDlg::OnBnClickedAddFrame()
+{
+	int currentSel = robotFrameBox.GetCurSel();
+	CString sPos;
+
+	if (aMotorMove)
+	{
+		int pos = aMotorSlider.GetPos();
+		sPos.Format("%d", pos);
+		robotFrameBox.InsertString(currentSel, MOTOR_A + pos);
+	}
+	if (bMotorMove)
+	{
+		int pos = bMotorSlider.GetPos();
+		sPos.Format("%d", pos);
+		robotFrameBox.InsertString(currentSel, MOTOR_B + pos);
+	}
+	if (cMotorMove)
+	{
+		int pos =	cMotorSlider.GetPos();
+		sPos.Format("%d", pos);
+		robotFrameBox.InsertString(currentSel, MOTOR_C + pos);
+	}
+	if (dMotorMove)
+	{
+		int pos =	dMotorSlider.GetPos();
+		sPos.Format("%d", pos);
+		robotFrameBox.InsertString(currentSel, MOTOR_D + pos);
+	}
 	ResetSliderPos();
 }
 
 
 void RobotControlDlg::AddCommand(CString command)
 {
-	robotCommandListBox.InsertString(-1,command);
+	robotFrameBox.InsertString(-1,command);
 }
 
 void RobotControlDlg::ResetCommand()
 {
-	robotCommandListBox.ResetContent();
+	robotFrameBox.ResetContent();
 	this->currentCommand = "";
 	ResetSliderPos();
 }
@@ -105,19 +128,18 @@ void RobotControlDlg::ResetSliderPos()
 	bMotorSlider.SetPos(ROBOT_ARM_MIN_RANGE);
 	cMotorSlider.SetPos(ROBOT_ARM_MIN_RANGE);
 	dMotorSlider.SetPos(ROBOT_ARM_MIN_RANGE);
+
+	aMotorMove = false;
+	bMotorMove = false;
+	cMotorMove = false;
+	dMotorMove = false;
 }
 
 
 void RobotControlDlg::OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	if (!isRecord)return;
+	aMotorMove = true;
 
-	int pos = aMotorSlider.GetPos();
-	CString sPos;
-	sPos.Format("%d", pos);
-
-	AddCommand(MOTOR_A + sPos);
-	robotArmSP->SendCommand(MOTOR_A + sPos);
 	*pResult = 0;
 }
 
@@ -135,28 +157,17 @@ void RobotControlDlg::OnDestroy()
 
 void RobotControlDlg::OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	if (!isRecord)return;
+	bMotorMove = true;
+		 
 
-	int pos = bMotorSlider.GetPos();
-	CString sPos;
-	sPos.Format("%d", pos);
-
-	AddCommand(MOTOR_B + sPos);
-	robotArmSP->SendCommand(MOTOR_B + sPos);
 	*pResult = 0;
 }
 
 
 void RobotControlDlg::OnNMReleasedCaptureCMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {	
-	if (!isRecord)return;
+	cMotorMove = true;
 
-	int pos = cMotorSlider.GetPos();
-	CString sPos;
-	sPos.Format("%d", pos);
-
-	AddCommand(MOTOR_C+ sPos);
-	robotArmSP->SendCommand(MOTOR_C + sPos);
 
 	*pResult = 0;
 }
@@ -164,14 +175,8 @@ void RobotControlDlg::OnNMReleasedCaptureCMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 
 void RobotControlDlg::OnNMReleasedcaptureDMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	if (!isRecord)return;
+	dMotorMove = true;
 
-	int pos = dMotorSlider.GetPos();
-	CString sPos;
-	sPos.Format("%d", pos);
-
-	AddCommand(MOTOR_D + sPos);
-	robotArmSP->SendCommand(MOTOR_D + sPos);
 	
 	*pResult = 0;
 }
@@ -182,10 +187,10 @@ void RobotControlDlg::OnBnClickedSendCommandBtn()
 	if (!isRecord)
 	{
 		CString command = "";
-		for (int i = 0; i < robotCommandListBox.GetCount(); i++)
+		for (int i = 0; i < robotFrameBox.GetCount(); i++)
 		{
 			CString item;
-			robotCommandListBox.GetText(i,item);
+			robotFrameBox.GetText(i,item);
 			command += item + ":";
 		}
 
@@ -207,6 +212,26 @@ void RobotControlDlg::OnBnClickedTestBtn()
 
 void RobotControlDlg::OnBnClickedArmStopBtn()
 {
-	robotCommandListBox.ResetContent();
+	robotFrameBox.ResetContent();
 	robotArmSP->SendCommand(ROBOTSTOP);
+}
+
+
+
+
+void RobotControlDlg::OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	int currentCount = carriageCountSlider.GetPos();
+	carriage->SetCarriageCount(currentCount);
+}
+
+
+void RobotControlDlg::OnBnClickedFrameBtn()
+{
+	int currentSel = robotFrameBox.GetCurSel();
+
+	if (currentSel != -1)
+	{
+		robotFrameBox.DeleteString(currentSel);
+	}
 }

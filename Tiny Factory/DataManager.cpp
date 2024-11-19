@@ -19,9 +19,10 @@ void DataManager::IncreaseNormalCount()
 
 void DataManager::CheckNormalCount()
 {
-	if (normalObjectCount >= MAX_CARRIAGE)
+	int maxCount = WorkManager::GetInstance()->GetMaxCarriageCount();
+	if (normalObjectCount >= maxCount)
 	{
-		normalObjectCount -= MAX_CARRIAGE;
+		normalObjectCount -= maxCount;
 		WorkManager::GetInstance()->StartCarriage();
 	}
 }

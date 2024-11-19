@@ -45,6 +45,9 @@ private:
     void SaveLogData();
 
 private:
+    bool isRun = false;
+    bool isInit = false;
+
     VideoCapture* capture;
     Mat matFrame;
     CImage imageMfc;

@@ -207,6 +207,7 @@
     <ClInclude Include="RobotArmSP.h" />
     <ClInclude Include="RobotControlDlg.h" />
     <ClInclude Include="ConveyorBelt.h" />
+    <ClInclude Include="RobotFrameBox.h" />
     <ClInclude Include="WorkManager.h" />
     <ClInclude Include="DataProcessSP.h" />
     <ClInclude Include="Define.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="RobotArmSP.cpp" />
     <ClCompile Include="RobotControlDlg.cpp" />
     <ClCompile Include="ConveyorBeltSP.cpp" />
+    <ClCompile Include="RobotFrameBox.cpp" />
     <ClCompile Include="WorkManager.cpp" />
     <ClCompile Include="DataProcessSP.cpp" />
     <ClCompile Include="FileManager.cpp" />

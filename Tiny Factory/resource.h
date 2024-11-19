@@ -38,8 +38,12 @@
 #define CONVEYORPORT                    1019
 #define NORMAL_COUNT_TEXT               1020
 #define WRONG_COUNT_TEXT                1021
-#define IDC_EDIT1                       1022
 #define CARRIAGE_IP                     1022
+#define IDC_SLIDER5                     1025
+#define IDC_BUTTON4                     1026
+#define IDC_BUTTON5                     1027
+#define IDC_BUTTON6                     1028
+#define DELETE_FRAME_BTN                1028
 
 // Next default values for new objects
 // 
@@ -47,7 +51,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1023
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

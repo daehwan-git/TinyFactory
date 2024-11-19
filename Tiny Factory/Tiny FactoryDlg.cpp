@@ -10,11 +10,11 @@
 #include "Device.h"
 #include <dbt.h>
 #include "Carriage.h"
+#include "FileManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-#include "FileManager.h"
 
 #include "opencv2/opencv.hpp"
 #include "DataManager.h"
@@ -267,29 +267,55 @@ void CTinyFactoryDlg::SaveLogData()
 
 void CTinyFactoryDlg::OnBnClickedStartBtn()
 {
-	CString beltPort = "";
-	GetDlgItemText(CONVEYORPORT, beltPort);
-
-	if (conveyorBeltSp == nullptr)
+	if (!isInit)
 	{
-		conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
-		WorkManager::GetInstance()->InitConvayorBeltSP(conveyorBeltSp);
+		CString beltPort = "";
+		GetDlgItemText(CONVEYORPORT, beltPort);
+
+		CString robotArmPort = "";
+		GetDlgItemText(ROBOTPORT, robotArmPort);
+
+
+		CString carriageIP = "";
+		GetDlgItemText(CARRIAGE_IP, carriageIP);
+
+		if (beltPort == "" || robotArmPort == "" || carriageIP == "")
+		{
+			AfxMessageBox("포트가 유효하지 않음");
+			return;
+		}
+
+		if (conveyorBeltSp == nullptr)
+		{
+			conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
+			WorkManager::GetInstance()->InitConvayorBeltSP(conveyorBeltSp);
+		}
+
+
+		RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
+		robotControlDlg.SetRobotArmSP(robotArmSP);
+		WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
+
+
+		Carriage* carriage = new Carriage(carriageIP);
+		WorkManager::GetInstance()->InitCarriage(carriage);
+		robotControlDlg.SetCarriage(carriage);
+
+		GetDlgItem(CONVEYORPORT)->EnableWindow(FALSE);
+		GetDlgItem(CARRIAGE_IP)->EnableWindow(FALSE);
+		GetDlgItem(ROBOTPORT)->EnableWindow(FALSE);
+
+		isRun = true;
+		isInit = true;
 	}
-
-	conveyorBeltSp->StartConveyorBelt();
-
-	CString robotArmPort = "";
-	GetDlgItemText(ROBOTPORT, robotArmPort);
-
-	RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
-	robotControlDlg.SetRobotArmSP(robotArmSP);
-	WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
-
-	CString carriageIP = "";
-	GetDlgItemText(CARRIAGE_IP,carriageIP);
-
-	Carriage* carriage = new Carriage(carriageIP);
-	WorkManager::GetInstance()->InitCarriage(carriage);
+	else {
+		if (!isRun)
+		{
+			LogManager::GetInstance()->WriteLog("공장 재가동");
+			conveyorBeltSp->StartConveyorBelt();
+			isRun = true;
+		}
+	}
 }
 
 
@@ -326,11 +352,15 @@ void CTinyFactoryDlg::OnDestroy()
 
 void CTinyFactoryDlg::OnStopBtnClicked()
 {
-	if (conveyorBeltSp != nullptr)
+	if (isRun)
 	{
-		conveyorBeltSp->StopConveyorBelt();
-		GetDlgItem(START_BTN)->EnableWindow(TRUE);
-		LogManager::GetInstance()->WriteLog("공장을 정지합니다.");
+		if (conveyorBeltSp != nullptr)
+		{
+			conveyorBeltSp->StopConveyorBelt();
+			GetDlgItem(START_BTN)->EnableWindow(TRUE);
+			LogManager::GetInstance()->WriteLog("공장을 정지합니다.");
+			isRun = false;
+		}
 	}
 }
 
@@ -375,6 +405,7 @@ LRESULT CTinyFactoryDlg::OnWrongObjectInc(WPARAM wParam, LPARAM lParam)
 
 void CTinyFactoryDlg::OnBnClickedRobotcontrolbtn()
 {
+	//if(isRun)
 	robotControlDlg.ShowWindow(SW_SHOW);
 }
 
@@ -434,3 +465,5 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	return hbr;
 }
+
+

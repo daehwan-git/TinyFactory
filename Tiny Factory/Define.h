@@ -51,7 +51,8 @@ const cv::String NORMALOBJECT = "NORMAL";
 
 
 //È­¹°Â÷
-#define MAX_CARRIAGE 5
+#define MAX_CARRIAGE_COUNT 5
+#define CURRENT_CARRIAGE 2
 
 
 //·Îº¿ ÆÈ

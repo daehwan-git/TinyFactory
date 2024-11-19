@@ -35,6 +35,16 @@ void WorkManager::StartCarriage()
 		carriage->StartCarriage();
 }
 
+int WorkManager::GetMaxCarriageCount()
+{
+	return carriage->GetCarriageCount();
+}
+
+void WorkManager::SetMaxCarriage(int count)
+{
+	carriage->SetCarriageCount(count);
+}
+
 //some object detected
 void WorkManager::ObjectDetection()
 {

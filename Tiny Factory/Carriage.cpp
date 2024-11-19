@@ -7,16 +7,10 @@ void Carriage::StartCarriage()
 	ConnectToCarriage("/start");
 }
 
-void Carriage::StopCarriage()
+void Carriage::WaitCarriage()
 {
-	LogManager::GetInstance()->WriteLog("화물차 정지");
+	LogManager::GetInstance()->WriteLog("화물차 준비");
 	ConnectToCarriage("/wait");
-}
-
-void Carriage::ReturnCarriage()
-{
-	LogManager::GetInstance()->WriteLog("화물차 리턴");
-	ConnectToCarriage("/return");
 }
 
 void Carriage::ConnectToCarriage(CString command)

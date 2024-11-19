@@ -1,9 +1,12 @@
 ﻿#pragma once
 #include "afxdialogex.h"
 #include "RobotArmSP.h"
-
+#include "ConveyorBelt.h"
+#include "Carriage.h"
+#include "RobotFrameBox.h"
 
 // RobotControlDlg 대화 상자
+
 
 class RobotControlDlg : public CDialogEx
 {
@@ -30,23 +33,32 @@ private:
 	bool isTest = false;
 	CString currentCommand = "";
 
-	CListBox robotCommandListBox;
 	CSliderCtrl aMotorSlider;
 	CSliderCtrl bMotorSlider;
 	CSliderCtrl cMotorSlider;
 	CSliderCtrl dMotorSlider;
 
 	RobotArmSP* robotArmSP;
+	ConveyorBeltSP* conveyorBeltSP;
+	Carriage* carriage;
+
+	RobotFrameBox robotFrameBox;
 
 private:
 	void AddCommand(CString command);
 	void ResetCommand();
 	void ResetSliderPos();
 
+	bool aMotorMove = false;
+	bool bMotorMove = false;
+	bool cMotorMove = false;
+	bool dMotorMove = false;
+
 public:
 	virtual BOOL OnInitDialog();
 	void SetRobotArmSP(RobotArmSP* robotArmSP);
-	afx_msg void OnBnClickedRecordBtn();
+	void SetCarriage(Carriage* carriage);
+	afx_msg void OnBnClickedAddFrame();
 	afx_msg void OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDestroy();
 	afx_msg void OnNMReleasedcaputreBMotorSlider(NMHDR* pNMHDR, LRESULT* pResult);
@@ -55,4 +67,7 @@ public:
 	afx_msg void OnBnClickedSendCommandBtn();
 	afx_msg void OnBnClickedTestBtn();
 	afx_msg void OnBnClickedArmStopBtn();
+	CSliderCtrl carriageCountSlider;
+	afx_msg void OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedFrameBtn();
 };

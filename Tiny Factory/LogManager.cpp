@@ -14,9 +14,9 @@ void LogManager::InitLogControl(CListBox* listBox)
 	this->logListBox = listBox;
 }
 
-
 void LogManager::WriteLog(CString insertData)
 {
+	CTime aTime;
 	CTime cTime = CTime::GetCurrentTime();
 
 	CString strDate;
@@ -30,4 +30,5 @@ void LogManager::WriteLog(CString insertData)
 	insertData = strDate +  " : " + insertData;
 
 	logListBox->InsertString(0,insertData);
+
 }
