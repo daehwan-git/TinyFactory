@@ -93,3 +93,20 @@ const cv::String NORMALOBJECT = "NORMAL";
 //»ö»ó
 #define WHITE_COLOR RGB(255, 255, 255)
 #define BACKGROUND_BASE_COLOR RGB(54, 57, 63)
+#define DARK_GRAY RGB(70, 70, 70)
+
+#define BASIC_FONT \
+		25,\
+		0,\
+		0,\
+		0,\
+		FW_BOLD,\
+		FALSE,\
+		FALSE,\
+		0,\
+		DEFAULT_CHARSET,\
+		OUT_DEFAULT_PRECIS,\
+		CLIP_DEFAULT_PRECIS,\
+		DEFAULT_QUALITY,\
+		DEFAULT_PITCH | FF_SWISS,\
+		_T("Arial")

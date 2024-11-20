@@ -40,6 +40,7 @@ public:
 
 private:
     CFont btnFont;
+    CFont stcFont;
     void Init();
     void InitDevicePort();
     void SaveLogData();
@@ -65,7 +66,10 @@ private:
     CStatic detectionRect;
 
     CBrush listBoxBrush;
+    COLORREF listBoxTextColor;
 
+    CBrush comboBoxBrush;
+    COLORREF comboBoxTextColor;
 
 
 public:

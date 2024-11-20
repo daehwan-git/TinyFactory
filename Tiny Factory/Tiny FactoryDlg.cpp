@@ -106,43 +106,14 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 
 	ModifyStyle(WS_SIZEBOX, 0);
 
-	btnFont.CreateFont(
-		25,
-		0,
-		0,
-		0,
-		FW_BOLD,
-		FALSE,
-		FALSE,
-		0,
-		DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS,
-		DEFAULT_QUALITY,
-		DEFAULT_PITCH | FF_SWISS,
-		_T("Arial"));
+	btnFont.CreateFont(BASIC_FONT);
+	stcFont.CreateFont(BASIC_FONT);
 
-	stcFont.CreateFont(
-		20,
-		0,
-		0,
-		0,
-		FW_BOLD,
-		FALSE,
-		FALSE,
-		0,
-		ANSI_CHARSET,
-		OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS,
-		DEFAULT_QUALITY,
-		DEFAULT_PITCH | FF_SWISS,
-		_T("Arial"));
+	listBoxBrush.CreateSolidBrush(BACKGROUND_BASE_COLOR);
+	listBoxTextColor = WHITE_COLOR;
 
-	listBoxBrush.CreateSolidBrush(RGB(54, 57, 63));
-	listBoxTextColor = RGB(255, 255, 255);
-
-	comboBoxBrush.CreateSolidBrush(RGB(70, 70, 70));
-	comboBoxTextColor = RGB(255, 255, 255);
+	comboBoxBrush.CreateSolidBrush(DARK_GRAY);
+	comboBoxTextColor = WHITE_COLOR;
 
 	if (startBtn)
 	{
@@ -366,6 +337,7 @@ void CTinyFactoryDlg::OnDestroy()
 	}
 
 	btnFont.DeleteObject();
+	stcFont.DeleteObject();
 
 	SaveLogData();
 }
@@ -482,7 +454,7 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 	if (nCtlColor == CTLCOLOR_STATIC)
 	{
-		pDC->SetTextColor(RGB(255, 255, 255));
+		pDC->SetTextColor(WHITE_COLOR);
 
 		pDC->SetBkMode(TRANSPARENT);
 
@@ -494,7 +466,7 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 		pDC->SetBkMode(OPAQUE);
 
-		pDC->SetBkColor(RGB(54, 57, 63));
+		pDC->SetBkColor(BACKGROUND_BASE_COLOR);
 
 		return listBoxBrush;
 	}
@@ -504,7 +476,7 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 		pDC->SetBkMode(OPAQUE);
 
-		pDC->SetBkColor(RGB(70, 70, 70));
+		pDC->SetBkColor(DARK_GRAY);
 
 		return comboBoxBrush;
 	}
