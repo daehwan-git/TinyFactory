@@ -45,6 +45,8 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(ROBOT_ARM_STOP_BTN, &RobotControlDlg::OnBnClickedArmStopBtn)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &RobotControlDlg::OnNMReleasedcaptureCarriageCount)
 	ON_BN_CLICKED(DELETE_FRAME_BTN, &RobotControlDlg::OnBnClickedFrameBtn)
+	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO2, &RobotControlDlg::OnRangedRadioRightWrong)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -60,6 +62,7 @@ BOOL RobotControlDlg::OnInitDialog()
 	dMotorSlider.SetRange(AMOTOR_MIN_RANGE, CMOTOR_MAX_RANGE);
 	carriageCountSlider.SetRange(0,MAX_CARRIAGE_COUNT);
 
+	((CButton*)GetDlgItem(IDC_RADIO1))->SetCheck(TRUE);
 
 	return TRUE;  
 }
@@ -81,30 +84,33 @@ void RobotControlDlg::OnBnClickedAddFrame()
 {
 	int currentSel = robotFrameBox.GetCurSel();
 	CString sPos;
+	int pos = 0;
 
+	if (currentSel < 0)currentSel = 0;
+	
 	if (aMotorMove)
 	{
-		int pos = aMotorSlider.GetPos();
-		sPos.Format("%d", pos);
-		robotFrameBox.InsertString(currentSel, MOTOR_A + pos);
+		pos = aMotorSlider.GetPos();
+		sPos.Format("%s%d", MOTOR_A, pos);
+		robotFrameBox.InsertString(currentSel,sPos);
 	}
 	if (bMotorMove)
 	{
-		int pos = bMotorSlider.GetPos();
-		sPos.Format("%d", pos);
-		robotFrameBox.InsertString(currentSel, MOTOR_B + pos);
+		pos = bMotorSlider.GetPos();
+		sPos.Format("%s%d", MOTOR_B, pos);
+		robotFrameBox.InsertString(currentSel, sPos);
 	}
 	if (cMotorMove)
 	{
-		int pos =	cMotorSlider.GetPos();
-		sPos.Format("%d", pos);
-		robotFrameBox.InsertString(currentSel, MOTOR_C + pos);
+		pos =cMotorSlider.GetPos();
+		sPos.Format("%s%d", MOTOR_C, pos);
+		robotFrameBox.InsertString(currentSel, sPos);
 	}
 	if (dMotorMove)
 	{
-		int pos =	dMotorSlider.GetPos();
-		sPos.Format("%d", pos);
-		robotFrameBox.InsertString(currentSel, MOTOR_D + pos);
+		pos = dMotorSlider.GetPos();
+		sPos.Format("%s%d", MOTOR_D, pos);
+		robotFrameBox.InsertString(currentSel, sPos);
 	}
 	ResetSliderPos();
 }
@@ -195,7 +201,7 @@ void RobotControlDlg::OnBnClickedSendCommandBtn()
 		}
 
 		if(command != "")
-			robotArmSP->SendCommandList(command);
+			robotArmSP->SendCommandList(command,rightOrWrong);
 	}
 }
 
@@ -234,4 +240,28 @@ void RobotControlDlg::OnBnClickedFrameBtn()
 	{
 		robotFrameBox.DeleteString(currentSel);
 	}
+}
+
+void RobotControlDlg::OnRangedRadioRightWrong(UINT uid)
+{
+	switch (uid)
+	{
+	case IDC_RADIO1:
+		rightOrWrong = true;
+		break;
+	case IDC_RADIO2:
+		rightOrWrong = false;
+		break;
+	}
+}
+
+
+void RobotControlDlg::OnPaint()
+{
+	CPaintDC dc(this);
+
+	CRect rect;
+	GetClientRect(&rect);
+	dc.FillSolidRect(&rect, BACKGROUND_BASE_COLOR);
+
 }

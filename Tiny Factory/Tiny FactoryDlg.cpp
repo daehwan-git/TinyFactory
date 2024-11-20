@@ -185,7 +185,7 @@ void CTinyFactoryDlg::OnPaint()
 
 		CRect rect;
 		GetClientRect(&rect);
-		dc.FillSolidRect(&rect, RGB(54, 57, 63));
+		dc.FillSolidRect(&rect, BACKGROUND_BASE_COLOR);
 
 		CDialogEx::OnPaint();
 	}

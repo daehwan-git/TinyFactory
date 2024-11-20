@@ -36,10 +36,16 @@ void RobotArmSP::SendCommand(CString command)
 	}
 }
 
-void RobotArmSP::SendCommandList(CString command)
+void RobotArmSP::SendCommandList(CString command,bool rightOrWrong)
 {
-
-	command = STORECOMMAND + command + "\n";
+	if (rightOrWrong == true)
+	{
+		command = RIGHT_STORED_COMMAND + command + "\n";
+	}
+	else {
+		command = WRONG_STORED_COMMAND + command + "\n";
+	}
+	
 	isFinishCommand = false;
 
 	if (sp == nullptr)return;
@@ -89,7 +95,8 @@ void RobotArmSP::SendObjectType(bool isNormal)
 void RobotArmSP::ParsingData(CString command)
 {
 	if (command == "")return;
-	if (command == COMMANDFNINISH)
+	if (command == COMMANDFNINISH ||
+		command == EMPTY_OBJECT)
 	{
 		isPlaying = false;
 		WorkManager::GetInstance()->ResetGoal();

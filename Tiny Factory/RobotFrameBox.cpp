@@ -10,7 +10,7 @@ END_MESSAGE_MAP()
 
 RobotFrameBox::RobotFrameBox() {
     m_backgroundColor = RGB(54, 57, 63); 
-    m_textColor = RGB(0, 0, 0); 
+    m_textColor = RGB(255, 255, 255); 
 }
 
 RobotFrameBox::~RobotFrameBox() {

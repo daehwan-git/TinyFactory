@@ -23,7 +23,7 @@ public:
 		{
 			LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port ¿¡ ¿¬°á½Ãµµ");
 
-			this->sp = new Serial(PORT_PREFIX + portNumber);
+			this->sp = new Serial(PORT_PREFIX + portNumber,BAUDRATE);
 
 			if (sp->IsConnected())
 			{
@@ -46,7 +46,7 @@ public:
 	void StartDataProcess();
 	void StopDataProcess();
 	void SendCommand(CString command);
-	void SendCommandList(CString command);
+	void SendCommandList(CString command, bool rightOrWrong);
 	void PlayRobotArm();
 	void SendObjectType(bool isNormal);
 	

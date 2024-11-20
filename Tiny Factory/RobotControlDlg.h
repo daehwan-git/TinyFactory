@@ -49,6 +49,8 @@ private:
 	void ResetCommand();
 	void ResetSliderPos();
 
+	bool rightOrWrong = true;
+
 	bool aMotorMove = false;
 	bool bMotorMove = false;
 	bool cMotorMove = false;
@@ -70,4 +72,6 @@ public:
 	CSliderCtrl carriageCountSlider;
 	afx_msg void OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedFrameBtn();
+	afx_msg void OnRangedRadioRightWrong(UINT uid);
+	afx_msg void OnPaint();
 };
