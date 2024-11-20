@@ -6,6 +6,10 @@ IMPLEMENT_DYNAMIC(RobotFrameBox, CListBox)
 
 BEGIN_MESSAGE_MAP(RobotFrameBox, CListBox)
     ON_WM_LBUTTONDBLCLK()
+    ON_WM_LBUTTONDOWN()
+    ON_WM_TIMER()
+    ON_WM_LBUTTONUP()
+    ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -16,7 +20,8 @@ RobotFrameBox::RobotFrameBox() {
 }
 
 RobotFrameBox::~RobotFrameBox() {
-
+    if (timerID != 0)
+        KillTimer(timerID);
 }
 
 
@@ -47,6 +52,15 @@ void RobotFrameBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 
 void RobotFrameBox::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
+    if (canMove)
+    {
+        canMove = false;
+        if (timerID != 0)
+        {
+            KillTimer(timerID);
+            timerID = 0;
+        }
+    }
     BOOL selected = TRUE;
     int index = ItemFromPoint(point, selected);
 
@@ -63,4 +77,108 @@ void RobotFrameBox::OnLButtonDblClk(UINT nFlags, CPoint point)
     }
     
     CListBox::OnLButtonDblClk(nFlags, point);
+}
+
+
+void RobotFrameBox::OnLButtonDown(UINT nFlags, CPoint point)
+{
+    BOOL selected = FALSE;
+    selectedIndex = ItemFromPoint(point, selected);
+
+    if (selectedIndex != LB_ERR)
+    {
+        startPoint = point;
+        timerID = SetTimer(1, 500, NULL);
+    }
+    
+    CListBox::OnLButtonDown(nFlags, point);
+}
+
+
+void RobotFrameBox::OnTimer(UINT_PTR nIDEvent)
+{
+    if (nIDEvent == 1 && selectedIndex != LB_ERR)
+    {
+        canMove = true;
+        KillTimer(timerID);
+        timerID = 0;
+
+        SetCapture();
+        ::SetCursor(AfxGetApp()->LoadStandardCursor(IDC_HAND));
+    }
+    
+    CListBox::OnTimer(nIDEvent);
+}
+
+
+void RobotFrameBox::OnLButtonUp(UINT nFlags, CPoint point)
+{
+    if (canMove)
+    {
+        ReleaseCapture();
+        canMove = false;
+
+        BOOL selected = FALSE;
+        hoveredIndex = ItemFromPoint(point, selected);
+
+        if (hoveredIndex != LB_ERR &&
+            hoveredIndex != selectedIndex)
+        {
+            CString dragItem, targetItem;
+            GetText(selectedIndex, dragItem);
+            GetText(hoveredIndex, targetItem);
+
+            DeleteString(selectedIndex);
+            InsertString(selectedIndex, targetItem);
+
+            DeleteString(hoveredIndex);
+            InsertString(hoveredIndex, dragItem);
+
+            SetCurSel(hoveredIndex);
+        }
+    }
+
+    if (timerID != 0)
+    {
+        KillTimer(timerID);
+        timerID = 0;
+    }
+
+    CListBox::OnLButtonUp(nFlags, point);
+}
+
+
+void RobotFrameBox::OnMouseMove(UINT nFlags, CPoint point)
+{
+    if(canMove)
+    {
+        CRect clientRect;
+        GetClientRect(&clientRect);
+
+        if (!clientRect.PtInRect(point))
+        {
+            canMove = false;
+            ReleaseCapture();
+            return;
+        }
+
+        CClientDC dc(this);
+        CRect itemRect;
+        CString itemText;
+
+        GetItemRect(selectedIndex,itemRect);
+        GetText(selectedIndex, itemText);
+
+        itemRect.MoveToXY(point);
+        dc.IntersectClipRect(&clientRect);
+        dc.Rectangle(itemRect);
+        dc.SetDCPenColor(m_backgroundColor);
+        dc.FillSolidRect(itemRect, m_backgroundColor);
+        dc.SetBkMode(TRANSPARENT);
+        dc.SetTextColor(WHITE_COLOR);
+        dc.DrawText(itemText, &itemRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+        
+        Invalidate(FALSE);
+    }
+    CListBox::OnMouseMove(nFlags, point);
 }

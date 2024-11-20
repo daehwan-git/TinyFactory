@@ -19,6 +19,17 @@ protected:
 private:
     COLORREF m_backgroundColor; 
     COLORREF m_textColor;       
+
+    bool canMove = false;
+    int selectedIndex;
+    int hoveredIndex;
+    CPoint startPoint;
+    UINT_PTR timerID;
+
 public:
     afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+    afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
+    afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+    afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };

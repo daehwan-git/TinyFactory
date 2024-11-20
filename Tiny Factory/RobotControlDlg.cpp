@@ -113,7 +113,6 @@ void RobotControlDlg::OnBnClickedAddFrame()
 		pos = aMotorSlider.GetPos();
 		sPos.Format("%s%d", MOTOR_A, pos);
 		robotFrameBox.InsertString(currentSel,sPos);
-		robotFrameBox.SetItemHeight(currentSel, 140);
 	}
 	if (bMotorMove)
 	{
@@ -133,6 +132,7 @@ void RobotControlDlg::OnBnClickedAddFrame()
 		sPos.Format("%s%d", MOTOR_D, pos);
 		robotFrameBox.InsertString(currentSel, sPos);
 	}
+	robotFrameBox.SetItemHeight(currentSel, 180);
 	ResetSliderPos();
 }
 
