@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &RobotControlDlg::OnNMCustomdrawSlider)
 	ON_WM_PAINT()
 	ON_WM_CTLCOLOR()
+	ON_BN_CLICKED(ROBOT_DELAY_BTN, &RobotControlDlg::OnBnClickedDelayBtn)
 END_MESSAGE_MAP()
 
 
@@ -83,6 +84,8 @@ BOOL RobotControlDlg::OnInitDialog()
 	
 	robotFrameBox.SetColumnWidth(100);
 	robotFrameBox.SetHorizontalExtent(200);
+	
+	SetDlgItemInt(ROBOT_DELAY_EDIT, robotDelay);
 
 	return TRUE;  
 }
@@ -274,11 +277,16 @@ void RobotControlDlg::OnBnClickedSendCommandBtn()
 
 void RobotControlDlg::OnBnClickedTestBtn()
 {
-	if (!isTest)
+	CString command = "";
+	for (int i = 0; i < robotFrameBox.GetCount(); i++)
 	{
-		isTest = true;
-		robotArmSP->SendCommand(ROBOTTEST + currentCommand);
+		CString item;
+		robotFrameBox.GetText(i, item);
+		command += item + ":";
 	}
+
+	if (command != "")
+		robotArmSP->SendCommand(ROBOTTEST + command);
 }
 
 
@@ -400,10 +408,10 @@ void RobotControlDlg::OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult)
 
 	if (pNMUpDown->iDelta < 0)
 	{
-		robotDelay++;
+		robotDelay += 10;
 	}
 	else {
-		robotDelay--;
+		robotDelay -= 10;
 	}
 
 	SetDlgItemInt(ROBOT_DELAY_EDIT,robotDelay);
@@ -443,4 +451,15 @@ HBRUSH RobotControlDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	static HBRUSH hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 	return hbr, hbrBackground;
+}
+
+
+void RobotControlDlg::OnBnClickedDelayBtn()
+{
+	if (robotArmSP != nullptr)
+	{
+		CString delay;
+		delay.Format("%s%d",ROBOTDELAY,robotDelay);
+		robotArmSP->SendCommand(delay);
+	}
 }
