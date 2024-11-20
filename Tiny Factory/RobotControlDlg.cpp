@@ -30,6 +30,15 @@ void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_C_MOTOR_SLIDER, cMotorSlider);
 	DDX_Control(pDX, IDC_D_MOTOR_SLIDER, dMotorSlider);
 	DDX_Control(pDX, IDC_SLIDER5, carriageCountSlider);
+
+	DDX_Control(pDX, ROBOT_TEST_BTN, robotTestBtn);
+	DDX_Control(pDX, ROBOT_ADD_FRAME_BTN, robotAddFrameBtn);
+	DDX_Control(pDX, ROBOT_DELETE_FRAME_BTN, robotDeleteFrameBtn);
+	DDX_Control(pDX, ROBOT_SEND_COMMAND_BTN, robotSendCommanBtn);
+	DDX_Control(pDX, ROBOT_ARM_STOP_BTN, robotStopBtn);
+	DDX_Control(pDX, IDC_BUTTON4, carTestBtn);
+	DDX_Control(pDX, IDC_BUTTON5, carStopBtn);
+
 }
 
 
@@ -46,9 +55,15 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &RobotControlDlg::OnNMReleasedcaptureCarriageCount)
 	ON_BN_CLICKED(DELETE_FRAME_BTN, &RobotControlDlg::OnBnClickedFrameBtn)
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO2, &RobotControlDlg::OnRangedRadioRightWrong)
-	ON_MESSAGE(ROBOT_FRAME_BOX_CURRENT_SEL_DBCLICK, &RobotControlDlg::CurrentSelCommandDBClicked)
-	ON_WM_PAINT()
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN2, &RobotControlDlg::OnDeltaposSpin2)
+	ON_MESSAGE(ROBOT_FRAME_BOX_CURRENT_SEL_DBCLICK, &RobotControlDlg::CurrentSelCommandDBClicked)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_A_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_B_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_D_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_WM_PAINT()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -65,6 +80,9 @@ BOOL RobotControlDlg::OnInitDialog()
 	carriageCountSlider.SetRange(0,MAX_CARRIAGE_COUNT);
 
 	((CButton*)GetDlgItem(IDC_RADIO1))->SetCheck(TRUE);
+	
+	robotFrameBox.SetColumnWidth(100);
+	robotFrameBox.SetHorizontalExtent(200);
 
 	return TRUE;  
 }
@@ -95,6 +113,7 @@ void RobotControlDlg::OnBnClickedAddFrame()
 		pos = aMotorSlider.GetPos();
 		sPos.Format("%s%d", MOTOR_A, pos);
 		robotFrameBox.InsertString(currentSel,sPos);
+		robotFrameBox.SetItemHeight(currentSel, 140);
 	}
 	if (bMotorMove)
 	{
@@ -143,6 +162,44 @@ void RobotControlDlg::ResetSliderPos()
 	dMotorMove = false;
 }
 
+void RobotControlDlg::CustomDlg()
+{
+	carBtnFont.CreateFont(BASIC_FONT);
+	robotBtnFont.CreateFont(BASIC_FONT);
+
+	if (carTestBtn)
+	{
+		carTestBtn.SetFont(&carBtnFont);
+	}
+	if (carStopBtn)
+	{
+		carStopBtn.SetFont(&carBtnFont);
+	}
+	if (robotTestBtn)
+	{
+		robotTestBtn.SetFont(&robotBtnFont);
+	}
+	if (robotAddFrameBtn)
+	{
+		robotAddFrameBtn.SetFont(&robotBtnFont);
+	}
+	if (robotDeleteFrameBtn)
+	{
+		robotDeleteFrameBtn.SetFont(&robotBtnFont);
+	}
+	if (robotSendCommanBtn)
+	{
+		robotSendCommanBtn.SetFont(&robotBtnFont);
+	}
+	if (robotStopBtn)
+	{
+		robotStopBtn.SetFont(&robotBtnFont);
+	}
+
+	listBoxBrush.CreateSolidBrush(BACKGROUND_BASE_COLOR);
+	listBoxTextColor = WHITE_COLOR;
+}
+
 
 void RobotControlDlg::OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -155,6 +212,10 @@ void RobotControlDlg::OnNMReleasedcaptureAMotorSlider(NMHDR* pNMHDR, LRESULT* pR
 void RobotControlDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
+
+	carBtnFont.DeleteObject();
+	robotBtnFont.DeleteObject();
+	listBoxBrush.DeleteObject();
 
 	if (robotArmSP != nullptr)
 	{
@@ -233,6 +294,50 @@ void RobotControlDlg::OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* p
 	carriage->SetCarriageCount(currentCount);
 }
 
+void RobotControlDlg::OnNMCustomdrawSlider(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+
+	switch (pNMCD->dwDrawStage)
+	{
+	case CDDS_PREPAINT:
+	{
+		CDC* pDC = CDC::FromHandle(pNMCD->hdc);
+
+		CRect rc;
+		::GetClientRect(pNMCD->hdr.hwndFrom, &rc);
+		pDC->FillSolidRect(&rc, RGB(54, 57, 63));
+
+		*pResult = CDRF_NOTIFYITEMDRAW;
+	}
+	break;
+
+	case CDDS_ITEMPREPAINT:
+	{
+		CDC* pDC = CDC::FromHandle(pNMCD->hdc);
+
+		if (pNMCD->dwItemSpec == TBCD_CHANNEL)
+		{
+			CRect rc;
+			rc.CopyRect(&pNMCD->rc);
+			pDC->FillSolidRect(&rc, RGB(70, 70, 70));
+		}
+		else if (pNMCD->dwItemSpec == TBCD_THUMB)
+		{
+			CRect rcThumb(pNMCD->rc);
+			pDC->FillSolidRect(&rcThumb, RGB(150, 150, 150));
+		}
+	}
+
+	*pResult = CDRF_SKIPDEFAULT;
+	break;
+
+	default:
+		*pResult = 0;
+		break;
+	}
+}
+
 
 void RobotControlDlg::OnBnClickedFrameBtn()
 {
@@ -301,4 +406,38 @@ void RobotControlDlg::OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult)
 	SetDlgItemInt(ROBOT_DELAY_EDIT,robotDelay);
 	
 	*pResult = 0;
+}
+
+
+HBRUSH RobotControlDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC)
+	{
+		pDC->SetTextColor(WHITE_COLOR);
+
+		pDC->SetBkMode(TRANSPARENT);
+	}
+	if (nCtlColor == CTLCOLOR_STATIC)
+	{
+		pDC->SetTextColor(WHITE_COLOR);
+
+		pDC->SetBkMode(TRANSPARENT);
+
+		pDC->SelectObject(&carBtnFont);
+	}
+	if (nCtlColor == CTLCOLOR_LISTBOX)
+	{
+		pDC->SetTextColor(listBoxTextColor);
+
+		pDC->SetBkMode(OPAQUE);
+
+		pDC->SetBkColor(BACKGROUND_BASE_COLOR);
+
+		return listBoxBrush;
+	}
+
+	static HBRUSH hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+	return hbr, hbrBackground;
 }

@@ -18,6 +18,7 @@
 #define START_BTN                       1004
 #define IDC_BUTTON2                     1005
 #define ROBOT_RECORD_BTN                1005
+#define ROBOT_ADD_FRAME_BTN             1005
 #define STOP_BTN                        1006
 #define CAMERARECT                      1007
 #define CAMERARECT2                     1008
@@ -44,10 +45,10 @@
 #define IDC_BUTTON5                     1027
 #define IDC_BUTTON6                     1028
 #define DELETE_FRAME_BTN                1028
+#define ROBOT_DELETE_FRAME_BTN          1028
 #define IDC_RADIO1                      1029
 #define IDC_RADIO2                      1030
 #define IDC_SPIN2                       1033
-#define IDC_EDIT2                       1034
 #define ROBOT_DELAY_EDIT                1034
 #define ROBOT_DELAY_BTN                 1035
 

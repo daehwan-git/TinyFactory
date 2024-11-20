@@ -4,6 +4,7 @@
 #include "ConveyorBelt.h"
 #include "Carriage.h"
 #include "RobotFrameBox.h"
+#include "CustomBtn.h"
 
 // RobotControlDlg 대화 상자
 
@@ -44,10 +45,25 @@ private:
 
 	RobotFrameBox robotFrameBox;
 
+	CustomBtn robotTestBtn;
+	CustomBtn robotAddFrameBtn;
+	CustomBtn robotDeleteFrameBtn;
+	CustomBtn robotSendCommanBtn;
+	CustomBtn robotStopBtn;
+	CustomBtn carTestBtn;
+	CustomBtn carStopBtn;
+
+	CFont carBtnFont;
+	CFont robotBtnFont;
+
+	CBrush listBoxBrush;
+	COLORREF listBoxTextColor;
+
 private:
 	void AddCommand(CString command);
 	void ResetCommand();
 	void ResetSliderPos();
+	void CustomDlg();
 
 	bool rightOrWrong = true;
 
@@ -73,10 +89,12 @@ public:
 	afx_msg void OnBnClickedArmStopBtn();
 	CSliderCtrl carriageCountSlider;
 	afx_msg void OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMCustomdrawSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedFrameBtn();
 	afx_msg void OnRangedRadioRightWrong(UINT uid);
 	afx_msg void OnPaint();
 
 	afx_msg LRESULT CurrentSelCommandDBClicked(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

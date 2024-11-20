@@ -11,7 +11,7 @@ END_MESSAGE_MAP()
 
 
 RobotFrameBox::RobotFrameBox() {
-    m_backgroundColor = RGB(54, 57, 63); 
+    m_backgroundColor = RGB(132,137,39);
     m_textColor = RGB(255, 255, 255); 
 }
 
@@ -39,7 +39,7 @@ void RobotFrameBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) {
 
 void RobotFrameBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
-	lpMeasureItemStruct->itemHeight = 60;
+	lpMeasureItemStruct->itemHeight = 1000;
 	lpMeasureItemStruct->itemWidth = 60;
 }
 

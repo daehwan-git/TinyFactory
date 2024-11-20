@@ -271,12 +271,13 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 		CString carriageIP = "";
 		GetDlgItemText(CARRIAGE_IP, carriageIP);
 
-
-	/*	if (beltPort == "" || robotArmPort == "" || carriageIP == "")
+#ifndef _DEBUG
+		if (beltPort == "" || robotArmPort == "" || carriageIP == "")
 		{
 			AfxMessageBox("포트가 유효하지 않음");
 			return;
-		}*/
+		}
+#endif
 
 		if (conveyorBeltSp == nullptr)
 		{
@@ -329,11 +330,6 @@ void CTinyFactoryDlg::OnDestroy()
 	if (camera != nullptr)
 	{
 		delete camera;
-	}
-
-	if (WorkManager::GetInstance() != nullptr)
-	{
-		delete WorkManager::GetInstance();
 	}
 
 	btnFont.DeleteObject();
