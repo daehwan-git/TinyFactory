@@ -32,10 +32,21 @@ void RobotFrameBox::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct) {
 
     BOOL isSelected = (lpDrawItemStruct->itemState & ODS_SELECTED);
     CBrush brush(isSelected ? RGB(100, 100, 100) : m_backgroundColor);
+
+    CRect itemRect;
+    GetItemRect(lpDrawItemStruct->itemID,itemRect);
+    itemRect.top -= 1;
+    itemRect.bottom -= 1;
+    itemRect.right -= 1;
+    itemRect.left -= 1;
+    pDC->SetDCPenColor(RGB(0,0,0));
+    pDC->Rectangle(itemRect);
+
     pDC->FillRect(&lpDrawItemStruct->rcItem, &brush);
 
     pDC->SetTextColor(isSelected ? RGB(255, 255, 255) : m_textColor);
     pDC->SetBkMode(TRANSPARENT);
+
 
     CString itemText;
     GetText(lpDrawItemStruct->itemID, itemText);
@@ -144,6 +155,8 @@ void RobotFrameBox::OnLButtonUp(UINT nFlags, CPoint point)
         timerID = 0;
     }
 
+    Invalidate(TRUE);
+
     CListBox::OnLButtonUp(nFlags, point);
 }
 
@@ -162,22 +175,33 @@ void RobotFrameBox::OnMouseMove(UINT nFlags, CPoint point)
             return;
         }
 
+        CDC memDC;
         CClientDC dc(this);
+        memDC.CreateCompatibleDC(&dc);
+
+        CBitmap memBitmap;
+        memBitmap.CreateCompatibleBitmap(&dc, clientRect.Width(), clientRect.Height()); 
+        CBitmap* pOldBitmap = memDC.SelectObject(&memBitmap);
+
+        memDC.FillSolidRect(&clientRect, WHITE_COLOR);
+
         CRect itemRect;
         CString itemText;
-
-        GetItemRect(selectedIndex,itemRect);
+        GetItemRect(selectedIndex, itemRect);
         GetText(selectedIndex, itemText);
-
         itemRect.MoveToXY(point);
-        dc.IntersectClipRect(&clientRect);
-        dc.Rectangle(itemRect);
-        dc.SetDCPenColor(m_backgroundColor);
-        dc.FillSolidRect(itemRect, m_backgroundColor);
-        dc.SetBkMode(TRANSPARENT);
-        dc.SetTextColor(WHITE_COLOR);
-        dc.DrawText(itemText, &itemRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-        
+
+        memDC.FillSolidRect(itemRect, m_backgroundColor);  
+        memDC.SetBkMode(TRANSPARENT); 
+        memDC.SetTextColor(m_textColor);
+        memDC.DrawText(itemText, &itemRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); // 텍스트 그리기
+
+ 
+        dc.BitBlt(0, 0, clientRect.Width(), clientRect.Height(), &memDC, 0, 0, SRCCOPY);
+
+        memDC.SelectObject(pOldBitmap); 
+        memBitmap.DeleteObject(); 
+
         Invalidate(FALSE);
     }
     CListBox::OnMouseMove(nFlags, point);

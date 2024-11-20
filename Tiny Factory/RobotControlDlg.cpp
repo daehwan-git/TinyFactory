@@ -132,7 +132,10 @@ void RobotControlDlg::OnBnClickedAddFrame()
 		sPos.Format("%s%d", MOTOR_D, pos);
 		robotFrameBox.InsertString(currentSel, sPos);
 	}
-	robotFrameBox.SetItemHeight(currentSel, 180);
+
+	CRect rect;
+	robotFrameBox.GetClientRect(&rect);
+	robotFrameBox.SetItemHeight(currentSel, rect.Height());
 	ResetSliderPos();
 }
 
