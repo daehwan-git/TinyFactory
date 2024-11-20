@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO2, &RobotControlDlg::OnRangedRadioRightWrong)
 	ON_MESSAGE(ROBOT_FRAME_BOX_CURRENT_SEL_DBCLICK, &RobotControlDlg::CurrentSelCommandDBClicked)
 	ON_WM_PAINT()
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN2, &RobotControlDlg::OnDeltaposSpin2)
 END_MESSAGE_MAP()
 
 
@@ -282,4 +283,22 @@ LRESULT RobotControlDlg::CurrentSelCommandDBClicked(WPARAM wParam, LPARAM lParam
 	delete currentSelCommand;
 
 	return 0;
+}
+
+
+void RobotControlDlg::OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+
+	if (pNMUpDown->iDelta < 0)
+	{
+		robotDelay++;
+	}
+	else {
+		robotDelay--;
+	}
+
+	SetDlgItemInt(ROBOT_DELAY_EDIT,robotDelay);
+	
+	*pResult = 0;
 }

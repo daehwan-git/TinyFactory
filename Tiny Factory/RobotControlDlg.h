@@ -56,6 +56,8 @@ private:
 	bool cMotorMove = false;
 	bool dMotorMove = false;
 
+	int robotDelay = 10;
+
 public:
 	virtual BOOL OnInitDialog();
 	void SetRobotArmSP(RobotArmSP* robotArmSP);
@@ -76,4 +78,5 @@ public:
 	afx_msg void OnPaint();
 
 	afx_msg LRESULT CurrentSelCommandDBClicked(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult);
 };

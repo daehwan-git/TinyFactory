@@ -106,22 +106,43 @@ BOOL CTinyFactoryDlg::OnInitDialog()
 
 	ModifyStyle(WS_SIZEBOX, 0);
 
-	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	btnFont.CreateFont(
-		25,                        // 폰트 크기 (높이)
-		0,                         // 문자 너비 (0이면 자동 계산)
-		0,                         // 텍스트 각도
-		0,                         // 베이스라인 각도
-		FW_BOLD,                   // 폰트 굵기 (FW_NORMAL 또는 FW_BOLD)
-		FALSE,                     // 이탤릭체 여부
-		FALSE,                     // 밑줄 여부
-		0,                         // 취소선 여부
-		DEFAULT_CHARSET,           // 문자 집합
-		OUT_DEFAULT_PRECIS,        // 출력 정확도
-		CLIP_DEFAULT_PRECIS,       // 클리핑 정확도
-		DEFAULT_QUALITY,           // 출력 품질
-		DEFAULT_PITCH | FF_SWISS,  // 글꼴 종류
-		_T("Arial"));              // 폰트 이름
+		25,
+		0,
+		0,
+		0,
+		FW_BOLD,
+		FALSE,
+		FALSE,
+		0,
+		DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS,
+		DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_SWISS,
+		_T("Arial"));
+
+	stcFont.CreateFont(
+		20,
+		0,
+		0,
+		0,
+		FW_BOLD,
+		FALSE,
+		FALSE,
+		0,
+		ANSI_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS,
+		DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_SWISS,
+		_T("Arial"));
+
+	listBoxBrush.CreateSolidBrush(RGB(54, 57, 63));
+	listBoxTextColor = RGB(255, 255, 255);
+
+	comboBoxBrush.CreateSolidBrush(RGB(70, 70, 70));
+	comboBoxTextColor = RGB(255, 255, 255);
 
 	if (startBtn)
 	{
@@ -452,18 +473,44 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 
-	
+
 	if (pWnd->GetDlgCtrlID() == IDC_STATIC)
 	{
 		pDC->SetTextColor(WHITE_COLOR);
 
 		pDC->SetBkMode(TRANSPARENT);
+	}
+	if (nCtlColor == CTLCOLOR_STATIC)
+	{
+		pDC->SetTextColor(RGB(255, 255, 255));
 
-		static HBRUSH hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-		return hbrBackground;
+		pDC->SetBkMode(TRANSPARENT);
+
+		pDC->SelectObject(&stcFont);
+	}
+	if (nCtlColor == CTLCOLOR_LISTBOX)
+	{
+		pDC->SetTextColor(listBoxTextColor);
+
+		pDC->SetBkMode(OPAQUE);
+
+		pDC->SetBkColor(RGB(54, 57, 63));
+
+		return listBoxBrush;
+	}
+	if (nCtlColor == CTLCOLOR_EDIT || nCtlColor == CTLCOLOR_LISTBOX)
+	{
+		pDC->SetTextColor(comboBoxTextColor);
+
+		pDC->SetBkMode(OPAQUE);
+
+		pDC->SetBkColor(RGB(70, 70, 70));
+
+		return comboBoxBrush;
 	}
 
-	return hbr;
+	static HBRUSH hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+	return hbr, hbrBackground;
 }
 
 

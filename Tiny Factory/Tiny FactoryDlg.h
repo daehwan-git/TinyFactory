@@ -64,6 +64,9 @@ private:
     CStatic videoRect;
     CStatic detectionRect;
 
+    CBrush listBoxBrush;
+
+
 
 public:
     afx_msg void OnBnClickedStartBtn();
