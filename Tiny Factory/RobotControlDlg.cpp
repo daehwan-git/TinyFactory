@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &RobotControlDlg::OnNMReleasedcaptureCarriageCount)
 	ON_BN_CLICKED(DELETE_FRAME_BTN, &RobotControlDlg::OnBnClickedFrameBtn)
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO2, &RobotControlDlg::OnRangedRadioRightWrong)
+	ON_MESSAGE(ROBOT_FRAME_BOX_CURRENT_SEL_DBCLICK, &RobotControlDlg::CurrentSelCommandDBClicked)
 	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
@@ -264,4 +265,21 @@ void RobotControlDlg::OnPaint()
 	GetClientRect(&rect);
 	dc.FillSolidRect(&rect, BACKGROUND_BASE_COLOR);
 
+}
+
+LRESULT RobotControlDlg::CurrentSelCommandDBClicked(WPARAM wParam, LPARAM lParam)
+{
+	CString* currentSelCommand = reinterpret_cast<CString*>(lParam);
+
+	if (currentSelCommand)
+	{
+		if (robotArmSP != nullptr)
+		{
+			robotArmSP->SendCommand(*currentSelCommand);
+		}
+	}
+
+	delete currentSelCommand;
+
+	return 0;
 }

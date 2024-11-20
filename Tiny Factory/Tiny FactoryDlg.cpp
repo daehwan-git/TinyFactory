@@ -279,11 +279,12 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 		CString carriageIP = "";
 		GetDlgItemText(CARRIAGE_IP, carriageIP);
 
-		if (beltPort == "" || robotArmPort == "" || carriageIP == "")
+
+	/*	if (beltPort == "" || robotArmPort == "" || carriageIP == "")
 		{
 			AfxMessageBox("포트가 유효하지 않음");
 			return;
-		}
+		}*/
 
 		if (conveyorBeltSp == nullptr)
 		{
@@ -295,7 +296,6 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 		RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
 		robotControlDlg.SetRobotArmSP(robotArmSP);
 		WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
-
 
 		Carriage* carriage = new Carriage(carriageIP);
 		WorkManager::GetInstance()->InitCarriage(carriage);

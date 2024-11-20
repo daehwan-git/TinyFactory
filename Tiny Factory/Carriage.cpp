@@ -15,6 +15,7 @@ void Carriage::WaitCarriage()
 
 void Carriage::ConnectToCarriage(CString command)
 {
+	if (ip == "")return;
 	try {
 		CInternetSession session("CARRIAGE");
 

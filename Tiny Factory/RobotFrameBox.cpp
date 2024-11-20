@@ -1,9 +1,11 @@
 #include "RobotFrameBox.h"
+#include "Define.h"
 
 
 IMPLEMENT_DYNAMIC(RobotFrameBox, CListBox)
 
 BEGIN_MESSAGE_MAP(RobotFrameBox, CListBox)
+    ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -41,3 +43,24 @@ void RobotFrameBox::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	lpMeasureItemStruct->itemWidth = 60;
 }
 
+
+
+void RobotFrameBox::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+    BOOL selected = TRUE;
+    int index = ItemFromPoint(point, selected);
+
+    if (!selected && index != LB_ERR)
+    {
+        CString commandText;
+        GetText(index, commandText);
+        
+        if (commandText == "")return;
+
+        CString* pCommandText = new CString(commandText);
+
+        GetParent()->PostMessage(ROBOT_FRAME_BOX_CURRENT_SEL_DBCLICK,0,reinterpret_cast<LPARAM>(pCommandText));
+    }
+    
+    CListBox::OnLButtonDblClk(nFlags, point);
+}

@@ -19,4 +19,6 @@ protected:
 private:
     COLORREF m_backgroundColor; 
     COLORREF m_textColor;       
+public:
+    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };

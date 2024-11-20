@@ -74,4 +74,6 @@ public:
 	afx_msg void OnBnClickedFrameBtn();
 	afx_msg void OnRangedRadioRightWrong(UINT uid);
 	afx_msg void OnPaint();
+
+	afx_msg LRESULT CurrentSelCommandDBClicked(WPARAM wParam, LPARAM lParam);
 };
