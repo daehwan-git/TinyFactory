@@ -92,17 +92,18 @@ void RobotArmSP::AddObjectType(bool isNormal)
 
 void RobotArmSP::ParsingData(CString command)
 {
-	if (command == "")return;
-	if (command == RIGHT_COMMANDFNINISH ||
-		command == EMPTY_OBJECT ||
-		command == WRONG_COMMANDFNINISH)
-	{
+	const bool isCommandFinish =
+		(command == RIGHT_COMMANDFNINISH ||
+			command == EMPTY_OBJECT ||
+			command == WRONG_COMMANDFNINISH);
+
+	if (isCommandFinish) {
 		isPlaying = false;
 		WorkManager::GetInstance()->ResetGoal();
 	}
-	if (command == RIGHT_COMMANDFNINISH)
-	{
-		rightCount++;
+
+	if (command == RIGHT_COMMANDFNINISH) {
+		++rightCount;
 		DataManager::GetInstance()->CheckNormalCount(&rightCount);
 	}
 }
