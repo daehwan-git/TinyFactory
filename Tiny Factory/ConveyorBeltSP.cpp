@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ConveyorBelt.h"
+#include"DataManager.h"
 
 
 void ConveyorBeltSP::StopConveyorBelt()
@@ -67,6 +68,7 @@ void ConveyorBeltSP::ResetGoal()
 
 void ConveyorBeltSP::ParsingReciveData(CString data)
 {
+
 	if (data == OBJECT_DETECTION)
 	{
 		WorkManager::GetInstance()->ObjectDetection();

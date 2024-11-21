@@ -17,12 +17,12 @@ void DataManager::IncreaseNormalCount()
 	PostMessage(mainHandle,NORMAL_OBJECT_INC,normalObjectCount,NULL);
 }
 
-void DataManager::CheckNormalCount()
+void DataManager::CheckNormalCount(int* count)
 {
 	int maxCount = WorkManager::GetInstance()->GetMaxCarriageCount();
-	if (normalObjectCount >= maxCount)
+	if (*count >= maxCount)
 	{
-		normalObjectCount -= maxCount;
+		*count -= maxCount;
 		WorkManager::GetInstance()->StartCarriage();
 	}
 }

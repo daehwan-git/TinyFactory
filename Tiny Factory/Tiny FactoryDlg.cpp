@@ -362,7 +362,6 @@ LRESULT CTinyFactoryDlg::OnConnectCompleteMessage(WPARAM wParam, LPARAM lParam)
 LRESULT CTinyFactoryDlg::OnDectionFinish(WPARAM wParam, LPARAM lParam)
 {
 	SetTimer(DETECTION_RESET, DETECTIONWAITTIME, NULL);
-
 	return LRESULT();
 }
 

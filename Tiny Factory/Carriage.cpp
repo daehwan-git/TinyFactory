@@ -18,18 +18,21 @@ void Carriage::ConnectToCarriage(CString command)
 	if (ip == "")return;
 	try {
 		CInternetSession session("CARRIAGE");
+		CHttpConnection* connection = nullptr;
+		CHttpFile* file = nullptr;
 
-		CHttpConnection* connection = session.GetHttpConnection(
+		session.SetOption(INTERNET_OPTION_END_BROWSER_SESSION, 1);
+		
+		connection = session.GetHttpConnection(
 			ip, INTERNET_DEFAULT_HTTP_PORT,
 			nullptr,
 			nullptr);
 
-		CHttpFile* file = connection->OpenRequest(
+		file = connection->OpenRequest(
 			CHttpConnection::HTTP_VERB_GET, command);
-
 		file->SendRequest();
 
-		DWORD status;
+		DWORD status = 0;
 		file->QueryInfoStatusCode(status);
 
 		if (status == HTTP_STATUS_OK)
@@ -46,12 +49,18 @@ void Carriage::ConnectToCarriage(CString command)
 			LogManager::GetInstance()->WriteLog("화물차 통신 실패");
 		}
 
-		file->Close();
-		connection->Close();
-		delete file;
-		delete connection;
+		if (file) {
+			file->Close();
+			delete file;
+		}
+		if (connection) {
+			connection->Close();
+			delete connection;
+		}
 	}
-	catch (Exception e) {
+	catch (CInternetException* e) {
 		LogManager::GetInstance()->WriteLog("화물차 통신 실패");
+		e->Delete();
 	}
+
 }

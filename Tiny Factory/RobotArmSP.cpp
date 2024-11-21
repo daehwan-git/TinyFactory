@@ -1,4 +1,5 @@
 #include "RobotArmSP.h"
+#include"DataManager.h"
 
 void RobotArmSP::StartDataProcess()
 {
@@ -66,28 +67,25 @@ void RobotArmSP::PlayRobotArm()
 
 	if (!isPlaying)
 	{
+		CString objectType = objectQueue.front(); objectQueue.pop();
+
 		if (sp->IsConnected())
 		{
 			isPlaying = true;
 			Sleep(ROBOT_WAIT_TIME);
-			sp->WriteData(PLAYROBOT, DATA_LENGTH);
+			sp->WriteData(objectType,DATA_LENGTH);
 		}
 	}
 }
 
-void RobotArmSP::SendObjectType(bool isNormal)
+void RobotArmSP::AddObjectType(bool isNormal)
 {
-	if (sp == nullptr)return;
-
-	if (sp->IsConnected())
+	if (isNormal)
 	{
-		if (isNormal)
-		{
-			sp->WriteData(RIGHT_OBJECT, DATA_LENGTH);
-		}
-		else {
-			sp->WriteData(WRONG_OBJECT, DATA_LENGTH);
-		}
+		objectQueue.push(RIGHT_OBJECT);
+	}
+	else {
+		objectQueue.push(WRONG_OBJECT);
 	}
 
 }
@@ -95,11 +93,17 @@ void RobotArmSP::SendObjectType(bool isNormal)
 void RobotArmSP::ParsingData(CString command)
 {
 	if (command == "")return;
-	if (command == COMMANDFNINISH ||
-		command == EMPTY_OBJECT)
+	if (command == RIGHT_COMMANDFNINISH ||
+		command == EMPTY_OBJECT ||
+		command == WRONG_COMMANDFNINISH)
 	{
 		isPlaying = false;
 		WorkManager::GetInstance()->ResetGoal();
+	}
+	if (command == RIGHT_COMMANDFNINISH)
+	{
+		rightCount++;
+		DataManager::GetInstance()->CheckNormalCount(&rightCount);
 	}
 }
 

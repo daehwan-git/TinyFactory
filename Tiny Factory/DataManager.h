@@ -39,6 +39,6 @@ public:
 public:
 	void IncreaseWrongCount();
 	void IncreaseNormalCount();
-	void CheckNormalCount();
+	void CheckNormalCount(int* count);
 };
 

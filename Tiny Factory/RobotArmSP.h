@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include <queue>
 
 class RobotArmSP
 {
@@ -10,7 +11,9 @@ private:
 	bool isRun = false;
 	bool isFinishCommand = true;
 	bool isPlaying = false;
-
+	int rightCount = 0;
+	
+	std::queue<CString> objectQueue;
 
 public:
 	RobotArmSP(CString portNumber, CDialogEx* dialog) :sp(nullptr), dialog(dialog)
@@ -48,7 +51,8 @@ public:
 	void SendCommand(CString command);
 	void SendCommandList(CString command, bool rightOrWrong);
 	void PlayRobotArm();
-	void SendObjectType(bool isNormal);
+	void AddObjectType(bool isNormal);
+	
 	
 
 private:
