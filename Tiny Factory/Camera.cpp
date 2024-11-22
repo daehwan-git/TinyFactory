@@ -15,38 +15,56 @@ void Camera::StopCamera()
     if (isRun)
     {
         isRun = false;
+
+        if (cameraThread != nullptr)
+        {
+            WaitForSingleObject(cameraThread->m_hThread, INFINITE);
+            cameraThread = nullptr;  
+        }
     }
 }
 
 void Camera::ReleaseCamera()
 {
-    if (cameraThread != nullptr)
+
+    if (imageMfc.GetDC() != nullptr)
     {
-        DWORD exitCode = NULL;
-        TerminateJobObject(cameraThread->m_hThread, exitCode);
+        imageMfc.ReleaseDC();
     }
+
+    if(imageMfc)imageMfc.Destroy();
+
 
     if (objectDetction != nullptr)
     {
         delete objectDetction;
+        objectDetction = nullptr;
+    }
+
+    matFrame.release();
+
+    if (videoCapture != nullptr)
+    {
+        videoCapture->release();
+        delete videoCapture;
+        videoCapture = nullptr;
     }
 }
 
-void Camera::SetBitMapInfo(DWORD bpp, Mat matTemp)
-{
-   
-   
-
-}
 
 void Camera::DrawRect()
 {
     videoCapture->read(matFrame);
 
+    if (matFrame.empty())return;
+
     if (objectDetction != nullptr)
     {
         objectDetction->YoloDataFrame(matFrame);
     }
+
+    HDC dc = ::GetDC(videoRect->m_hWnd);
+    if (dc == nullptr)return;
 
     int bpp = 8 * matFrame.elemSize();
     assert((bpp == 8 || bpp == 24 || bpp == 32));
@@ -118,10 +136,9 @@ void Camera::DrawRect()
             matTemp.data, bitInfo, DIB_RGB_COLORS, SRCCOPY);
     }
 
-
-    HDC dc = ::GetDC(videoRect->m_hWnd);
     imageMfc.BitBlt(dc, 0, 0);
     ::ReleaseDC(videoRect->m_hWnd, dc);
+    imageMfc.ReleaseDC();
     free(bitInfo);
 }
 

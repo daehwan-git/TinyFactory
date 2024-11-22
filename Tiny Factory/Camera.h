@@ -67,7 +67,6 @@ public:
 	ObjectDetection* GetObjectDetection() { return objectDetction; }
 
 private:
-	void SetBitMapInfo(DWORD bpp, Mat matTemp);
 	void DrawRect();
 	void ReleaseCamera();
 	static UINT CameraDrawThread(LPVOID lpParam);

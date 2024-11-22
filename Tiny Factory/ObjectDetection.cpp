@@ -36,11 +36,8 @@ void ObjectDetection::YoloDataFrame(Mat matFrame)
 
 void ObjectDetection::StopObjectDetection()
 {
-	if (detectionThread && detectionThread->m_hThread) {
+	if (isRun) {
 		isRun = false;
-		WaitForSingleObject(detectionThread->m_hThread, INFINITE);
-		CloseHandle(detectionThread->m_hThread);
-		detectionThread = nullptr;
 	}
 }
 
@@ -56,8 +53,9 @@ void ObjectDetection::ReleaseObjectDetection()
 {
 	if (detectionThread) {
 		WaitForSingleObject(detectionThread->m_hThread, INFINITE);
-		detectionThread = nullptr;  // 스레드 객체 해제
+		detectionThread = nullptr;  
 	}
+	matFrame.release();
 }
 
 
