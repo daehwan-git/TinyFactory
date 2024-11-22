@@ -106,7 +106,6 @@ void RobotArmSP::ParsingData(CString command)
 			command == WRONG_COMMANDFNINISH);
 
 	if (isCommandFinish) {
-		isPlaying = false;
 		PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::WAIT, NULL);
 	}
 
