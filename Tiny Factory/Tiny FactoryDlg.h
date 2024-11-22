@@ -49,10 +49,6 @@ private:
     bool isRun = false;
     bool isInit = false;
 
-    VideoCapture* capture;
-    Mat matFrame;
-    CImage imageMfc;
-
     ConveyorBeltSP* conveyorBeltSp;
     RobotControlDlg robotControlDlg;
 
