@@ -18,7 +18,7 @@ UINT ObjectDetection::RunThread_YOLO(LPVOID pParam)
 		if (!WorkManager::GetInstance()->IsDetection())continue;
 		if(!objectDetection->isFinishYolo)
 			objectDetection->YOLO(objectDetection->matFrame);
-		Sleep(100);
+		Sleep(500);
 	}
 
 	return 0;

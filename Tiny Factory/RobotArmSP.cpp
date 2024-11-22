@@ -66,14 +66,17 @@ void RobotArmSP::PlayRobotArm()
 
 	if (!isPlaying)
 	{
-		CString objectType = objectQueue.front(); objectQueue.pop();
+		if (objectQueue.empty()) return;
 
+		CString objectType = objectQueue.front(); objectQueue.pop();
 		if (sp->IsConnected())
 		{
 			isPlaying = true;
 			Sleep(ROBOT_WAIT_TIME);
+			WorkManager::GetInstance()->ResetGoal();
 			sp->WriteData(objectType,DATA_LENGTH);
 			PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::PLAYING, NULL);
+			dialog->SetTimer(ROBOT_TIMER, 3000, NULL);
 		}
 	}
 }
@@ -90,6 +93,11 @@ void RobotArmSP::AddObjectType(bool isNormal)
 
 }
 
+void RobotArmSP::ResetIsPlaying()
+{
+	isPlaying = false;
+}
+
 void RobotArmSP::ParsingData(CString command)
 {
 	const bool isCommandFinish =
@@ -99,7 +107,6 @@ void RobotArmSP::ParsingData(CString command)
 
 	if (isCommandFinish) {
 		isPlaying = false;
-		WorkManager::GetInstance()->ResetGoal();
 		PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::WAIT, NULL);
 	}
 

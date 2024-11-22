@@ -150,7 +150,7 @@ UINT Camera::CameraDrawThread(LPVOID lpParam)
     while (camera->isRun)
     {
         camera->DrawRect();
-        Sleep(1000 / camera->fps);
+        Sleep(1000 / 24);
     }
 
     return 0;

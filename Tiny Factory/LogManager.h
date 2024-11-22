@@ -25,7 +25,7 @@ public:
 		return instance;
 	}
 
-	void InitLogControl(CDialogEx* dialog);
+	void InitLogControl(CDialogEx* listBox);
 
 	void WriteLog(CString insertData);
 };

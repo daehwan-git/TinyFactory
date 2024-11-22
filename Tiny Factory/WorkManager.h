@@ -75,6 +75,7 @@ public:
 	void ResetGoal();
 	void SetMainHandle(HWND hwnd);
 	void ObjectGoal();
+	void ResetIsPlaying();
 
 	void StartCarriage();
 	int GetMaxCarriageCount();

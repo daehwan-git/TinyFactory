@@ -10,7 +10,7 @@ private:
 public:
 	bool InitCarriage(CString ip)
 	{
-		if (this->ip.IsEmpty())
+		if (ip.IsEmpty())
 		{
 			return false;
 		}

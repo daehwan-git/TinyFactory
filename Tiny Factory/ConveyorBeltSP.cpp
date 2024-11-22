@@ -53,7 +53,11 @@ void ConveyorBeltSP::ResetDetect()
 
 	if (sp->IsConnected())
 	{
-		sp->WriteData(RESETDETECT, DATA_LENGTH);
+		for (int i = 0; i < 5; i++)
+		{
+			sp->WriteData(RESETDETECT, DATA_LENGTH);
+			Sleep(30);
+		}
 	}
 }
 
@@ -64,13 +68,16 @@ void ConveyorBeltSP::ResetGoal()
 
 	if (sp->IsConnected())
 	{
-		sp->WriteData(RESETGOAL, DATA_LENGTH);
+		for (int i = 0; i < 5; i++)
+		{
+			sp->WriteData(RESETGOAL, DATA_LENGTH);
+			Sleep(30);
+		}
 	}
 }
 
 void ConveyorBeltSP::ParsingReciveData(CString data)
 {
-
 	if (data == OBJECT_DETECTION)
 	{
 		WorkManager::GetInstance()->ObjectDetection();
@@ -109,6 +116,8 @@ UINT ConveyorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 		CString result(incomingData);
 
 		conveyorBeltSP->ParsingReciveData(result);
+
+		Sleep(SYNC_TIME);
 	}
 
 	return 0;

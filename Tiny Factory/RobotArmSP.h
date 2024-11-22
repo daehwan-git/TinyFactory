@@ -61,6 +61,7 @@ public:
 	void SendCommandList(CString command, bool rightOrWrong);
 	void PlayRobotArm();
 	void AddObjectType(bool isNormal);
+	void ResetIsPlaying();
 	
 	
 

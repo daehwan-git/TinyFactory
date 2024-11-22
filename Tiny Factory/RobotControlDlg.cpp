@@ -99,7 +99,6 @@ void RobotControlDlg::SetCarriage(Carriage* carriage)
 {
 	this->carriage = carriage;
 	carriageCountSlider.SetPos(carriage->GetCarriageCount());
-	this->carriage->WaitCarriage();
 }
 
 

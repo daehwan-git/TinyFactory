@@ -29,6 +29,12 @@ void WorkManager::ObjectGoal()
 		robotArmSP->PlayRobotArm();
 }
 
+void WorkManager::ResetIsPlaying()
+{
+	if (robotArmSP != nullptr)
+		robotArmSP->ResetIsPlaying();
+}
+
 void WorkManager::StartCarriage()
 {
 	if (carriage != nullptr)
@@ -37,7 +43,9 @@ void WorkManager::StartCarriage()
 
 int WorkManager::GetMaxCarriageCount()
 {
-	return carriage->GetCarriageCount();
+	if(carriage != nullptr)
+		return carriage->GetCarriageCount();
+	return 0;
 }
 
 void WorkManager::SetMaxCarriage(int count)
@@ -45,7 +53,6 @@ void WorkManager::SetMaxCarriage(int count)
 	carriage->SetCarriageCount(count);
 }
 
-//some object detected
 void WorkManager::ObjectDetection()
 {
 	if (!isDetection)
@@ -70,9 +77,7 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	}
 
 	if (!isNormal)
-	{
-		//robot arms can move
-		
+	{		
 		LogManager::GetInstance()->WriteLog("비정상적인 오브젝트 감지됨.");
 
 		DataManager::GetInstance()->IncreaseWrongCount();
@@ -97,5 +102,5 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 	{
 		robotArmSP->AddObjectType(isNormal);
 	}
-		PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
+	PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 }

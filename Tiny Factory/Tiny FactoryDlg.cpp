@@ -473,8 +473,13 @@ void CTinyFactoryDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	if (nIDEvent == DETECTION_RESET)
 	{
-		WorkManager::GetInstance()->ResetDetection();
 		KillTimer(DETECTION_RESET);
+		WorkManager::GetInstance()->ResetDetection();
+	}
+	else if (nIDEvent == ROBOT_TIMER)
+	{
+		KillTimer(ROBOT_TIMER);
+		WorkManager::GetInstance()->ResetIsPlaying();
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
