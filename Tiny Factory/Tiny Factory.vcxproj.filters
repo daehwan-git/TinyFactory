@@ -99,6 +99,9 @@
     <ClInclude Include="RobotFrameBox.h">
       <Filter>헤더 파일\Custom Controls</Filter>
     </ClInclude>
+    <ClInclude Include="SplashScreen.h">
+      <Filter>헤더 파일\Dlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tiny Factory.cpp">
@@ -152,6 +155,9 @@
     <ClCompile Include="RobotFrameBox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SplashScreen.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TinyFactory.rc">
@@ -165,6 +171,18 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Tiny Factory.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Desktop\business_smart_factory_function_img-export.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Downloads\business_smart_factory_function_img-export.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\..\Downloads\business_smart_factory_function_img-export (1).bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

@@ -11,6 +11,7 @@
 #include <dbt.h>
 #include "Carriage.h"
 #include "FileManager.h"
+#include "SplashScreen.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -95,6 +96,8 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
 	ON_WM_CTLCOLOR()
+	ON_WM_ACTIVATE()
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -492,3 +495,22 @@ HBRUSH CTinyFactoryDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 }
 
 
+
+
+void CTinyFactoryDlg::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+	CDialogEx::OnActivate(nState, pWndOther, bMinimized);
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+
+int CTinyFactoryDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	SplashScreen::ShowSplashScreen(this);
+
+	return 0;
+}

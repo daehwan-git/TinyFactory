@@ -208,6 +208,7 @@
     <ClInclude Include="RobotControlDlg.h" />
     <ClInclude Include="ConveyorBelt.h" />
     <ClInclude Include="RobotFrameBox.h" />
+    <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="WorkManager.h" />
     <ClInclude Include="DataProcessSP.h" />
     <ClInclude Include="Define.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="RobotControlDlg.cpp" />
     <ClCompile Include="ConveyorBeltSP.cpp" />
     <ClCompile Include="RobotFrameBox.cpp" />
+    <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="WorkManager.cpp" />
     <ClCompile Include="DataProcessSP.cpp" />
     <ClCompile Include="FileManager.cpp" />
@@ -253,6 +255,10 @@
     <None Include="res\TinyFactory.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Desktop\business_smart_factory_function_img-export.png" />
+    <Image Include="..\..\..\..\..\Downloads\business_smart_factory_function_img-export (1).bmp" />
+    <Image Include="..\..\..\..\..\Downloads\business_smart_factory_function_img-export.bmp" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\Tiny Factory.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
