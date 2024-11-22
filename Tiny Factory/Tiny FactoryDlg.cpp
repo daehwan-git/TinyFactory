@@ -374,7 +374,12 @@ LRESULT CTinyFactoryDlg::OnNormalObjectInc(WPARAM wParam, LPARAM lParam)
 	intToStr.Format("%d개", normalCount);
 
 	SetDlgItemText(NORMAL_COUNT_TEXT, intToStr);
+	
+	CRect countRect;
+	GetDlgItem(NORMAL_COUNT_TEXT)->GetWindowRect(&countRect);
+	ScreenToClient(&countRect);
 
+	InvalidateRect(&countRect, TRUE);
 	return LRESULT();
 }
 
@@ -385,6 +390,12 @@ LRESULT CTinyFactoryDlg::OnWrongObjectInc(WPARAM wParam, LPARAM lParam)
 	intToStr.Format("%d개", wrongCount);
 
 	SetDlgItemText(WRONG_COUNT_TEXT, intToStr);
+
+	CRect countRect;
+	GetDlgItem(NORMAL_COUNT_TEXT)->GetWindowRect(&countRect);
+	ScreenToClient(&countRect);
+
+	InvalidateRect(&countRect, TRUE);
 
 	return LRESULT();
 }
