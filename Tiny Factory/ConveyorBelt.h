@@ -8,14 +8,20 @@ class ConveyorBeltSP
 private:
 	const CString OBJECT_DETECTION = "OBJECTDETECTION";
 
-	Serial* sp;
-	CDialogEx* dialog;
+	Serial* sp = nullptr;
+	CDialogEx* dialog = nullptr;
 	bool isRun = false;
 
 	CWinThread* conveyorBeltThread = nullptr;
 
 public:
-	ConveyorBeltSP(CString portNumber,CDialogEx* dialog):sp(nullptr),dialog(dialog)
+
+	enum Status{
+		ON,
+		OFF,
+	};
+
+	bool InitConveyorBeltSP(CString portNumber,CDialogEx* dialog)
 	{
 		if (portNumber == "")
 		{
@@ -29,14 +35,17 @@ public:
 
 			if (sp->IsConnected())
 			{
+				this->dialog = dialog;
 				LogManager::GetInstance()->WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 완료");
 				StartConveyorBelt();
-				dialog->PostMessageA(ON_CONNECT_COMPLETE_MESSAGE,0,0);
+				return true;
 			}
 			else {
 				LogManager::GetInstance()->WriteLog("컨베이어 벨트 : " + portNumber + " port에 연결 실패...");
 			}
 		}
+		
+		return false;
 
 	}
 

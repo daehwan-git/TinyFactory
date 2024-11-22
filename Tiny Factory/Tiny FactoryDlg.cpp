@@ -90,6 +90,8 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_MESSAGE(NORMAL_OBJECT_INC, &CTinyFactoryDlg::OnNormalObjectInc)
 	ON_MESSAGE(WRONG_OBJECT_INC, &CTinyFactoryDlg::OnWrongObjectInc)
 	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnDectionFinish)
+	ON_MESSAGE(LOG_WRITE, &CTinyFactoryDlg::OnLogWrite)
+	ON_MESSAGE(CONVEYORBELT_CONDITION_CHANGED, &CTinyFactoryDlg::OnConveyorBeltConditionChanged)
 	ON_WM_DEVICECHANGE()
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
@@ -206,7 +208,7 @@ void CTinyFactoryDlg::Init()
 {
 	InitDevicePort();
 
-	LogManager::GetInstance()->InitLogControl(&logListBox);
+	LogManager::GetInstance()->InitLogControl(this);
 
 	if (!robotControlDlg.GetSafeHwnd()) {
 		robotControlDlg.Create(IDD_ROBOT_DLG, this);
@@ -219,8 +221,8 @@ void CTinyFactoryDlg::Init()
 	}
 
 	WorkManager::GetInstance()->SetMainHandle(m_hWnd);
-	DataManager::GetInstance()->SetMainHandle(m_hWnd);
 	WorkManager::GetInstance()->InitObjectDetection(camera->GetObjectDetection());
+	DataManager::GetInstance()->SetMainHandle(m_hWnd);
 }
 
 
@@ -282,20 +284,30 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 		}
 #endif
 
-		if (conveyorBeltSp == nullptr)
+		conveyorBeltSp = new ConveyorBeltSP();
+		if (conveyorBeltSp->InitConveyorBeltSP(beltPort, this))
 		{
-			conveyorBeltSp = new ConveyorBeltSP(beltPort, this);
 			WorkManager::GetInstance()->InitConvayorBeltSP(conveyorBeltSp);
 		}
+		else delete conveyorBeltSp;
 
 
-		RobotArmSP* robotArmSP = new RobotArmSP(robotArmPort, this);
-		robotControlDlg.SetRobotArmSP(robotArmSP);
-		WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
+		RobotArmSP* robotArmSP = new RobotArmSP();
+		if (robotArmSP->InitRobotArmSP(robotArmPort, this))
+		{
+			robotControlDlg.SetRobotArmSP(robotArmSP);
+			WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
+		}
+		else delete robotArmSP;
+		
 
-		Carriage* carriage = new Carriage(carriageIP);
-		WorkManager::GetInstance()->InitCarriage(carriage);
-		robotControlDlg.SetCarriage(carriage);
+		Carriage* carriage = new Carriage();
+		if (carriage->InitCarriage(carriageIP))
+		{
+			WorkManager::GetInstance()->InitCarriage(carriage);
+			robotControlDlg.SetCarriage(carriage);
+		}
+		else delete carriage;
 
 		GetDlgItem(CONVEYORPORT)->EnableWindow(FALSE);
 		GetDlgItem(CARRIAGE_IP)->EnableWindow(FALSE);
@@ -399,6 +411,35 @@ LRESULT CTinyFactoryDlg::OnWrongObjectInc(WPARAM wParam, LPARAM lParam)
 	ScreenToClient(&countRect);
 
 	InvalidateRect(&countRect, TRUE);
+
+	return LRESULT();
+}
+
+LRESULT CTinyFactoryDlg::OnLogWrite(WPARAM wParam, LPARAM lParam)
+{
+
+	CString* data = reinterpret_cast<CString*>(lParam);
+	
+	logListBox.InsertString(-1, *data);
+
+	delete data;
+
+	return LRESULT();
+}
+
+LRESULT CTinyFactoryDlg::OnConveyorBeltConditionChanged(WPARAM wParam, LPARAM lParam)
+{
+
+	ConveyorBeltSP::Status currentStatus = (ConveyorBeltSP::Status)(wParam);
+
+	if (ConveyorBeltSP::Status::ON == currentStatus)
+	{
+		AfxMessageBox("켜졌어염");
+	}
+	else if (ConveyorBeltSP::Status::OFF == currentStatus)
+	{
+		AfxMessageBox("멈췄어염");
+	}
 
 	return LRESULT();
 }

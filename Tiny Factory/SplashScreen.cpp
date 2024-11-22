@@ -45,7 +45,7 @@ BOOL SplashScreen::Create(CWnd* parentWnd)
 	}
 
 	CenterWindow();
-	SetTimer(1, 3000, nullptr);
+	SetTimer(1, SPLASH_TIME, nullptr);
 	return TRUE;
 }
 

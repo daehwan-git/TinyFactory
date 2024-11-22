@@ -12,6 +12,7 @@ void ConveyorBeltSP::StopConveyorBelt()
 		{
 			LogManager::GetInstance()->WriteLog("컨베이어 벨트 작동 중지");
 			sp->WriteData(CONVAYORBELT_OFF_DATA, DATA_LENGTH);
+			PostMessage(dialog->m_hWnd, CONVEYORBELT_CONDITION_CHANGED, Status::OFF, NULL);
 		}
 		isRun = false;
 	}
@@ -28,6 +29,7 @@ void ConveyorBeltSP::StartConveyorBelt()
 	if (sp->IsConnected())
 	{
 		sp->WriteData(CONVAYORBELT_ON_DATA, DATA_LENGTH);
+		PostMessage(dialog->m_hWnd,CONVEYORBELT_CONDITION_CHANGED,Status::ON,NULL);
 	}
 
 	if(conveyorBeltThread == nullptr)
@@ -107,8 +109,6 @@ UINT ConveyorBeltSP::ConvayorBeltRun(LPVOID lpParam)
 		CString result(incomingData);
 
 		conveyorBeltSP->ParsingReciveData(result);
-
-		Sleep(SYNC_TIME);
 	}
 
 	return 0;

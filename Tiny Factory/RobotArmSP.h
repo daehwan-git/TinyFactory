@@ -16,7 +16,7 @@ private:
 	std::queue<CString> objectQueue;
 
 public:
-	RobotArmSP(CString portNumber, CDialogEx* dialog) :sp(nullptr), dialog(dialog)
+	bool InitRobotArmSP(CString portNumber, CDialogEx* dialog) 
 	{
 		if (portNumber == "")
 		{
@@ -30,13 +30,17 @@ public:
 
 			if (sp->IsConnected())
 			{
+				this->dialog = dialog;
 				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ¿Ï·á");
 				StartDataProcess();
+				return true;
 			}
 			else {
 				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ½ÇÆÐ...");
 			}
 		}
+
+		return false;
 	}
 
 	~RobotArmSP()

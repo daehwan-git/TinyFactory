@@ -13,9 +13,9 @@ void Carriage::WaitCarriage()
 	ConnectToCarriage("/wait");
 }
 
-void Carriage::ConnectToCarriage(CString command)
+bool Carriage::ConnectToCarriage(CString command)
 {
-	if (ip == "")return;
+	if (ip == "")return false;
 	try {
 		CInternetSession session("CARRIAGE");
 		CHttpConnection* connection = nullptr;
@@ -44,9 +44,11 @@ void Carriage::ConnectToCarriage(CString command)
 				response += line;
 
 			LogManager::GetInstance()->WriteLog("화물차 통신 완료");
+			return true;
 		}
 		else {
 			LogManager::GetInstance()->WriteLog("화물차 통신 실패");
+			return false;
 		}
 
 		if (file) {
@@ -61,6 +63,7 @@ void Carriage::ConnectToCarriage(CString command)
 	catch (CInternetException* e) {
 		LogManager::GetInstance()->WriteLog("화물차 통신 실패");
 		e->Delete();
+		return false;
 	}
 
 }

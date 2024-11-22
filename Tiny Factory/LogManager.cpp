@@ -9,9 +9,10 @@ LogManager::~LogManager()
 {
 }
 
-void LogManager::InitLogControl(CListBox* listBox)
+
+void LogManager::InitLogControl(CDialogEx* dialog)
 {
-	this->logListBox = listBox;
+	this->dialog = dialog;
 }
 
 void LogManager::WriteLog(CString insertData)
@@ -27,8 +28,10 @@ void LogManager::WriteLog(CString insertData)
 		cTime.GetMinute(),
 		cTime.GetSecond());
 
-	insertData = strDate +  " : " + insertData;
 
-	logListBox->InsertString(0,insertData);
+	CString* sendData = new CString(strDate + " : " + insertData);
 
+	LPARAM lParam = reinterpret_cast<LPARAM>(sendData);
+	
+	PostMessage(dialog->m_hWnd,LOG_WRITE,NULL, lParam);
 }

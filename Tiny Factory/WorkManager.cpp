@@ -93,7 +93,9 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 		}
 	}
 
-	robotArmSP->AddObjectType(isNormal);
-	PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
-
+	if (robotArmSP != nullptr)
+	{
+		robotArmSP->AddObjectType(isNormal);
+	}
+		PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 }

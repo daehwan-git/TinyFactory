@@ -8,9 +8,20 @@ private:
 	int maxCarriageCount = CURRENT_CARRIAGE;
 
 public:
-	Carriage(CString ip)
+	bool InitCarriage(CString ip)
 	{
+		if (this->ip.IsEmpty())
+		{
+			return false;
+		}
+
 		this->ip = ip;
+		
+		if (ConnectToCarriage("/wait"))
+		{
+			return true;
+		}
+		return false;
 	}
 
 	void StartCarriage();
@@ -19,6 +30,6 @@ public:
 	void SetCarriageCount(int count) { maxCarriageCount = count; }
 
 private:
-	void ConnectToCarriage(CString command);
+	bool ConnectToCarriage(CString command);
 };
 

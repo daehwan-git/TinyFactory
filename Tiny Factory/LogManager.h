@@ -9,7 +9,7 @@ class LogManager
 private:
 	static LogManager* instance;
 	static std::mutex mtx;
-	CListBox* logListBox = nullptr;
+	CDialogEx* dialog;
 
 	~LogManager();
 
@@ -25,7 +25,7 @@ public:
 		return instance;
 	}
 
-	void InitLogControl(CListBox* listBox);
+	void InitLogControl(CDialogEx* dialog);
 
 	void WriteLog(CString insertData);
 };
