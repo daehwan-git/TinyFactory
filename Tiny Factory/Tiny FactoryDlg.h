@@ -79,6 +79,7 @@ public:
     afx_msg LRESULT OnWrongObjectInc(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnLogWrite(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnConveyorBeltConditionChanged(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnRobotArmConditionChanged(WPARAM wParam, LPARAM lParam);
 
     afx_msg void OnBnClickedRobotcontrolbtn();
     afx_msg void OnTimer(UINT_PTR nIDEvent);

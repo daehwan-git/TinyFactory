@@ -54,6 +54,8 @@
 #define IDC_SPIN2                       1033
 #define ROBOT_DELAY_EDIT                1034
 #define ROBOT_DELAY_BTN                 1035
+#define CONVEYOR_CONDITION_TEXT         1036
+#define ROBOTARM_CONDITION_TEXT         1037
 
 // Next default values for new objects
 // 
@@ -61,7 +63,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        141
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1036
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

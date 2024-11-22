@@ -92,6 +92,7 @@ BEGIN_MESSAGE_MAP(CTinyFactoryDlg, CDialogEx)
 	ON_MESSAGE(DETECTIONFINISH, &CTinyFactoryDlg::OnDectionFinish)
 	ON_MESSAGE(LOG_WRITE, &CTinyFactoryDlg::OnLogWrite)
 	ON_MESSAGE(CONVEYORBELT_CONDITION_CHANGED, &CTinyFactoryDlg::OnConveyorBeltConditionChanged)
+	ON_MESSAGE(ROBOTARM_CONDITION_CHANGED, &CTinyFactoryDlg::OnRobotArmConditionChanged)
 	ON_WM_DEVICECHANGE()
 	ON_BN_CLICKED(ROBOTCONTROLBTN, &CTinyFactoryDlg::OnBnClickedRobotcontrolbtn)
 	ON_WM_TIMER()
@@ -434,13 +435,27 @@ LRESULT CTinyFactoryDlg::OnConveyorBeltConditionChanged(WPARAM wParam, LPARAM lP
 
 	if (ConveyorBeltSP::Status::ON == currentStatus)
 	{
-		AfxMessageBox("켜졌어염");
+		SetDlgItemText(CONVEYOR_CONDITION_TEXT, "작동 중");
 	}
 	else if (ConveyorBeltSP::Status::OFF == currentStatus)
 	{
-		AfxMessageBox("멈췄어염");
+		SetDlgItemText(CONVEYOR_CONDITION_TEXT, "정지");
 	}
 
+	return LRESULT();
+}
+
+LRESULT CTinyFactoryDlg::OnRobotArmConditionChanged(WPARAM wParam, LPARAM lParam)
+{
+	RobotArmSP::Status currentStatus = (RobotArmSP::Status)(wParam);
+	if (RobotArmSP::Status::PLAYING == currentStatus)
+	{
+		SetDlgItemText(ROBOTARM_CONDITION_TEXT, "작동 중");
+	}
+	else if (RobotArmSP::Status::WAIT == currentStatus)
+	{
+		SetDlgItemText(ROBOTARM_CONDITION_TEXT, "대기 중");
+	}
 	return LRESULT();
 }
 

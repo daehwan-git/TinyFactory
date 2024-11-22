@@ -62,7 +62,6 @@ void RobotArmSP::SendCommandList(CString command,bool rightOrWrong)
 
 void RobotArmSP::PlayRobotArm()
 {
-
 	if (sp == nullptr)return;
 
 	if (!isPlaying)
@@ -74,6 +73,7 @@ void RobotArmSP::PlayRobotArm()
 			isPlaying = true;
 			Sleep(ROBOT_WAIT_TIME);
 			sp->WriteData(objectType,DATA_LENGTH);
+			PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::PLAYING, NULL);
 		}
 	}
 }
@@ -100,6 +100,7 @@ void RobotArmSP::ParsingData(CString command)
 	if (isCommandFinish) {
 		isPlaying = false;
 		WorkManager::GetInstance()->ResetGoal();
+		PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::WAIT, NULL);
 	}
 
 	if (command == RIGHT_COMMANDFNINISH) {

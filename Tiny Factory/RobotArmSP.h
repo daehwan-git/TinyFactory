@@ -16,6 +16,11 @@ private:
 	std::queue<CString> objectQueue;
 
 public:
+	enum Status
+	{
+		WAIT,
+		PLAYING
+	};
 	bool InitRobotArmSP(CString portNumber, CDialogEx* dialog) 
 	{
 		if (portNumber == "")
