@@ -263,6 +263,15 @@ void CTinyFactoryDlg::SaveLogData()
 
 
 
+void CTinyFactoryDlg::UpdateControl(int controlID)
+{
+	CRect countRect;
+	GetDlgItem(controlID)->GetWindowRect(&countRect);
+	ScreenToClient(&countRect);
+
+	InvalidateRect(&countRect, TRUE);
+}
+
 void CTinyFactoryDlg::OnBnClickedStartBtn()
 {
 	if (!isInit)
@@ -391,11 +400,8 @@ LRESULT CTinyFactoryDlg::OnNormalObjectInc(WPARAM wParam, LPARAM lParam)
 
 	SetDlgItemText(NORMAL_COUNT_TEXT, intToStr);
 	
-	CRect countRect;
-	GetDlgItem(NORMAL_COUNT_TEXT)->GetWindowRect(&countRect);
-	ScreenToClient(&countRect);
+	UpdateControl(NORMAL_COUNT_TEXT);
 
-	InvalidateRect(&countRect, TRUE);
 	return LRESULT();
 }
 
@@ -407,11 +413,7 @@ LRESULT CTinyFactoryDlg::OnWrongObjectInc(WPARAM wParam, LPARAM lParam)
 
 	SetDlgItemText(WRONG_COUNT_TEXT, intToStr);
 
-	CRect countRect;
-	GetDlgItem(NORMAL_COUNT_TEXT)->GetWindowRect(&countRect);
-	ScreenToClient(&countRect);
-
-	InvalidateRect(&countRect, TRUE);
+	UpdateControl(WRONG_COUNT_TEXT);
 
 	return LRESULT();
 }

@@ -69,6 +69,8 @@ private:
 
 
 public:
+    void UpdateControl(int controlID);
+
     afx_msg void OnBnClickedStartBtn();
     afx_msg void OnDestroy();
     afx_msg void OnStopBtnClicked();
