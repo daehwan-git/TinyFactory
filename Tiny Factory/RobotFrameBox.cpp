@@ -189,6 +189,9 @@ void RobotFrameBox::OnMouseMove(UINT nFlags, CPoint point)
         CString itemText;
         GetItemRect(selectedIndex, itemRect);
         GetText(selectedIndex, itemText);
+
+        point.x -= itemRect.Width() / 2;
+        point.y -= itemRect.Height() / 2;
         itemRect.MoveToXY(point);
 
         memDC.FillSolidRect(itemRect, m_backgroundColor);  

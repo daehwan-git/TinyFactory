@@ -68,6 +68,7 @@ private:
     COLORREF comboBoxTextColor;
 
 
+
 public:
     void UpdateControl(int controlID);
 

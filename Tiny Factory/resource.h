@@ -56,7 +56,12 @@
 #define ROBOT_DELAY_BTN                 1035
 #define CONVEYOR_CONDITION_TEXT         1036
 #define ROBOTARM_CONDITION_TEXT         1037
-#define IDC_BUTTON7                     1038
+#define CARRIAGE_APPLY_BTN              1038
+#define ROBOTARM_CONDITION_TEXT2        1038
+#define CONVEYOR_SPEED_SLIDER           1039
+#define CONVEYOR_START_BTN              1040
+#define CONVEYOR_STOP_BTN               1041
+#define CONVEYOR_APPLY_BTN              1042
 
 // Next default values for new objects
 // 
@@ -64,7 +69,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        141
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1039
+#define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

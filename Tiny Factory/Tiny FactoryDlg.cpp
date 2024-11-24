@@ -241,6 +241,7 @@ void CTinyFactoryDlg::InitDevicePort()
 		beltComboBox->AddString(portNames[i]);
 		robotComboBox->AddString(portNames[i]);
 	}
+
 }
 
 void CTinyFactoryDlg::SaveLogData()
@@ -260,7 +261,6 @@ void CTinyFactoryDlg::SaveLogData()
 	FileManager::GetInstance()->SaveFile(data);
 
 }
-
 
 
 void CTinyFactoryDlg::UpdateControl(int controlID)

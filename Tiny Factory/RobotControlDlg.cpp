@@ -39,6 +39,11 @@ void RobotControlDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON4, carTestBtn);
 	DDX_Control(pDX, IDC_BUTTON5, carStopBtn);
 
+	DDX_Control(pDX, ROBOT_DELAY_BTN, delayApplyBtn);
+	DDX_Control(pDX, CARRIAGE_APPLY_BTN, carriageApplyBtn);
+	DDX_Control(pDX, CONVEYOR_START_BTN, conveyorStartBtn);
+	DDX_Control(pDX, CONVEYOR_STOP_BTN, conveyorStopBtn);
+	DDX_Control(pDX, CONVEYOR_APPLY_BTN, conveyorApplyBtn);
 }
 
 
@@ -62,6 +67,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_C_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_D_MOTOR_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER5, &RobotControlDlg::OnNMCustomdrawSlider)
+	ON_NOTIFY(NM_CUSTOMDRAW, CONVEYOR_SPEED_SLIDER, &RobotControlDlg::OnNMCustomdrawSlider)
 	ON_WM_PAINT()
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(ROBOT_DELAY_BTN, &RobotControlDlg::OnBnClickedDelayBtn)
@@ -179,6 +185,26 @@ void RobotControlDlg::CustomDlg()
 	if (carStopBtn)
 	{
 		carStopBtn.SetFont(&carBtnFont);
+	}
+	if (delayApplyBtn)
+	{
+		delayApplyBtn.SetFont(&carBtnFont);
+	}
+	if (carriageApplyBtn)
+	{
+		carriageApplyBtn.SetFont(&carBtnFont);
+	}
+	if(conveyorStopBtn)
+	{
+		conveyorStopBtn.SetFont(&carBtnFont);
+	}
+	if(conveyorStartBtn)
+	{
+		conveyorStartBtn.SetFont(&carBtnFont);
+	}
+	if (conveyorApplyBtn)
+	{
+		conveyorApplyBtn.SetFont(&carBtnFont);
 	}
 	if (robotTestBtn)
 	{

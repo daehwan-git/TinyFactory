@@ -50,8 +50,15 @@ private:
 	CustomBtn robotDeleteFrameBtn;
 	CustomBtn robotSendCommanBtn;
 	CustomBtn robotStopBtn;
+	
 	CustomBtn carTestBtn;
 	CustomBtn carStopBtn;
+
+	CustomBtn delayApplyBtn;
+	CustomBtn carriageApplyBtn;
+	CustomBtn conveyorStopBtn;
+	CustomBtn conveyorStartBtn;
+	CustomBtn conveyorApplyBtn;
 
 	CFont carBtnFont;
 	CFont robotBtnFont;
