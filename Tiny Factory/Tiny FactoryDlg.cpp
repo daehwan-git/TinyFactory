@@ -306,7 +306,8 @@ void CTinyFactoryDlg::OnBnClickedStartBtn()
 		if (robotArmSP->InitRobotArmSP(robotArmPort, this))
 		{
 			robotControlDlg.SetRobotArmSP(robotArmSP);
-			WorkManager::GetInstance()->InitRobotArmSP(robotArmSP);
+			WorkM
+				anager::GetInstance()->InitRobotArmSP(robotArmSP);
 		}
 		else delete robotArmSP;
 		

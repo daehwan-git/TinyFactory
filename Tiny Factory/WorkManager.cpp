@@ -50,7 +50,8 @@ int WorkManager::GetMaxCarriageCount()
 
 void WorkManager::SetMaxCarriage(int count)
 {
-	carriage->SetCarriageCount(count);
+	if(carriage != nullptr)
+		carriage->SetCarriageCount(count);
 }
 
 void WorkManager::ObjectDetection()

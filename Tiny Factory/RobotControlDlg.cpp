@@ -6,7 +6,6 @@
 #include "afxdialogex.h"
 #include "RobotControlDlg.h"
 
-
 // RobotControlDlg 대화 상자
 
 IMPLEMENT_DYNAMIC(RobotControlDlg, CDialogEx)
@@ -98,6 +97,7 @@ BOOL RobotControlDlg::OnInitDialog()
 	
 	SetDlgItemInt(ROBOT_DELAY_EDIT, robotDelay);
 
+	carriageCountSlider.SetRange(0,MAX_CARRIAGE_COUNT);
 	carriageCountSlider.SetPos(WorkManager::GetInstance()->GetMaxCarriageCount());
 
 	return TRUE;  
@@ -487,6 +487,11 @@ void RobotControlDlg::OnBnClickedDelayBtn()
 		delay.Format("%s%d",ROBOTDELAY,robotDelay);
 		robotArmSP->SendCommand(delay);
 	}
+}
+
+void RobotControlDlg::OnBnClickedApplyBtn()
+{
+	//컨베이어 속도
 }
 
 
