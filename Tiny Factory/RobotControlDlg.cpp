@@ -57,7 +57,6 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(ROBOT_TEST_BTN, &RobotControlDlg::OnBnClickedTestBtn)
 	ON_BN_CLICKED(ROBOT_ARM_STOP_BTN, &RobotControlDlg::OnBnClickedArmStopBtn)
-	ON_NOTIFY(NM_RELEASEDCAPTURE, IDC_SLIDER5, &RobotControlDlg::OnNMReleasedcaptureCarriageCount)
 	ON_BN_CLICKED(DELETE_FRAME_BTN, &RobotControlDlg::OnBnClickedFrameBtn)
 	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO2, &RobotControlDlg::OnRangedRadioRightWrong)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN2, &RobotControlDlg::OnDeltaposSpin2)
@@ -76,6 +75,7 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &RobotControlDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(CONVEYOR_START_BTN, &RobotControlDlg::OnBnClickedStartBtn)
 	ON_BN_CLICKED(CONVEYOR_STOP_BTN, &RobotControlDlg::OnBnClickedStopBtn)
+	ON_BN_CLICKED(CARRIAGE_APPLY_BTN, &RobotControlDlg::OnBnClickedCarriageCountApplyBtn)
 END_MESSAGE_MAP()
 
 
@@ -97,6 +97,8 @@ BOOL RobotControlDlg::OnInitDialog()
 	robotFrameBox.SetHorizontalExtent(200);
 	
 	SetDlgItemInt(ROBOT_DELAY_EDIT, robotDelay);
+
+	carriageCountSlider.SetPos(WorkManager::GetInstance()->GetMaxCarriageCount());
 
 	return TRUE;  
 }
@@ -328,13 +330,6 @@ void RobotControlDlg::OnBnClickedArmStopBtn()
 
 
 
-
-void RobotControlDlg::OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult)
-{
-	int currentCount = carriageCountSlider.GetPos();
-	carriage->SetCarriageCount(currentCount);
-}
-
 void RobotControlDlg::OnNMCustomdrawSlider(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
@@ -495,12 +490,6 @@ void RobotControlDlg::OnBnClickedDelayBtn()
 }
 
 
-void RobotControlDlg::OnBnClickedApplyBtn()
-{
-	int currentCount = carriageCountSlider.GetPos();
-	WorkManager::GetInstance()->SetMaxCarriage(currentCount);
-}
-
 
 void RobotControlDlg::OnBnClickedButton4()
 {
@@ -525,4 +514,11 @@ void RobotControlDlg::OnBnClickedStopBtn()
 {
 	if (conveyorBeltSP != nullptr)
 		conveyorBeltSP->StopConveyorBelt();
+}
+
+
+void RobotControlDlg::OnBnClickedCarriageCountApplyBtn()
+{
+	int currentCoutnt = WorkManager::GetInstance()->GetMaxCarriageCount();
+	WorkManager::GetInstance()->SetMaxCarriage(currentCoutnt);
 }

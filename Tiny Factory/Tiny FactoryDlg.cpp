@@ -582,3 +582,5 @@ int CTinyFactoryDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return 0;
 }
+
+

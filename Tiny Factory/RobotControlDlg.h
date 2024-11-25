@@ -95,7 +95,6 @@ public:
 	afx_msg void OnBnClickedTestBtn();
 	afx_msg void OnBnClickedArmStopBtn();
 	CSliderCtrl carriageCountSlider;
-	afx_msg void OnNMReleasedcaptureCarriageCount(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMCustomdrawSlider(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBnClickedFrameBtn();
 	afx_msg void OnRangedRadioRightWrong(UINT uid);
@@ -110,4 +109,5 @@ public:
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedStartBtn();
 	afx_msg void OnBnClickedStopBtn();
+	afx_msg void OnBnClickedCarriageCountApplyBtn();
 };
