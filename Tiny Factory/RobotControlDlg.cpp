@@ -71,6 +71,11 @@ BEGIN_MESSAGE_MAP(RobotControlDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(ROBOT_DELAY_BTN, &RobotControlDlg::OnBnClickedDelayBtn)
+	ON_BN_CLICKED(CONVEYOR_APPLY_BTN, &RobotControlDlg::OnBnClickedApplyBtn)
+	ON_BN_CLICKED(IDC_BUTTON4, &RobotControlDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &RobotControlDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(CONVEYOR_START_BTN, &RobotControlDlg::OnBnClickedStartBtn)
+	ON_BN_CLICKED(CONVEYOR_STOP_BTN, &RobotControlDlg::OnBnClickedStopBtn)
 END_MESSAGE_MAP()
 
 
@@ -487,4 +492,37 @@ void RobotControlDlg::OnBnClickedDelayBtn()
 		delay.Format("%s%d",ROBOTDELAY,robotDelay);
 		robotArmSP->SendCommand(delay);
 	}
+}
+
+
+void RobotControlDlg::OnBnClickedApplyBtn()
+{
+	int currentCount = carriageCountSlider.GetPos();
+	WorkManager::GetInstance()->SetMaxCarriage(currentCount);
+}
+
+
+void RobotControlDlg::OnBnClickedButton4()
+{
+	WorkManager::GetInstance()->StartCarriage();
+}
+
+
+void RobotControlDlg::OnBnClickedButton5()
+{
+	
+}
+
+
+void RobotControlDlg::OnBnClickedStartBtn()
+{
+	if(conveyorBeltSP != nullptr)
+		conveyorBeltSP->StartConveyorBelt();
+}
+
+
+void RobotControlDlg::OnBnClickedStopBtn()
+{
+	if (conveyorBeltSP != nullptr)
+		conveyorBeltSP->StopConveyorBelt();
 }

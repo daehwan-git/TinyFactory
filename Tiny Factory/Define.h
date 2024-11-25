@@ -1,6 +1,9 @@
 #include "string"	
 #include"opencv2/opencv.hpp"
 
+
+typedef int CONTROLID;
+
 #define PORT_PREFIX "\\\\.\\"
 
 #define KNOCKDOWN "KNOCKDOWN\n"

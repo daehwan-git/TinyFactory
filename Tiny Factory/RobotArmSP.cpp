@@ -7,10 +7,12 @@ void RobotArmSP::StartDataProcess()
 
 	LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ ÀÛµ¿");
 
+
 	isRun = true;
 
 	if (sp->IsConnected())
 	{
+		PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::WAIT, NULL);
 		sp->WriteData(DATAPROCESS_ON_DATA, DATA_LENGTH);
 	}
 
@@ -71,11 +73,11 @@ void RobotArmSP::PlayRobotArm()
 		CString objectType = objectQueue.front(); objectQueue.pop();
 		if (sp->IsConnected())
 		{
+			PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::PLAYING, NULL);
 			isPlaying = true;
 			Sleep(ROBOT_WAIT_TIME);
 			WorkManager::GetInstance()->ResetGoal();
 			sp->WriteData(objectType,DATA_LENGTH);
-			PostMessage(dialog->m_hWnd, ROBOTARM_CONDITION_CHANGED, Status::PLAYING, NULL);
 			dialog->SetTimer(ROBOT_TIMER, 3000, NULL);
 		}
 	}

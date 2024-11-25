@@ -105,4 +105,9 @@ public:
 	afx_msg void OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnBnClickedDelayBtn();
+	afx_msg void OnBnClickedApplyBtn();
+	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedButton5();
+	afx_msg void OnBnClickedStartBtn();
+	afx_msg void OnBnClickedStopBtn();
 };

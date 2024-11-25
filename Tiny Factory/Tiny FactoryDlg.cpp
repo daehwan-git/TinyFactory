@@ -263,7 +263,7 @@ void CTinyFactoryDlg::SaveLogData()
 }
 
 
-void CTinyFactoryDlg::UpdateControl(int controlID)
+void CTinyFactoryDlg::UpdateControl(CONTROLID controlID)
 {
 	CRect countRect;
 	GetDlgItem(controlID)->GetWindowRect(&countRect);
@@ -444,6 +444,8 @@ LRESULT CTinyFactoryDlg::OnConveyorBeltConditionChanged(WPARAM wParam, LPARAM lP
 		SetDlgItemText(CONVEYOR_CONDITION_TEXT, "정지");
 	}
 
+	UpdateControl(CONVEYOR_CONDITION_TEXT);
+
 	return LRESULT();
 }
 
@@ -458,6 +460,9 @@ LRESULT CTinyFactoryDlg::OnRobotArmConditionChanged(WPARAM wParam, LPARAM lParam
 	{
 		SetDlgItemText(ROBOTARM_CONDITION_TEXT, "대기 중");
 	}
+
+	UpdateControl(ROBOTARM_CONDITION_TEXT);
+
 	return LRESULT();
 }
 
