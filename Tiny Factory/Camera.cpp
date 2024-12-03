@@ -1,5 +1,38 @@
 #include "Camera.h"
 
+
+Camera::Camera(IN CStatic* videoRect, CStatic* detectionRect, int videoNumber)
+{
+    m_videoRect = videoRect;
+
+    RECT r;
+    videoRect->GetClientRect(&r);
+    winSize = cv::Size(r.right, r.bottom);
+    imageMfc.Create(winSize.width, winSize.height, 24);
+
+    videoCapture = new cv::VideoCapture(videoNumber);
+
+    if (!videoCapture->isOpened())
+    {
+        LogManager::GetInstance()->WriteLog("카메라를 연결 할 수 없습니다.");
+        return;
+    }
+    else {
+        LogManager::GetInstance()->WriteLog("카메라를 연결 완료했습니다.");
+
+        if (objectDetction == nullptr)
+        {
+            objectDetction = new ObjectDetection(detectionRect);
+        }
+    }
+
+    videoCapture->set(CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH);
+    videoCapture->set(CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT);
+
+
+    DisplayCamera();
+}
+
 void Camera::DisplayCamera(int fps)
 {
     if (!isRun)
@@ -63,7 +96,7 @@ void Camera::DrawRect()
         objectDetction->YoloDataFrame(matFrame);
     }
 
-    HDC dc = ::GetDC(videoRect->m_hWnd);
+    HDC dc = ::GetDC(m_videoRect->m_hWnd);
     if (dc == nullptr)return;
 
     int bpp = 8 * matFrame.elemSize();
@@ -137,7 +170,7 @@ void Camera::DrawRect()
     }
 
     imageMfc.BitBlt(dc, 0, 0);
-    ::ReleaseDC(videoRect->m_hWnd, dc);
+    ::ReleaseDC(m_videoRect->m_hWnd, dc);
     imageMfc.ReleaseDC();
     free(bitInfo);
 }

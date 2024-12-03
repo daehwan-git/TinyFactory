@@ -10,19 +10,7 @@ private:
 
 public:
 
-	static FileManager* GetInstance()
-	{
-		if (instance != nullptr)
-		{
-			return instance;
-		}
-		else {
-			instance = new FileManager();
-			return instance;
-		}
-	}
-
-
+	static FileManager* GetInstance();
 	bool SaveFile(std::vector<CString> data);
 
 };

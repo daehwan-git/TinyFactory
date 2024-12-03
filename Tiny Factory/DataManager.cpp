@@ -4,17 +4,33 @@
 DataManager* DataManager::instance = nullptr;
 std::mutex DataManager::mtx;
 
+DataManager* DataManager::GetInstance()
+{
+	if (instance == nullptr) {
+		std::lock_guard<std::mutex> lock(mtx);
+		if (instance == nullptr) {
+			instance = new DataManager();
+		}
+	}
+	return instance;
+}
+
+void DataManager::SetMainHandle(HWND mainHandle)
+{
+	m_mainHandle = mainHandle;
+}
+
 void DataManager::IncreaseWrongCount()
 {
 	wrongObjectCount++;
-	PostMessage(mainHandle,WRONG_OBJECT_INC, wrongObjectCount,NULL);
+	PostMessage(m_mainHandle,WRONG_OBJECT_INC, wrongObjectCount,NULL);
 }
 
 void DataManager::IncreaseNormalCount()
 {
 	normalObjectCount++;
 	carriageObjectCount++;
-	PostMessage(mainHandle,NORMAL_OBJECT_INC,normalObjectCount,NULL);
+	PostMessage(m_mainHandle,NORMAL_OBJECT_INC,normalObjectCount,NULL);
 }
 
 void DataManager::CheckNormalCount(int* count)

@@ -13,28 +13,16 @@ private:
 	int wrongObjectCount = 0;
 	int carriageObjectCount = 0;
 
-	HWND mainHandle = nullptr;
+	HWND m_mainHandle = nullptr;
 
 	DataManager() {}
 	~DataManager() {}
 
 public:
-	static DataManager* GetInstance()
-	{
-		if (instance == nullptr) {
-			std::lock_guard<std::mutex> lock(mtx);
-			if (instance == nullptr) {
-				instance = new DataManager();
-			}
-		}
-		return instance;
-	}
+	static DataManager* GetInstance();
 
 
-	void SetMainHandle(HWND mainHandle)
-	{
-		this->mainHandle = mainHandle;
-	}
+	void SetMainHandle(HWND mainHandle);
 
 public:
 	void IncreaseWrongCount();

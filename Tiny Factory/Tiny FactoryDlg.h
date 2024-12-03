@@ -70,7 +70,7 @@ private:
 
 
 public:
-    void UpdateControl(int controlID);
+    void UpdateControl(CONTROLID controlID);
 
     afx_msg void OnBnClickedStartBtn();
     afx_msg void OnDestroy();

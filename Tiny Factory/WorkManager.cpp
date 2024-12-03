@@ -6,16 +6,46 @@ WorkManager* WorkManager::instance = nullptr;
 std::mutex WorkManager::mtx;
 
 
+WorkManager* WorkManager::GetInstance()
+{
+	if (instance == nullptr) {
+		std::lock_guard<std::mutex> lock(mtx);
+		if (instance == nullptr) {
+			instance = new WorkManager();
+		}
+	}
+	return instance;
+}
+
+void WorkManager::InitConvayorBeltSP(ConveyorBeltSP* conveyorBeltSP)
+{
+	m_conveyorBeltSP = conveyorBeltSP;
+}
+
+void WorkManager::InitObjectDetection(ObjectDetection* objectDetection)
+{
+	m_objectDetection = objectDetection;
+}
+void WorkManager::InitRobotArmSP(RobotArmSP* robotArmSP)
+{
+	m_robotArmSP = robotArmSP;
+}
+
+void WorkManager::InitCarriage(Carriage* carriage)
+{
+	m_carriage = carriage;
+}
+
 void WorkManager::ResetDetection()
 {
 	isDetection = false;
-	conveyorBeltSP->ResetDetect();
-	objectDetection->ResetFinishFlag();
+	m_conveyorBeltSP->ResetDetect();
+	m_objectDetection->ResetFinishFlag();
 }
 
 void WorkManager::ResetGoal()
 {
-	conveyorBeltSP->ResetGoal();
+	m_conveyorBeltSP->ResetGoal();
 }
 
 void WorkManager::SetMainHandle(HWND hwnd)
@@ -25,36 +55,37 @@ void WorkManager::SetMainHandle(HWND hwnd)
 
 void WorkManager::ObjectGoal()
 {
-	if(robotArmSP != nullptr)
-		robotArmSP->PlayRobotArm();
+	if(m_robotArmSP != nullptr)
+		m_robotArmSP->PlayRobotArm();
 }
 
 void WorkManager::ResetIsPlaying()
 {
-	if (robotArmSP != nullptr)
-		robotArmSP->ResetIsPlaying();
+	if (m_robotArmSP != nullptr)
+		m_robotArmSP->ResetIsPlaying();
 }
 
 void WorkManager::StartCarriage()
 {
-	if (carriage != nullptr)
-		carriage->StartCarriage();
+	if (m_carriage != nullptr)
+		m_carriage->StartCarriage();
 }
 
 int WorkManager::GetMaxCarriageCount()
 {
-	if(carriage != nullptr)
-		return carriage->GetCarriageCount();
+	if(m_carriage != nullptr)
+		return m_carriage->GetCarriageCount();
 	return 0;
 }
 
 void WorkManager::SetMaxCarriage(int count)
 {
-	if(carriage != nullptr)
-		carriage->SetCarriageCount(count);
+	if(m_carriage != nullptr)
+		m_carriage->SetCarriageCount(count);
 }
 
-void WorkManager::ObjectDetection()
+
+void WorkManager::ObjectDetected()
 {
 	if (!isDetection)
 	{
@@ -83,9 +114,9 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 
 		DataManager::GetInstance()->IncreaseWrongCount();
 
-		if (conveyorBeltSP != nullptr)
+		if (m_conveyorBeltSP != nullptr)
 		{
-			conveyorBeltSP->KnockDown();
+			m_conveyorBeltSP->KnockDown();
 		}
 	}
 	else {
@@ -93,15 +124,15 @@ void WorkManager::FinishYOLO(std::vector<cv::String> classNames)
 
 		DataManager::GetInstance()->IncreaseNormalCount();
 
-		if (conveyorBeltSP != nullptr)
+		if (m_conveyorBeltSP != nullptr)
 		{
-			conveyorBeltSP->StartConveyorBelt();
+			m_conveyorBeltSP->StartConveyorBelt();
 		}
 	}
 
-	if (robotArmSP != nullptr)
+	if (m_robotArmSP != nullptr)
 	{
-		robotArmSP->AddObjectType(isNormal);
+		m_robotArmSP->AddObjectType(isNormal);
 	}
 	PostMessage(mainHandle, DETECTIONFINISH, NULL, NULL);
 }

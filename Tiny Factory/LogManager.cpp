@@ -10,9 +10,22 @@ LogManager::~LogManager()
 }
 
 
+LogManager* LogManager::GetInstance()
+{
+	if (instance == nullptr) 
+	{
+		std::lock_guard<std::mutex> lock(mtx);
+		if (instance == nullptr) 
+		{
+			instance = new LogManager();
+		}
+	}
+	return instance;
+}
+
 void LogManager::InitLogControl(CDialogEx* dialog)
 {
-	this->dialog = dialog;
+	m_dialog = dialog;
 }
 
 void LogManager::WriteLog(CString insertData)
@@ -33,5 +46,5 @@ void LogManager::WriteLog(CString insertData)
 
 	LPARAM lParam = reinterpret_cast<LPARAM>(sendData);
 	
-	PostMessage(dialog->m_hWnd,LOG_WRITE,NULL, lParam);
+	PostMessage(m_dialog->m_hWnd,LOG_WRITE,NULL, lParam);
 }

@@ -22,16 +22,7 @@ private:
 	
 
 public:
-	static WorkManager* GetInstance()
-	{
-		if (instance == nullptr) { 
-			std::lock_guard<std::mutex> lock(mtx); 
-			if (instance == nullptr) { 
-				instance = new WorkManager();
-			}
-		}
-		return instance;
-	}
+	static WorkManager* GetInstance();
 
 
 private:
@@ -39,36 +30,21 @@ private:
 	CString detectionClassName = "";
 	bool objectCheck = false;
 
-	ConveyorBeltSP* conveyorBeltSP = nullptr;
-	ObjectDetection* objectDetection = nullptr;
-	Carriage* carriage = nullptr;
-	RobotArmSP* robotArmSP = nullptr;
+	ConveyorBeltSP* m_conveyorBeltSP = nullptr;
+	ObjectDetection* m_objectDetection = nullptr;
+	Carriage* m_carriage = nullptr;
+	RobotArmSP* m_robotArmSP = nullptr;
 	HWND mainHandle = nullptr;
 
 public:
-	void InitConvayorBeltSP(ConveyorBeltSP* conveyorBeltSP)
-	{
-		this->conveyorBeltSP = conveyorBeltSP;
-	}
-
-	void InitObjectDetection(ObjectDetection* objectDetection)
-	{
-		this->objectDetection = objectDetection;
-	}
-
-	void InitRobotArmSP(RobotArmSP* robotArmSP)
-	{
-		this->robotArmSP = robotArmSP;
-	}
-
-	void InitCarriage(Carriage* carriage)
-	{
-		this->carriage = carriage;
-	}
+	void InitConvayorBeltSP(ConveyorBeltSP* conveyorBeltSP);
+	void InitObjectDetection(ObjectDetection* objectDetection);
+	void InitRobotArmSP(RobotArmSP* robotArmSP);
+	void InitCarriage(Carriage* carriage);
 
 
 public:
-	void ObjectDetection();
+	void ObjectDetected();
 	void FinishYOLO(std::vector<cv::String> classNames);
 	bool IsDetection() { return isDetection; }
 	void ResetDetection();

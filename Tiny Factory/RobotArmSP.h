@@ -21,32 +21,7 @@ public:
 		WAIT,
 		PLAYING
 	};
-	bool InitRobotArmSP(CString portNumber, CDialogEx* dialog) 
-	{
-		if (portNumber == "")
-		{
-			LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ Æ÷Æ®ÀÇ ¹øÈ£°¡ À¯È¿ÇÏÁö ¾ÊÀ½");
-		}
-		else
-		{
-			LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port ¿¡ ¿¬°á½Ãµµ");
-
-			this->sp = new Serial(PORT_PREFIX + portNumber,BAUDRATE);
-
-			if (sp->IsConnected())
-			{
-				this->dialog = dialog;
-				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ¿Ï·á");
-				StartDataProcess();
-				return true;
-			}
-			else {
-				LogManager::GetInstance()->WriteLog("·Îº¿ÆÈ : " + portNumber + " port¿¡ ¿¬°á ½ÇÆÐ...");
-			}
-		}
-
-		return false;
-	}
+	bool InitRobotArmSP(CString portNumber, CDialogEx* dialog);
 
 	~RobotArmSP()
 	{

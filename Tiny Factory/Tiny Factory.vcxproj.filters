@@ -158,6 +158,9 @@
     <ClCompile Include="SplashScreen.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TinyFactory.rc">

@@ -9,21 +9,12 @@ class LogManager
 private:
 	static LogManager* instance;
 	static std::mutex mtx;
-	CDialogEx* dialog;
+	CDialogEx* m_dialog;
 
 	~LogManager();
 
 public:
-	static LogManager* GetInstance()
-	{
-		if (instance == nullptr) { 
-			std::lock_guard<std::mutex> lock(mtx);
-			if (instance == nullptr) {
-				instance = new LogManager();
-			}
-		}
-		return instance;
-	}
+	static LogManager* GetInstance();
 
 	void InitLogControl(CDialogEx* listBox);
 

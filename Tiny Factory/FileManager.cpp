@@ -5,6 +5,18 @@
 
 FileManager* FileManager::instance = nullptr;
 
+FileManager* FileManager::GetInstance()
+{
+    if (instance != nullptr)
+    {
+        return instance;
+    }
+    else {
+        instance = new FileManager();
+        return instance;
+    }
+}
+
 bool FileManager::SaveFile(std::vector<CString>  data)
 {
     //메모장에 데이터 저장
