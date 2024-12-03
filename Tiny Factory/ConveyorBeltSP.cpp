@@ -63,7 +63,6 @@ void ConveyorBeltSP::ResetDetect()
 
 void ConveyorBeltSP::ResetGoal()
 {
-
 	if (sp == nullptr)return;
 
 	if (sp->IsConnected())
@@ -80,7 +79,7 @@ void ConveyorBeltSP::ParsingReciveData(CString data)
 {
 	if (data == OBJECT_DETECTION)
 	{
-		WorkManager::GetInstance()->ObjectDetection();
+		WorkManager::GetInstance()->ObjectDetected();
 	}
 	else if (data == OBJECT_GOAL)
 	{

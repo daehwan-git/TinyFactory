@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 
-Camera::Camera(IN CStatic* videoRect, CStatic* detectionRect, int videoNumber)
+Camera::Camera(IN CStatic* videoRect, CStatic* detectionRect, int videoNumber = 0)
 {
     m_videoRect = videoRect;
 
@@ -10,7 +10,7 @@ Camera::Camera(IN CStatic* videoRect, CStatic* detectionRect, int videoNumber)
     winSize = cv::Size(r.right, r.bottom);
     imageMfc.Create(winSize.width, winSize.height, 24);
 
-    videoCapture = new cv::VideoCapture(videoNumber);
+    videoCapture = new cv::VideoCapture(1);
 
     if (!videoCapture->isOpened())
     {
